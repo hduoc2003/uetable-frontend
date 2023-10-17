@@ -1,8 +1,13 @@
+'use client';
+import Header from '@/components/layouts/Header'
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import Footer from '@/components/layouts/Footer'
+import { ReduxProvider } from '@/redux/provider';
+import NavBar from '@/components/layouts/NavBar';
+import { THEME } from '@/styles/theme';
+import { MAIN_FONT } from '@/styles/fonts';
 
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'UETable',
@@ -16,7 +21,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={MAIN_FONT.className}>
+        <ReduxProvider>
+          <div className='flex'>
+            <NavBar />
+            <div className='w-full'>
+              <Header />
+              {children}
+              <Footer />
+            </div>
+          </div>
+        </ReduxProvider>
+      </body>
     </html>
   )
 }
