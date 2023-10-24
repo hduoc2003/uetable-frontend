@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { THEME } from './styles/theme'
+import { MAIN_FONT } from './styles/fonts'
 
 const config: Config = {
   content: [
@@ -22,7 +23,7 @@ const config: Config = {
         "light-primary": THEME.LIGHT_PRIMARY_COLOR,
         secondary: THEME.SECONDARY_COLOR,
         "royal-gray": THEME.ROYAL_GRAY_COLOR,
-      }
+      },
     },
   },
   plugins: [],
