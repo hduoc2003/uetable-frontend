@@ -2,6 +2,11 @@ import type { Config } from 'tailwindcss'
 import { THEME } from './styles/theme'
 
 const config: Config = {
+  // mode: 'jit',
+  // purge: [
+  //   './public/**/*.html',
+  //   './**/*.{js,jsx,ts,tsx,vue}',
+  // ],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -22,6 +27,11 @@ const config: Config = {
         "light-primary": THEME.LIGHT_PRIMARY_COLOR,
         secondary: THEME.SECONDARY_COLOR,
         "royal-gray": THEME.ROYAL_GRAY_COLOR,
+        'table-border': THEME.TABLE_BORDER_COLOR,
+        'danger': THEME.DANGER_COLOR
+      },
+      fontSize: {
+        'fs-inherit': 'inherit'
       }
     },
   },
