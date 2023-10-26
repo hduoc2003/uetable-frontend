@@ -30,7 +30,8 @@ export default function SignIn() {
           <div className="text-3xl text-black font-bold text-center my-8">Đăng Nhập</div>
           <div className="w-full flex flex-col justify-center items-center p-6">
             <div className="flex w-full justify-center relative pb-6">
-              <div className="absolute bottom-21 left-5 bg-white px-2">
+              <div className="absolute bottom-21 left-5 bg-white px-2 flex gap-[2px]">
+                <pre className='text-red-500 text-xs'>*</pre>
                 <p className="text-gray-500 text-xs font-semibold">EMAIL / MSSV</p>
               </div>
               <div className="w-full flex flex-col pr-4">
@@ -48,7 +49,8 @@ export default function SignIn() {
               </div>
             </div>
             <div className="flex w-full justify-center relative">
-              <div className="absolute bottom-15 left-5 bg-white px-2">
+              <div className="absolute bottom-15 left-5 bg-white px-2 flex gap-[2px]">
+                <pre className='text-red-500 text-xs'>*</pre>
                 <p className="text-gray-500 text-xs font-semibold">MẬT KHẨU</p>
               </div>
               <div className="w-full flex flex-col pr-4">
