@@ -1,12 +1,11 @@
-'use client';
 import Header from '@/components/layouts/Header'
 import './globals.css'
 import type { Metadata } from 'next'
 import Footer from '@/components/layouts/Footer'
 import { ReduxProvider } from '@/redux/provider';
 import NavBar from '@/components/layouts/NavBar';
-import { THEME } from '@/styles/theme';
 import { MAIN_FONT } from '@/styles/fonts';
+import { ConfigProvider } from 'antd';
 
 
 export const metadata: Metadata = {
@@ -23,14 +22,22 @@ export default function RootLayout({
     <html lang="en">
       <body className={MAIN_FONT.className}>
         <ReduxProvider>
-          <div className='flex'>
-            <NavBar />
-            <div className='w-full'>
-              <Header />
-              {children}
-              <Footer />
+          <ConfigProvider
+            theme={{
+              token: {
+                fontFamily: MAIN_FONT.style.fontFamily,
+              },
+            }}
+          >
+            <div className='flex'>
+              <NavBar />
+              <div className='w-full'>
+                <Header />
+                {children}
+                <Footer />
+              </div>
             </div>
-          </div>
+          </ConfigProvider>
         </ReduxProvider>
       </body>
     </html>
