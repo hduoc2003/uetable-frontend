@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { THEME } from './styles/theme'
+import { MAIN_FONT } from './styles/fonts'
 
 const config: Config = {
   // mode: 'jit',
