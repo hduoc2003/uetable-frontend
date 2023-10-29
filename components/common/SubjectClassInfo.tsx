@@ -2,13 +2,18 @@
 
 import { SubjectClass } from "@/types/subject";
 import { ColorPicker, ColorPickerProps, Divider, Space, Typography } from 'antd';
-import CopyButton from "./MyButton/Copy";
-import { BiSolidTimeFive } from "react-icons/bi";
-import { subjectPropIcons, subjectPropsIconColor, subjectPropsIconSize } from "./Icons/SubjectPropIcons";
+import CopyButton from "./(MyButton)/Copy";
 import { twMerge } from "tailwind-merge";
-import { THEME } from "@/styles/theme";
-import SuccessIcon from "./Icons/SuccessIcon";
-import MyButtonWrapper from "./MyButton/MyButtonWrapper";
+import SuccessIcon from "./(Icons)/SuccessIcon";
+import MyButtonWrapper from "./(MyButton)/MyButtonWrapper";
+import SubjectIdIcon from "./(Icons)/SubjectIcons/SubjectIdIcon";
+import SubjectGroupIcon from "./(Icons)/SubjectIcons/SubjectGroupIcon";
+import SubjectTeacherNameIcon from "./(Icons)/SubjectIcons/SubjectTeacherNameIcon";
+import SubjectPlaceIcon from "./(Icons)/SubjectIcons/SubjectPlaceIcon";
+import SubjectTimeIcon from "./(Icons)/SubjectIcons/SubjectTimeIcon";
+import SubjectNumberOfStudentsIcon from "./(Icons)/SubjectIcons/SubjectNumberOfStudentsIcon";
+import SubjectColorIcon from "./(Icons)/SubjectIcons/SubjectColorIcon";
+import SubjectDescriptionIcon from "./(Icons)/SubjectIcons/SubjectDescription";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -43,7 +48,7 @@ export default function SubjectClassInfo({
       </div> */}
       <Space direction="vertical" className="w-full px-4" size={'small'}>
         <InfoBlock
-          icon={subjectPropIcons.id}
+          icon={<SubjectIdIcon/>}
           title='Mã lớp'
           content={
             <Text
@@ -61,10 +66,10 @@ export default function SubjectClassInfo({
             </Text>
           }
         />
-        <InfoBlock icon={subjectPropIcons.group} title='Nhóm' content={subjectClass.group} />
-        <InfoBlock icon={subjectPropIcons.teacherName} title='Giảng viên' content={subjectClass.teacherName} />
+        <InfoBlock icon={<SubjectGroupIcon/>} title='Nhóm' content={subjectClass.group} />
+        <InfoBlock icon={<SubjectTeacherNameIcon/>} title='Giảng viên' content={subjectClass.teacherName} />
         <InfoBlock
-          icon={subjectPropIcons.place}
+          icon={<SubjectPlaceIcon/>}
           title='Giảng đường'
           content={
             <Text
@@ -82,10 +87,10 @@ export default function SubjectClassInfo({
             </Text>
           }
         />
-        <InfoBlock icon={subjectPropIcons.time} title='Thời gian' content={`${subjectClass.lessonStart + 6}h - ${subjectClass.lessonEnd + 7}h`} />
-        <InfoBlock icon={subjectPropIcons.numberOfStudents} title='Sĩ số' content={subjectClass.numberOfStudents} />
+        <InfoBlock icon={<SubjectTimeIcon/>} title='Thời gian' content={`${subjectClass.lessonStart + 6}h - ${subjectClass.lessonEnd + 7}h`} />
+        <InfoBlock icon={<SubjectNumberOfStudentsIcon/>} title='Sĩ số' content={subjectClass.numberOfStudents} />
         <InfoBlock
-          icon={subjectPropIcons.highlightColor}
+          icon={<SubjectColorIcon/>}
           title='Đổi màu'
           content={
             <ColorPicker
@@ -98,7 +103,7 @@ export default function SubjectClassInfo({
       </Space>
       <Divider className="border-table-border m-0"></Divider>
       <Space className="px-4 pb-4 flex items-center">
-        {subjectPropIcons.description}
+        {<SubjectDescriptionIcon/>}
         <Text type="secondary" italic>{subjectClass.description || 'Không có mô tả'}</Text>
       </Space>
     </Space>

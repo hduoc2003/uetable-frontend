@@ -3,8 +3,9 @@
 import Image from "next/image";
 import HomeImage from '../../../public/images/hero-illo@3x.png';
 import { Typography } from "antd";
-import { NavsIcons } from "@/components/common/Icons/NavIcons";
 import Schedule from "@/components/common/Schedule/Schedule";
+import ScheduleIcon from "@/components/common/(Icons)/NavIcons/ScheduleIcon";
+import MySubjectIcon from "@/components/common/(Icons)/NavIcons/MySubjectIcon";
 const { Text, Title } = Typography;
 
 const headerText = "";
@@ -33,7 +34,7 @@ function AboutScheduleAndMySubjects() {
           <Text type="secondary" className="mb-[20px] text-xl">Bắt đầu quá trình học tập của bạn</Text>
           <div className="flex flex-col gap-5">
             <div className="flex gap-3">
-              <div className="mt-[2px]">{NavsIcons['schedule']}</div>
+              <div className="mt-[2px]">{<ScheduleIcon/>}</div>
               <div className="flex flex-col gap-3">
                 <Title level={4} className="mb-0">Thời khoá biểu</Title>
                 <Text className="text-base" type="secondary">Tạo và tuỳ chỉnh thời khoá biểu nhanh chóng</Text>
@@ -41,7 +42,7 @@ function AboutScheduleAndMySubjects() {
             </div>
 
             <div className="flex gap-3">
-              <div className="mt-[2px]">{NavsIcons['my-subjects']}</div>
+              <div className="mt-[2px]">{<MySubjectIcon/>}</div>
               <div className="flex flex-col gap-3">
                 <Title level={4} className="mb-0">Môn học</Title>
                 <Text className="text-base" type="secondary">Quản lý các học phần theo ngành học của bạn</Text>

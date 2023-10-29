@@ -1,5 +1,5 @@
-import { SaveButton } from '../MyButton/SaveButton';
-import React, { useState } from 'react';
+import { SaveButton } from '../(MyButton)/SaveButton';
+import React, { useId, useState } from 'react';
 import { Button, ColorPicker, ConfigProvider, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import ScheduleCell from "./ScheduleCell";
@@ -13,9 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { scheduleDataSelector, scheduleSelector } from "@/redux/schedule/scheduleSelector";
 import { scheduleActions } from '@/redux/schedule/scheduleSlice';
 import ScheduleSetting from './ScheduleSetting';
-import Download from '../MyButton/Download';
+import Download from '../(MyButton)/Download';
 import { THEME } from '@/styles/theme';
-import DangerButton from '../MyButton/DangerButton';
+import DangerButton from '../(MyButton)/DangerButton';
 
 const numberOfLessons = 12;
 
@@ -72,6 +72,7 @@ export default function Schedule({
 }: ScheduleProps) {
     let columns: ColumnsType<TableData> = [];
     let data: TableData[] = [];
+    const rowId = useId();
     const { scheduleStyle, subjectClassData } = useSelector(scheduleDataSelector);
     const { editing } = useSelector(scheduleSelector)
     const [hidenColumns, setHidenColumns] = useState<(React.Key | undefined)[]>([]);
@@ -168,6 +169,7 @@ export default function Schedule({
                 dataSource={data}
                 pagination={false}
                 bordered={scheduleStyle.hasBorder}
+                rowKey={() => rowId}
             />
         </div>
     );

@@ -5,8 +5,14 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { Menu } from 'antd';
 import type { MenuProps } from 'antd/es/menu';
-import { NavsIcons, NavsIconsProp } from "../common/Icons/NavIcons";
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import HomeIcon from '../common/(Icons)/NavIcons/HomeIcon';
+import ScheduleIcon from '../common/(Icons)/NavIcons/ScheduleIcon';
+import MySubjectIcon from '../common/(Icons)/NavIcons/MySubjectIcon';
+import AllSubjectsIcon from '../common/(Icons)/NavIcons/AllSubjectsIcon';
+import StatsIcon from '../common/(Icons)/NavIcons/StatsIcon';
+import { AiOutlineMenu } from 'react-icons/ai';
+import { NAVBAR_STYLE } from '@/styles/navBar';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -40,7 +46,15 @@ const NavsRoutes = [
     '/stats'
 ]
 
-const iconsKeys: (keyof NavsIconsProp)[] = [
+const NavIcons = {
+    'home': <HomeIcon/>,
+    'schedule': <ScheduleIcon/>,
+    'my-subjects': <MySubjectIcon/>,
+    'all-subjects': <AllSubjectsIcon/>,
+    'stats': <StatsIcon/>
+}
+
+const iconsKeys: (keyof typeof NavIcons)[] = [
     'home',
     'schedule',
     'my-subjects',
@@ -65,7 +79,7 @@ export default function NavBar() {
             </Link>
             ,
             i,
-            NavsIcons[iconsKeys[i]],
+            NavIcons[iconsKeys[i]],
             navContent === 'Thống kê' ?
                 statsContent.map((statContent) => getItem(<div className={`text-royal-gray`}>{statContent}</div>, statContent))
                 : undefined
@@ -82,7 +96,7 @@ export default function NavBar() {
             className="flex flex-col h-screen sticky left-0 top-0 border-r-[1px] border-gray-200 bg-secondary"
         >
             <div className='flex gap-5 h-[70px] items-center mx-[25px]'>
-                <button onClick={handleClickToExpand}>{NavsIcons['expand-nav']}</button>
+                <button onClick={handleClickToExpand}>{<AiOutlineMenu size={NAVBAR_STYLE.ICON_SIZE} />}</button>
                 {
                     expand &&
                     <Link href='/'>

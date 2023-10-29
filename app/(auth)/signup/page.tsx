@@ -37,7 +37,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="bg-white py-10 font-sans">
+    <main className="bg-white py-10 font-sans">
 
       <div className="mx-auto bg-white max-w-sm max-h-max border shadow-lg py-7 rounded-3xl">
 
@@ -52,7 +52,7 @@ export default function SignUp() {
             <div className="absolute bg-white w-full px-1">
               <label htmlFor="email" className="text-xs text-red-600 w-full font-medium">EMAIL*</label>
             </div>
-          </div> <br /> 
+          </div> <br />
 
           <input className={classnameE} type="email" id = "email" placeholder='Enter your email address' value={email} onChange={(evt) => setEmail(evt.target.value)} /> <br />
 
@@ -60,7 +60,7 @@ export default function SignUp() {
             <div className="absolute bg-white w-full px-1">
               <label htmlFor="password" className="text-xs text-red-600 w-full font-medium">PASSWORD*</label>
             </div>
-          </div> <br /> 
+          </div> <br />
 
             <input className={classnameP} type="password" id = "password" placeholder='Enter password' value={password} onChange={(evt) => setPassword(evt.target.value)} /> <br />
 
@@ -68,14 +68,14 @@ export default function SignUp() {
             <div className="absolute bg-white w-full px-1">
               <label htmlFor="Full Name" className="text-xs text-gray-400 w-full font-medium">FULL NAME</label>
             </div>
-          </div> <br /> 
+          </div> <br />
             <input className="border hover:border-sky-500 w-full h-14 rounded px-2" type="text" id = "Full Name" placeholder='Enter your full name' /> <br />
 
             <div className="relative top-2 left-2 w-24">
             <div className="absolute bg-white w-full px-1">
             <label htmlFor="student code" className="text-xs text-gray-400 w-full font-medium">STUDENT CODE</label>
             </div>
-          </div> <br /> 
+          </div> <br />
             <input className="border hover:border-sky-500 w-full h-14 rounded px-2" type="text" id = "student code" placeholder='Enter your student code' /> <br />
 
           <div className="text-sm text-red-600 w-full font-medium italic">{note}</div> <br />
@@ -87,12 +87,12 @@ export default function SignUp() {
           <Link href="/">Back</Link>
           </button>
 
-          <button className="font-bold bg-black hover:bg-sky-300 text-white rounded-2xl w-28 h-10" 
+          <button className="font-bold bg-black hover:bg-sky-300 text-white rounded-2xl w-28 h-10"
           onClick={() => handleClick()}>Next</button>
         </div>
 
       </div>
-      
-    </div>
+
+    </main>
   )
 }

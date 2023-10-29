@@ -1,12 +1,8 @@
-import Header from '@/components/layouts/Header'
 import './globals.css'
 import type { Metadata } from 'next'
-import Footer from '@/components/layouts/Footer'
 import { ReduxProvider } from '@/redux/provider';
-import NavBar from '@/components/layouts/NavBar';
 import { MAIN_FONT } from '@/styles/fonts';
 import { ConfigProvider } from 'antd';
-
 
 export const metadata: Metadata = {
   title: 'UETable',
@@ -29,14 +25,7 @@ export default function RootLayout({
               },
             }}
           >
-            <div className='flex'>
-              <NavBar />
-              <div className='w-full'>
-                <Header />
-                {children}
-                <Footer />
-              </div>
-            </div>
+            {children}
           </ConfigProvider>
         </ReduxProvider>
       </body>
