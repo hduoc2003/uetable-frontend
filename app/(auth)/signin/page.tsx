@@ -1,12 +1,15 @@
 "use client"
 import Link from 'next/link'
 import React, {useState} from 'react'
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 
 export default function SignIn() {
   const [inputValue, setInputValue] = useState('');
   const [inputFocused, setInputFocused] = useState(false);
   const [inputPasswordValue, setInputPasswordValue] = useState('');
   const [inputPasswordFocused, setInputPasswordFocused] = useState(false);
+  const [type, setType] = useState("password");
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
@@ -19,6 +22,12 @@ export default function SignIn() {
   const handleInputPasswordFocus = () => {
     setInputPasswordFocused(true);
   };
+  const changeStatus = () => {
+    if (type == "password")
+      setType("text");
+    else 
+      setType("password");
+  }
 
   return (
     <main className="bg-white py-5">
@@ -58,7 +67,7 @@ export default function SignIn() {
                   value={inputPasswordValue}
                   onChange={handleInputPasswordChange}
                   onFocus={handleInputPasswordFocus}
-                  type="password"
+                  type={type}
                   className={`w-full border rounded-lg text-black caret-black p-4 m-2 ${inputPasswordFocused && inputPasswordValue === '' ? 'border-red-500':''}`}
                   placeholder="Nhập mật khẩu">
                 </input>
@@ -66,11 +75,25 @@ export default function SignIn() {
                   <p className="text-red-500 ml-2 text-sm">Vui lòng nhập mật khẩu</p>
                   )}
               </div>
+              <div>
+                {type == "password" && (
+                <EyeInvisibleOutlined className="absolute top-8 right-6" onClick={changeStatus} />
+                )}
+                {type == "text" && (
+                <EyeOutlined className="absolute top-8 right-6" onClick={changeStatus} />
+                )}
+              </div>
             </div>
           </div>
         </div>
         <div className="w-full flex justify-end items-end">
           <button className="text-sm text-primary mr-8 hover:underline hover:underline-offset-2">Quên mật khẩu?</button>
+        </div>
+        <div className="w-full flex justify-end items-end">
+          Chưa có tài khoản? 
+          <button className="text-sm text-primary mr-8 mt-2 ml-2 hover:underline hover:underline-offset-2">
+            <Link href="/signup">Đăng ký ngay</Link>
+          </button>
         </div>
         <div className="w-full flex justify-between">
         <button className="text-lg text-black rounded-lg px-6 py-2 font-bold ml-8 mt-16 hover:bg-slate-300">

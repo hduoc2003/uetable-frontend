@@ -108,7 +108,7 @@ export default function Header() {
             >
               <div className="relative flex">
                 <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={avtURL} size={40}></Avatar>
-                <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" stroke-width="2" style={{ stroke: avtStrokeColor }}></circle></svg>
+                <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" strokeWidth="2" style={{ stroke: avtStrokeColor }}></circle></svg>
               </div>
             </button>
             <div className="ml-3">
