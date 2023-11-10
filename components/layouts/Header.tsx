@@ -5,18 +5,15 @@ import React, { ReactNode, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "@/redux/auth/authSlice";
 import { authSelector } from "@/redux/auth/authSelector";
-import { Avatar, Badge, Select, Button, Popover, Space, Card } from "antd";
+import { Avatar, Badge, Select, Popover} from "antd";
 import { IoNotificationsOutline, IoNotifications } from "react-icons/io5";
 import SearchBar from "../common/SearchBar";
 import Link from "next/link";
 import { MAIN_FONT } from "@/styles/fonts";
-
-import { FloatButton } from 'antd'
-import { CommentOutlined, CustomerServiceOutlined, NotificationOutlined } from '@ant-design/icons';
+import {content} from "@/components/layouts/Notifications"
 
 
 const languages = ['Tiếng Việt', 'English'];
-
 
 interface TabProps {
   selected: boolean;
@@ -80,29 +77,6 @@ export default function Header() {
     console.log(value)
   }
 
-  const content = (
-    <div className="border-2 border-black overflow-y-auto min-h-fit max-h-96">
-      <Card title="Thông báo" style={{ width: 400}}>
-        <Space direction="vertical" className="flex flex-col justify-center">
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">VanhG bị gay!!!</p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">VanhG bị gay!!!</p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">VanhG bị gay!!!</p>
-
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 9/11/2023</p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 8/11/2023 </p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 7/11/2023 </p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 6/11/2023 </p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 5/11/2023 </p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 4/11/2023 </p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 3/11/2023 </p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 2/11/2023 </p>
-          <p className="bg-white hover:bg-gray-100 border-2 rounded-lg p-2 max-w-sm">Thời khóa biểu của bạn vừa được cập nhật vào 00:00 ngày 1/11/2023 </p>
-        </Space>
-      </Card>
-    </div>
-
-  );
-
   return (
     <div className="flex items-center h-[70px] sticky top-0 z-[1000] border-b-[0px] border-gray-200" style={{ backgroundColor: THEME.SECONDARY_COLOR }}>
       {/* <NavBar/> */}
@@ -121,7 +95,7 @@ export default function Header() {
       {
         authState.signedIn ?
           <div className="flex mr-5">
-            <Popover content = {content} trigger  = "click">
+            <Popover content = {content} trigger  = "click" arrow = {false} placement="bottom" className="bg-white">
               <button onClick={() => setNotiCount(0)}>
                 <Badge count={notiCount} overflowCount={9} title="Thông báo" className={`mr-7 ${MAIN_FONT.className}`}>
                     <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300">
