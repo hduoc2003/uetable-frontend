@@ -1,9 +1,11 @@
 'use client';
 
+import Main from "@/components/layouts/Main";
+
 export default function Name() {
   return (
-    <div>
-      <h1>Client Component</h1>
-    </div>
+    <Main>
+
+    </Main>
   );
 }

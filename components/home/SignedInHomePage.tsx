@@ -1,23 +1,26 @@
 'use client';
 
-import { getSubjectClasses } from "@/api/subject";
+import { getSubjectClasses } from "@/api/subjectAPI";
 import Schedule from "../common/Schedule/Schedule";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { THEME } from "@/styles/theme";
 import MyCountDown from "../common/MyCountDown";
-import { Button, Popover, Space } from "antd";
+import { Button, Flex, Popover, Space } from "antd";
 import { HiInformationCircle, HiSpeakerphone } from "react-icons/hi";
 import { useMemo, useState } from "react";
 import { lessonToHour, nowToNextSubjectClass } from "@/utils/subjectClass";
 import { useSelector } from "react-redux";
 import { scheduleDataSelector } from "@/redux/schedule/scheduleSelector";
+import Main from "../layouts/Main";
 
 export default function SignedInHomePage() {
   return (
-    <main className="flex flex-col gap-[50px]">
-      <NextSubjectInfo />
-      <Schedule />
-    </main>
+    <Main>
+      <Flex vertical gap='large'>
+        <NextSubjectInfo />
+        <Schedule />
+      </Flex>
+    </Main>
   );
 }
 
@@ -28,7 +31,7 @@ function NextSubjectInfo() {
     subjectClass: nextSubjectClass
   }, setNextSubjectInfo] = useState(() => nowToNextSubjectClass(subjectClassData));
 
-  console.log(timeToNextSubject, nextSubjectClass.name)
+  // console.log(timeToNextSubject, nextSubjectClass.name)
 
   const [countdownKey, setCountdownKey] = useState(0);
 

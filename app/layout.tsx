@@ -1,8 +1,10 @@
 import './globals.css'
+import 'animate.css'
 import type { Metadata } from 'next'
 import { ReduxProvider } from '@/redux/provider';
 import { MAIN_FONT } from '@/styles/fonts';
 import { ConfigProvider } from 'antd';
+import { THEME } from '@/styles/theme';
 
 export const metadata: Metadata = {
   title: 'UETable',
@@ -15,14 +17,21 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={MAIN_FONT.className}>
+    <html lang="en" className={`${MAIN_FONT.className}`}>
+      <body className='bg-underground'>
         <ReduxProvider>
           <ConfigProvider
             theme={{
               token: {
                 fontFamily: MAIN_FONT.style.fontFamily,
+                // borderRadiusLG: 15
               },
+              components: {
+                Input: {
+                  activeBg: THEME.SECONDARY_COLOR,
+                  lineWidth: 2
+                }
+              }
             }}
           >
             {children}

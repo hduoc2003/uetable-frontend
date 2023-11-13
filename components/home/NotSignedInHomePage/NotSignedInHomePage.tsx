@@ -1,24 +1,25 @@
 'use client';
 
 import Image from "next/image";
-import HomeImage from '../../../public/images/hero-illo@3x.png';
+import HomeImage from '../../../public/images/A whole year-rafiki.svg';
 import { Typography } from "antd";
 import Schedule from "@/components/common/Schedule/Schedule";
 import ScheduleIcon from "@/components/common/(Icons)/NavIcons/ScheduleIcon";
 import MySubjectIcon from "@/components/common/(Icons)/NavIcons/MySubjectIcon";
+import Main from "@/components/layouts/Main";
 const { Text, Title } = Typography;
 
 const headerText = "";
 
 export default function NotSignedInHomePage() {
   return (
-    <main className="flex flex-col mx-[50px] gap-[50px]">
+    <Main className="flex flex-col gap-[50px]">
       <AboutScheduleAndMySubjects />
 
       <AboutAllSubjects />
 
       <AboutStats />
-    </main>
+    </Main>
   );
 }
 
@@ -26,7 +27,7 @@ function AboutScheduleAndMySubjects() {
   return (
     <div className="flex flex-col">
       <div className="flex items-center w-full">
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col">
           <Title className={headerText}>
             <div className="whitespace-nowrap">Tạo thời khoá biểu</div>
             <div className="whitespace-nowrap">& Quản lý môn học</div>
@@ -34,7 +35,7 @@ function AboutScheduleAndMySubjects() {
           <Text type="secondary" className="mb-[20px] text-xl">Bắt đầu quá trình học tập của bạn</Text>
           <div className="flex flex-col gap-5">
             <div className="flex gap-3">
-              <div className="mt-[2px]">{<ScheduleIcon/>}</div>
+              <div className="mt-[2px]">{<ScheduleIcon />}</div>
               <div className="flex flex-col gap-3">
                 <Title level={4} className="mb-0">Thời khoá biểu</Title>
                 <Text className="text-base" type="secondary">Tạo và tuỳ chỉnh thời khoá biểu nhanh chóng</Text>
@@ -42,7 +43,7 @@ function AboutScheduleAndMySubjects() {
             </div>
 
             <div className="flex gap-3">
-              <div className="mt-[2px]">{<MySubjectIcon/>}</div>
+              <div className="mt-[2px]">{<MySubjectIcon />}</div>
               <div className="flex flex-col gap-3">
                 <Title level={4} className="mb-0">Môn học</Title>
                 <Text className="text-base" type="secondary">Quản lý các học phần theo ngành học của bạn</Text>
@@ -50,9 +51,9 @@ function AboutScheduleAndMySubjects() {
             </div>
           </div>
         </div>
-        <Image src={HomeImage} alt="Dược" width={500} height={500}></Image>
-
-        {/* <Schedule onlyViewMode scale={0.7}/> */}
+        <div className="flex flex-1 place-content-center">
+          <Image src={HomeImage} alt="Dược" width={500} height={500}/>
+        </div>
       </div>
     </div>
   );
