@@ -5,12 +5,17 @@ import React, { ReactNode, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "@/redux/auth/authSlice";
 import { authSelector } from "@/redux/auth/authSelector";
-import { Avatar, Badge, Divider, Select } from "antd";
+import { Avatar, Badge, Divider, Select, Popover } from "antd";
 import { IoNotificationsOutline, IoNotifications } from "react-icons/io5";
 import SearchBar from "../common/SearchBar/SearchBar";
 import Link from "next/link";
 import { MAIN_FONT } from "@/styles/fonts";
+import { content } from "@/components/layouts/Notifications"
 import NotificationIcon from "../common/(Icons)/NotificationIcon";
+interface TabProps {
+  selected: boolean;
+  children: ReactNode;
+}
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -44,17 +49,19 @@ export default function Header() {
         <div className="flex-1">
           <SearchBar placeholder="Tìm kiếm học phần" />
         </div>
-        <LanguaguesSelector/>
+        <LanguaguesSelector />
         {
           authState.signedIn ?
             <div className="flex mr-5">
-              <button onClick={() => { setNotiCount(0); setSolidNoti(true); }}>
-                <Badge count={notiCount} overflowCount={9} title="Thông báo" className={`mr-7 ${MAIN_FONT.className}`}>
-                  <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300">
-                    <NotificationIcon solid={solidNoti} />
-                  </div>
-                </Badge>
-              </button>
+              <Popover content={content} trigger="click" arrow={false} placement="bottom" className="bg-white">
+                <button onClick={() => { setNotiCount(0); setSolidNoti(true); }}>
+                  <Badge count={notiCount} overflowCount={9} title="Thông báo" className={`mr-7 ${MAIN_FONT.className}`}>
+                    <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300">
+                      <NotificationIcon solid={solidNoti} />
+                    </div>
+                  </Badge>
+                </button>
+              </Popover>
               <button
                 onClick={handleSignOut}
                 onMouseEnter={() => setAvtStrokeColor(THEME.DARK_PRIMARY_COLOR)}
