@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import { EyeOutlined } from '@ant-design/icons';
 
 export default function SignUp() {
