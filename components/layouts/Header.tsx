@@ -5,14 +5,15 @@ import React, { ReactNode, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "@/redux/auth/authSlice";
 import { authSelector } from "@/redux/auth/authSelector";
-import { Avatar, Badge, Select } from "antd";
+import { Avatar, Badge, Select, Popover} from "antd";
 import { IoNotificationsOutline, IoNotifications } from "react-icons/io5";
 import SearchBar from "../common/SearchBar";
 import Link from "next/link";
 import { MAIN_FONT } from "@/styles/fonts";
+import {content} from "@/components/layouts/Notifications"
+
 
 const languages = ['Tiếng Việt', 'English'];
-
 
 interface TabProps {
   selected: boolean;
@@ -94,13 +95,15 @@ export default function Header() {
       {
         authState.signedIn ?
           <div className="flex mr-5">
-            <button onClick={() => setNotiCount(0)}>
-              <Badge count={notiCount} overflowCount={9} title="Thông báo" className={`mr-7 ${MAIN_FONT.className}`}>
-                <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300">
-                  <IoNotificationsOutline size={25} />
-                </div>
-              </Badge>
-            </button>
+            <Popover content = {content} trigger  = "click" arrow = {false} placement="bottom" className="bg-white">
+              <button onClick={() => setNotiCount(0)}>
+                <Badge count={notiCount} overflowCount={9} title="Thông báo" className={`mr-7 ${MAIN_FONT.className}`}>
+                    <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300">
+                      <IoNotificationsOutline size={25} />
+                    </div>
+                </Badge>
+              </button>
+            </Popover>
             <button
               onClick={handleSignOut}
               onMouseEnter={() => setAvtStrokeColor(THEME.DARK_PRIMARY_COLOR)}
