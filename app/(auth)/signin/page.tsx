@@ -21,8 +21,8 @@ export default function SignIn() {
   };
 
   return (
-    <main className="bg-white py-5">
-      <div className="py-6 max-w-md mx-auto bg-white rounded-xl shadow-lg border">
+    <main className="h-screen flex">
+      <div className="py-6 w-[420px] mx-auto bg-white rounded-xl shadow-lg border self-center">
         <div className="flex flex-col justify-center items-center">
           <button className="bg-transparent text-4xl my-6 text-primary font-bold font-mainfont">
             <Link href="/">UETable</Link>

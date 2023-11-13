@@ -1,0 +1,16 @@
+.slick-next::before, .slick-prev::before {
+    content: none !important;
+}
+
+.slick-next:hover, .slick-prev:hover {
+    background-color: rgb(226 232 240) !important;
+}
+
+.slick-next, .slick-prev {
+    background-color: rgb(241 245 249) !important;
+    z-index: 100;
+}
+
+.slick-dots li button {
+    background-color: #4299e1 !important;
+}

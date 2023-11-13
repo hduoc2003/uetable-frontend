@@ -5,10 +5,10 @@ import { THEME } from '@/styles/theme';
 
 export default function Footer() {
     return (
-        <div>
-            <div className='h-0.5 mb-5' style={{ backgroundColor: THEME.PRIMARY_COLOR }}></div>
+        <footer className='bg-secondary rounded-layout-el p-3 mt-layout-el ml-layout-el mr-body-pd shadow'>
+            {/* <div className='h-0.5 mb-5' style={{ backgroundColor: THEME.PRIMARY_COLOR }}></div> */}
             <div className="flex-row">
-                <div className="flex items-center ml-4 mb-4">
+                <div className="flex items-center">
                     <Image src={UETLogo} alt='uet-logo' />
                     <div className="flex-col ml-2">
                         <div className='font-semibold' style={{ color: THEME.PRIMARY_COLOR }}>
@@ -18,6 +18,6 @@ export default function Footer() {
                     </div>
                 </div>
             </div>
-        </div>
+        </footer>
     )
 }

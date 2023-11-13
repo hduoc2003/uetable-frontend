@@ -37,7 +37,7 @@ export default function SignUp() {
   }
 
   return (
-    <main className="bg-white py-10 font-sans">
+    <main className="bg-white py-10">
 
       <div className="mx-auto bg-white max-w-sm max-h-max border shadow-lg py-7 rounded-3xl">
 

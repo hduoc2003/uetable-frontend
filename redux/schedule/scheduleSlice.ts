@@ -1,7 +1,7 @@
 import { updateScheduleSubjects } from './actions/updateScheduleSubjects';
 import { createSlice } from "@reduxjs/toolkit";
 import { ScheduleInfo } from "@/types/schedule";
-import { getScheduleInfo } from "@/api/schedule";
+import { getScheduleInfo } from "@/api/scheduleAPI";
 import { updateScheduleStyle } from "./actions/updateScheduleStyle";
 import { cloneDeep } from 'lodash';
 import { discardChanges } from './actions/discardChanges';
