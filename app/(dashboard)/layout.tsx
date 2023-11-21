@@ -1,9 +1,9 @@
 import Footer from '@/components/layouts/Footer'
 import Header from '@/components/layouts/Header'
-import NavBar from '@/components/layouts/NavBar'
+import NavBar from '@/components/layouts/NavBar/NavBar'
 import React from 'react'
 
-export default function layout({
+export default function DashboardLayout({
     children
 }: {
     children: React.ReactNode
@@ -11,7 +11,7 @@ export default function layout({
     return (
         <div className='flex'>
             <NavBar />
-            <div className='w-full'>
+            <div className='flex-1'>
                 <Header />
                 {children}
                 <Footer />

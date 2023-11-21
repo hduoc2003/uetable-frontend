@@ -1,7 +1,10 @@
+import Main from '@/components/layouts/Main'
 import React from 'react'
 
 export default function page() {
   return (
-    <div>page</div>
+    <Main>
+
+    </Main>
   )
 }

@@ -5,18 +5,20 @@ import Profile from '@/app/(dashboard)/settings/profile/[studentId]/page';
 import { authSelector } from '@/redux/auth/authSelector';
 import React from 'react'
 import { useSelector } from 'react-redux';
+import MySubjectsLayout from './mysubjects/layout';
+import MySubjectsPage from './mysubjects/page';
+import DashboardLoading from './loading';
 
-const HomePage: React.FC = () => {
-  const authState = useSelector(authSelector);
-  return <Profile/>;
-  if (authState.signedIn)
-    return (
-      <NotSignedInHomePage/>
-    )
-
-  return (
-    <SignedInHomePage/>
-  );
+export default function HomePage() {
+  // const authState = useSelector(authSelector);
+  // if (!authState.signedIn)
+  //   return (
+  //     <NotSignedInHomePage/>
+  //   )
+  // return (
+  //   <SignedInHomePage/>
+  // );
+  return <MySubjectsPage/>
+  // return <DashboardLoading/>
 };
 
-export default HomePage;

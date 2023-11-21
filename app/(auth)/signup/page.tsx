@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import { EyeOutlined } from '@ant-design/icons';
 
 export default function SignUp() {
@@ -60,7 +60,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="bg-white py-10 font-sans">
+    <main className="bg-white py-10">
 
       <div className="mx-auto bg-white max-w-sm max-h-max border shadow-lg py-7 rounded-lg">
 
@@ -76,17 +76,17 @@ export default function SignUp() {
               <label htmlFor="mssv" className="text-xs w-full text-red-600 font-medium">*  </label>
               <label htmlFor="mssv" className="text-xs text-gray-400 w-full font-medium">MSSV</label>
             </div>
-          </div> <br /> 
+          </div> <br />
 
           <input className={classnameE} type="text" id = "mssv" placeholder='Nhập mã số sinh viên' value={mssv} onChange={(evt) => setMssv(evt.target.value)} /> <br />
-          
+
           <div className="relative top-2 left-1 w-20">
             <div className="absolute bg-white w-full px-2">
               <label htmlFor="mssv" className="text-xs w-full text-red-600 font-medium">*  </label>
               <label htmlFor="mssv" className="text-xs text-gray-400 w-full font-medium">Mật khẩu</label>
             </div>
           </div>
-        
+
           <div>
             <EyeOutlined className={eye} onClick={changeStatus} />
           </div>
@@ -97,14 +97,14 @@ export default function SignUp() {
             <div className="absolute bg-white w-full px-2">
               <label htmlFor="Full Name" className="text-xs text-gray-400 w-full font-medium">Họ và tên</label>
             </div>
-          </div> <br /> 
+          </div> <br />
             <input className="border hover:border-sky-500 w-full h-14 rounded-lg px-2" type="text" id = "Full Name" placeholder='Nhập họ và tên' /> <br />
 
             <div className="relative top-2 left-1 w-12">
             <div className="absolute bg-white w-full px-2">
             <label htmlFor="email" className="text-xs text-gray-400 w-full font-medium"> Email</label>
             </div>
-          </div> <br /> 
+          </div> <br />
             <input className="border hover:border-sky-500 w-full h-14 rounded-lg px-2" type="text" id = "email" placeholder='Nhập email' /> <br />
 
           <div className="text-sm text-red-600 w-full font-medium italic">{note}</div> <br />
@@ -116,12 +116,12 @@ export default function SignUp() {
           <Link href="/">Back</Link>
           </button>
 
-          <button className="font-bold bg-black hover:bg-sky-300 text-white rounded-2xl w-28 h-10" 
+          <button className="font-bold bg-black hover:bg-sky-300 text-white rounded-2xl w-28 h-10"
           onClick={() => handleClick()}> <Link href = {nlink}>Next</Link> </button>
         </div>
 
       </div>
-      
-    </div>
+
+    </main>
   )
 }
