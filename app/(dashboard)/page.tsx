@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import MySubjectsLayout from './mysubjects/layout';
 import MySubjectsPage from './mysubjects/page';
 import DashboardLoading from './loading';
+import Fetcher from '@/api/Fetcher';
 
 export default function HomePage() {
   // const authState = useSelector(authSelector);
@@ -17,7 +18,7 @@ export default function HomePage() {
   // return (
   //   <SignedInHomePage/>
   // );
-  return <MySubjectsPage/>
+  return <MySubjectsPage />
   // return <DashboardLoading/>
 };
 

@@ -5,6 +5,7 @@ import { ReduxProvider } from '@/redux/provider';
 import { MAIN_FONT } from '@/styles/fonts';
 import { ConfigProvider } from 'antd';
 import { THEME } from '@/styles/theme';
+import Fetcher from '@/api/Fetcher';
 
 export const metadata: Metadata = {
   title: 'UETable',
