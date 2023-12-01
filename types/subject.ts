@@ -17,34 +17,40 @@ export interface Subject {
   id: string; /// mã học phần
   name: string; // tên học phần
   credits: number; // tín chỉ
+  type: ('all' | 'major' | 'registered')[]
 }
 interface ScoreInfo {
-  score: number;
-  weight: number;
+  score: number; // điểm
+  weight: number; // trọng số
 }
 
 export type LetterGrade = 'F' | 'D' | 'D+' | 'C' | 'C+' | 'B' | 'B+' | 'A' | 'A+';
-export class CompletedSubject implements Subject {
-  id: string;
-  name: string;
-  credits: number;
+export class RegisteredSubject implements Subject {
+  id: string; /// mã học phần
+  name: string; // tên học phần
+  credits: number; // tín chỉ
+  type: ("all" | "major" | "registered")[]; // Mặc định trả về ['registered'] luôn
+  semesterId: string; // id của học kì
   score: {
     midTerm?: ScoreInfo; // điểm giữa kì
     finalTerm?: ScoreInfo; // điểm cuối kì
     otherTerm?: ScoreInfo; // điểm thành phần
-    final: number; // điểm tổng trong hệ 10
+    final?: number; // điểm tổng trong hệ 10
   };
 
   constructor(
     id: string,
     name: string,
     credits: number,
-    score: typeof CompletedSubject.prototype.score
+    score: typeof RegisteredSubject.prototype.score,
+    semesterId: string
   ) {
     this.id = id;
     this.name = name;
     this.credits = credits;
     this.score = score;
+    this.type = ['registered']
+    this.semesterId = semesterId
   }
 
   getFinalScore(): number {
@@ -63,7 +69,7 @@ export class CompletedSubject implements Subject {
       weight += otherTerm.weight;
       res += otherTerm.score * otherTerm.weight;
     }
-    if (weight !== 1) return final;
+    if (weight !== 1) return final ?? 0;
     this.score.final = res;
     return res;
   }
@@ -106,3 +112,4 @@ export class CompletedSubject implements Subject {
     }
   }
 }
+

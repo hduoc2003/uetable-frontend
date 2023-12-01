@@ -1,7 +1,7 @@
 import { PayloadAction } from "@reduxjs/toolkit"
 import { ScheduleState } from "../scheduleSlice"
 import { SubjectClass } from "@/types/subject"
-import { isUndefined } from "@/utils/isUndefined"
+import { isUndefined } from "@/utils/typeChecking"
 
 export const updateScheduleSubjects = (state: ScheduleState, {
     payload: {

@@ -2,7 +2,7 @@
 
 import { THEME } from '@/styles/theme'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ConfigProvider, Layout, Menu, Typography } from 'antd';
 import type { MenuProps } from 'antd/es/menu';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -23,11 +23,26 @@ const { Sider } = Layout;
 export default function NavBar() {
     const [expand, setExpand] = useState(true);
     // const [clickToExpand, setClickToExpand] = useState(!expand);
-
+    const [scroll, setScroll] = useState(false);
     const handleClickToExpand = () => {
         setExpand(!expand);
         // setClickToExpand(!clickToExpand)
     };
+
+    useEffect(() => {
+        const handleScroll = () => {
+          if (window.scrollY > 0) {
+            setScroll(true);
+          } else {
+            setScroll(false);
+          }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+          window.removeEventListener("scroll", handleScroll);
+        };
+      }, []);
 
     return (
         <div
@@ -39,7 +54,13 @@ export default function NavBar() {
                 h-screen
             "
         >
-            <div className='bg-secondary rounded-layout-el h-full shadow min-w-fit'>
+            <div
+                className='bg-secondary h-full shadow min-w-fit rounded-layout-el'
+                style={{
+                    borderTopRightRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
+                    transition: 'border-radius 0.3s ease-in-out'
+                }}
+            >
                 <div className='flex gap-3 h-[70px] items-center mx-[25px]'>
                     <MyButtonWrapper
                         onClick={handleClickToExpand}

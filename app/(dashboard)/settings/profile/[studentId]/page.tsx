@@ -36,7 +36,6 @@ export default function Profile() {
       reader.onload = (e) => {
         if (e.target) {
           const dataURL = e.target.result as string;
-          console.log(dataURL);
           setImageURL(dataURL);
           if (!changedImage) {
             percentage += 20;

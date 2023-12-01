@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./auth/authSlice";
 import { scheduleReducer } from "./schedule/scheduleSlice";
+import { subjectReducer } from "./subject/subjectSlice";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        schedule: scheduleReducer
+        schedule: scheduleReducer,
+        subject: subjectReducer
     }
 });
 

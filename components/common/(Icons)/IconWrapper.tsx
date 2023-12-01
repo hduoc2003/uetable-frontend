@@ -13,7 +13,7 @@ export default function IconWrapper({
     const [solid, setSolid] = useState(false);
     return (
         <div
-            onMouseEnter={iconProps.solidOnHover ? () => {setSolid(true); console.log('enter')} : undefined}
+            onMouseEnter={iconProps.solidOnHover ? () => {setSolid(true);} : undefined}
             onMouseLeave={iconProps.solidOnHover ? () => setSolid(false) : undefined}
         >
             <Icon {...iconProps}  solid={solid}/>

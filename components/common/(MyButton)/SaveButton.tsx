@@ -1,28 +1,19 @@
 import { Button } from "antd";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-export function SaveButton({
-    editing,
-    onClick,
-    children,
-    disable = false
-}: {
-    editing: boolean
-    onClick: () => void
-    disable?: boolean
-    children: React.ReactNode
-}) {
+import { MyButtonProps } from "./MyButtonProps";
+import MyButtonWrapper from "./MyButtonWrapper";
+export function SaveButton(props: MyButtonProps) {
+    let butClassName = `group border !border-green-400 text-green-400 px-3
+                        hover:!text-white hover:bg-green-400
+                        `;
+    butClassName = twMerge(butClassName, props.className)
     return (
-        <Button
-            className={`group border-green-400 ${disable ? '' : 'hover:bg-green-500'} ${editing ? 'bg-green-400' : ''}`}
-            onClick={onClick}
-            disabled={disable}
+        <MyButtonWrapper
+            {...props}
+            className={butClassName}
         >
-            <span
-                className={twMerge(`group-hover:text-secondary ${disable ? '' : 'text-green-400'}`, `${editing ? 'text-secondary' : ''}`)}
-            >
-                {children}
-            </span>
-        </Button>
+            {props.children}
+        </MyButtonWrapper>
     );
 }

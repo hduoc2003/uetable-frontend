@@ -31,7 +31,6 @@ function NextSubjectInfo() {
     subjectClass: nextSubjectClass
   }, setNextSubjectInfo] = useState(() => nowToNextSubjectClass(subjectClassData));
 
-  // console.log(timeToNextSubject, nextSubjectClass.name)
 
   const [countdownKey, setCountdownKey] = useState(0);
 
