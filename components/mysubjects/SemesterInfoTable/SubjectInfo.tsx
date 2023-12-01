@@ -4,7 +4,7 @@ import HomeIcon from '@/components/common/(Icons)/NavIcons/HomeIcon'
 import DangerButton from '@/components/common/(MyButton)/DangerButton'
 import { SaveButton } from '@/components/common/(MyButton)/SaveButton'
 import DecorBox from '@/components/common/DecorBox'
-import { CompletedSubject } from '@/types/subject'
+import { RegisteredSubject } from '@/types/subject'
 import { Divider, Input, Modal, Popover, Space, Tooltip, Typography } from 'antd'
 import React, { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
@@ -20,8 +20,8 @@ export default function SubjectInfo({
     onCancel
 }: {
     semesterName: string,
-    subjectInfo: CompletedSubject | null,
-    onSave: (newCompletedSubject: CompletedSubject) => void,
+    subjectInfo: RegisteredSubject | null,
+    onSave: (newCompletedSubject: RegisteredSubject) => void,
     onDelete: (subjectId: string) => void
     open: boolean,
     onCancel: () => void

@@ -1,14 +1,6 @@
 'use client';
-import NotSignedInHomePage from '@/components/home/NotSignedInHomePage/NotSignedInHomePage';
-import SignedInHomePage from '@/components/home/SignedInHomePage';
-import Profile from '@/app/(dashboard)/settings/profile/[studentId]/page';
-import { authSelector } from '@/redux/auth/authSelector';
 import React from 'react'
-import { useSelector } from 'react-redux';
-import MySubjectsLayout from './mysubjects/layout';
-import MySubjectsPage from './mysubjects/page';
-import DashboardLoading from './loading';
-import Fetcher from '@/api/Fetcher';
+import MySubjectsPage from './mysubjects/semester/page';
 
 export default function HomePage() {
   // const authState = useSelector(authSelector);

@@ -1,4 +1,4 @@
-import { CompletedSubject, SubjectClass } from "@/types/subject";
+import { RegisteredSubject, SubjectClass } from "@/types/subject";
 
 export const mockSubjectClasses: SubjectClass[] = [
   {
@@ -147,26 +147,26 @@ export const mockSubjectClasses: SubjectClass[] = [
   },
 ];
 
-export const mockCompletedSubjects: CompletedSubject[] = [
-  new CompletedSubject("HIS1001", "Lịch sử Đảng Cộng sản Việt Nam", 2, {
+export const mockCompletedSubjects: RegisteredSubject[] = [
+  new RegisteredSubject("HIS1001", "Lịch sử Đảng Cộng sản Việt Nam", 2, {
     final: 8.1,
   }),
-  new CompletedSubject("INT2208", "Công nghệ phần mềm", 3, {
+  new RegisteredSubject("INT2208", "Công nghệ phần mềm", 3, {
     final: 9.2,
   }),
-  new CompletedSubject("INT3202", "Hệ quản trị cơ sở dữ liệu", 3, {
+  new RegisteredSubject("INT3202", "Hệ quản trị cơ sở dữ liệu", 3, {
     final: 8,
   }),
-  new CompletedSubject("INT3115", "Thiết kế giao diện người dùng", 3, {
+  new RegisteredSubject("INT3115", "Thiết kế giao diện người dùng", 3, {
     final: 7.1,
   }),
-  new CompletedSubject("INT3117", "Kiểm thử và đảm bảo chất lượng phần mềm", 3, {
+  new RegisteredSubject("INT3117", "Kiểm thử và đảm bảo chất lượng phần mềm", 3, {
     final: 6.5,
   }),
-  new CompletedSubject("INT2211", "Cơ sở dữ liệu", 4, {
+  new RegisteredSubject("INT2211", "Cơ sở dữ liệu", 4, {
     final: 5,
   }),
-  new CompletedSubject("INT2213", "Mạng máy tính", 4, {
+  new RegisteredSubject("INT2213", "Mạng máy tính", 4, {
     final: 1,
   }),
 ];

@@ -62,3 +62,9 @@ body {
 .ant-select-selector:hover {
   box-shadow: inset 0 0 0 2px #9A9FA5;
 }
+
+.ant-table-selection-column .ant-checkbox-inner {
+  border-width: 2px;
+  height: 18px;
+  width: 18px;
+}

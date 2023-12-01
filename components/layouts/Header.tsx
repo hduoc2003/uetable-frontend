@@ -1,7 +1,7 @@
 "use client";
 
 import { THEME } from "@/styles/theme";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "@/redux/auth/authSlice";
 import { authSelector } from "@/redux/auth/authSelector";
@@ -24,6 +24,7 @@ export default function Header() {
   const [avtStrokeColor, setAvtStrokeColor] = useState<string>(THEME.PRIMARY_COLOR);
   const [notiCount, setNotiCount] = useState(10);
   const [solidNoti, setSolidNoti] = useState(false);
+  const [scroll, setScroll] = useState(false)
 
   const handleSignIn = (): void => {
     dispatch(authActions.updateAuthState({
@@ -40,12 +41,39 @@ export default function Header() {
   };
 
   const handleOnSearch = (): void => {
-    // console.log(value)
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScroll(true);
+      } else {
+        setScroll(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="sticky top-0 z-[1000] pb-layout-el pl-layout-el pr-body-pd bg-underground pt-body-pd">
-      <div className="flex items-center h-[80px] bg-secondary rounded-layout-el shadow px-8">
+    <header
+      className="sticky top-0 z-[1000] pb-layout-el pr-body-pd bg-underground pt-body-pd"
+      style={{
+        paddingLeft: scroll ? 0 : THEME.LAYOUT_ELEMENT_SPACE,
+        transition: 'padding-left 0.3s ease-in-out'
+      }}
+    >
+      <div
+        className="flex items-center h-[80px] bg-secondary shadow px-8  rounded-layout-el"
+        style={{
+          borderTopLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
+          borderBottomLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
+          transition: 'border-radius 0.3s ease-in-out'
+        }}
+      >
         <div className="flex-1">
           <SearchBar placeholder="Tìm kiếm học phần" />
         </div>

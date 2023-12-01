@@ -14,7 +14,8 @@ export default function TaskBar({
     handleTitleChange,
     startEditing,
     discardChange,
-    save,
+    onSave: save,
+    onSaveDone,
     onAddSubject,
     onDeleteTable,
     semesterMode
@@ -24,7 +25,8 @@ export default function TaskBar({
     handleTitleChange: (title: string) => void
     startEditing: () => void
     discardChange: () => void
-    save: () => void
+    onSave: () => Promise<void>
+    onSaveDone: () => void
     onAddSubject: () => void
     onDeleteTable: () => void
     semesterMode: boolean
@@ -35,24 +37,30 @@ export default function TaskBar({
                 defaultValue={title}
                 normalText={<strong className='text-lg'>{title}</strong>}
                 onComplete={handleTitleChange}
-                onStartEditing={startEditing}
+                mode={semesterMode ? 'editable' : 'normal'}
             // editing={editing}
             />
             {semesterMode &&
                 <>
-                    <MyButtonWrapper rounded onClick={onAddSubject}>
+                    <MyButtonWrapper
+                        rounded
+                        onClick={onAddSubject}
+                        className="group-hover/table:visible group-hover/table:opacity-100 transition-opacity duration-500 opacity-0"
+                    >
                         <AddIcon solidOnHover size={24} />
                         {/* color="rgb(74 222 128)" */}
                     </MyButtonWrapper>
-                    <DeleteTable onDeleteTable={onDeleteTable} />
+                    <div className="group-hover/table:visible group-hover/table:opacity-100 transition-opacity duration-500 opacity-0">
+                        <DeleteTable onDeleteTable={onDeleteTable} />
+                    </div>
                     {editing &&
                         <>
-                            <DangerButton className="ml-auto">
+                            <DangerButton className="ml-auto" onClick={discardChange}>
                                 Huỷ
                             </DangerButton>
                             <SaveButton
-                                editing={editing}
                                 onClick={save}
+                                onDoneAnimationEnd={onSaveDone}
                             >
                                 Lưu thay đổi
                             </SaveButton>

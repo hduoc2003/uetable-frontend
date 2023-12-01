@@ -1,6 +1,6 @@
 import useSave from '@/hooks/useSave'
 import { SemesterChangeLog, SemesterInfo } from '@/types/semester'
-import { CompletedSubject, LetterGrade } from '@/types/subject'
+import { RegisteredSubject, LetterGrade } from '@/types/subject'
 import { ConfigProvider, Table, Typography } from 'antd'
 import Space from 'antd/es/space'
 import { ColumnType, ColumnsType } from 'antd/es/table'
@@ -9,14 +9,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import TaskBar from './TaskBar'
 import SubjectInfo from './SubjectInfo'
+import { useRouter } from 'next/navigation'
+import { openNewTab } from '@/utils/openNewTab'
+import { MySubjectsPageProps } from '@/app/(dashboard)/mysubjects/page'
+import SelectedIcon from '@/components/common/(Icons)/SelectedIcon'
+import DangerButton from '@/components/common/(MyButton)/DangerButton'
 
 const { Title, Text } = Typography;
 
 interface SemesterInfoProps {
     semesterInfo: SemesterInfo
-    onUpdateSemester: (data: SemesterChangeLog) => void
+    onUpdateSemester: (data: SemesterInfo) => Promise<void>
     onDeleteTable: () => void
     semesterMode?: boolean
+    loading?: boolean
 }
 
 interface TableStat {
@@ -24,7 +30,7 @@ interface TableStat {
     isStatRow?: true
 }
 
-type TableDataSourceType = CompletedSubject | TableStat;
+type TableDataSourceType = RegisteredSubject | TableStat;
 
 type ColKey = 'order' |
     'subject-id' |
@@ -42,7 +48,8 @@ export default function SemesterInfoTable({
     semesterInfo: _semesterInfo,
     onUpdateSemester,
     onDeleteTable,
-    semesterMode = true
+    semesterMode = true,
+    loading = false
 }: SemesterInfoProps) {
     const {
         data: semesterInfo,
@@ -78,42 +85,8 @@ export default function SemesterInfoTable({
         ])
     }, [semesterInfo, semesterMode])
 
-    // const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]); // mã những môn được chọn
-    const semesterChange = useRef<SemesterChangeLog>({
-        title: semesterInfo.title,
-        deletedSubject: [],
-        updatedSubject: []
-    });
-    // const rowSelection: TableRowSelection<TableDataSourceType> | undefined = useMemo(() => {
-    //     if (!editing)
-    //         return undefined;
-    //     return {
-    //         selectedRowKeys,
-    //         onChange: (newSelectedRowKeys) => { setSelectedRowKeys(newSelectedRowKeys) },
-    //         selections: [
-    //             {
-    //                 key: 'erase-row',
-    //                 text: <DangerButton>Xoá dòng đã chọn</DangerButton>,
-    //                 onSelect: () => {
-    //                     // setDataSource(dataSource.filter((data) => {
-    //                     //     if (isStatRow(data))
-    //                     //         return true;
-    //                     //     return !selectedRowKeys.includes(data.id);
-    //                     // }));
-    //                     semesterChange.current.deletedSubject = selectedRowKeys as string[];
-    //                 }
-    //             }
-    //         ],
-    //         columnWidth: 60
-    //     }
-    // }, [editing, selectedRowKeys]);
-    const [openSubjectInfo, setOpenSubjectInfo] = useState(false);
-    const editingSubject = useRef<CompletedSubject | null>(null);
-    const handleUpdateSubject = (subject: CompletedSubject) => {
-        startEditing();
-        setOpenSubjectInfo(true);
-        editingSubject.current = subject;
-    }
+    const [selectedSubjects, setSelectedSubjects] = useState<React.Key[]>([])
+
     return (
         <div>
             <ConfigProvider
@@ -127,21 +100,23 @@ export default function SemesterInfoTable({
                     },
                 }}
             >
-                <Space direction='vertical' size={'small'} className='mt-3 w-full'>
+                <Space direction='vertical' size={'small'} className='mt-3 w-full group/table'>
                     <TaskBar
                         editing={editing}
                         title={semesterInfo.title}
                         handleTitleChange={handleTitleChange}
                         startEditing={startEditing}
-                        save={() => { saveTable(); onUpdateSemester(semesterChange.current) }}
+                        onSave={handleSave}
+                        onSaveDone={saveTable}
                         discardChange={discardTableChange}
                         onDeleteTable={onDeleteTable}
-                        onAddSubject={() => handleUpdateSubject(new CompletedSubject(
-                            '', '', 0, { final: 0 }
+                        onAddSubject={() => handleUpdateSubject(new RegisteredSubject(
+                            '', '', 0, { final: 0 }, semesterInfo.id
                         ))}
                         semesterMode={semesterMode}
                     />
                     <Table
+                        loading={loading}
                         dataSource={dataSource}
                         columns={columns}
                         pagination={false}
@@ -154,22 +129,42 @@ export default function SemesterInfoTable({
                             scrollToFirstRowOnChange: true
                         }}
                         onRow={(data) => (
-                            !isStatRow(data) && semesterMode ? {
-                                className: 'hover:bg-gray-200 cursor-pointer rounded-md group',
+                            !isStatRow(data) ? {
+                                className: 'hover:bg-gray-200 cursor-pointer group',
                                 onClick: () => handleUpdateSubject(data)
                             } : {
 
                             }
                         )}
-                    // rowSelection={rowSelection}
+                        rowSelection={semesterMode ? {
+                            renderCell(checked, record, index, originNode) {
+                                return !isStatRow(record) ? {
+                                    props: {
+                                        className: '!rounded-l-lg'
+                                    },
+                                    children: originNode
+                                } : {}
+                            },
+                            hideSelectAll: true,
+                            onChange(selectedRowKeys) {
+                                setSelectedSubjects(selectedRowKeys)
+                            }
+                        } : undefined}
                     />
+                    {selectedSubjects.length > 0 &&
+                        <div className='flex gap-3 items-center py-2'>
+                        <SelectedIcon/>
+                        <Text strong className='text-royal-gray flex-1'>{`${selectedSubjects.length} môn học đã chọn`}</Text>
+                        <DangerButton onClick={handleDeleteSubject}>Xoá môn học</DangerButton>
+                        </div>
+                    }
 
                 </Space>
             </ConfigProvider>
-            <SubjectInfo
+            {/* <SubjectInfo
                 key={editingSubject.current?.id}
                 semesterName={semesterInfo.title}
-                subjectInfo={editingSubject.current as CompletedSubject}
+                subjectInfo={editingSubject.current as RegisteredSubject}
                 onSave={(newCompletedSubject) => {
                     // setSemesterInfo(newSemesterInfo);
                     setOpenSubjectInfo(false);
@@ -184,14 +179,33 @@ export default function SemesterInfoTable({
                 }}
                 open={openSubjectInfo}
                 onCancel={() => setOpenSubjectInfo(false)}
-            />
+            /> */}
 
         </div>
     )
 
     function handleTitleChange(title: string) {
         setSemesterInfo({ ...semesterInfo, title });
-        semesterChange.current.title = title
+        startEditing();
+    }
+
+    function handleUpdateSubject(subject: RegisteredSubject) {
+        openNewTab<MySubjectsPageProps['searchParams']>('/mysubjects', {
+            subjectId: subject.id
+        })
+    }
+
+    function handleDeleteSubject() {
+        startEditing();
+        setSemesterInfo({
+            ...semesterInfo,
+            subjects: semesterInfo.subjects.filter((info) => !selectedSubjects.includes(info.id))
+        })
+        setSelectedSubjects([])
+    }
+
+    async function handleSave() {
+        await onUpdateSemester(semesterInfo);
     }
 }
 
@@ -258,7 +272,7 @@ const cellStyle: React.CSSProperties = {
 }
 
 function isStatRow(data: TableDataSourceType): data is TableStat {
-    return !(data instanceof CompletedSubject)
+    return !(data instanceof RegisteredSubject)
 }
 
 function getOrderCol(key: ColKey): ColumnType<TableDataSourceType> {
@@ -290,7 +304,7 @@ function getOrderCol(key: ColKey): ColumnType<TableDataSourceType> {
                 props: {
                     style: statRow ? { ...cellStyle, textAlign: 'left' } : cellStyle,
                     colSpan: statRow ? tableCols - statResultColSpan : 1,
-                    className: statRow ? '' : '!rounded-l-lg'
+                    // className: statRow ? '' : '!rounded-l-lg'
                 }
             }
         },
@@ -328,7 +342,7 @@ function getSubjectNameCol(key: ColKey): ColumnType<TableDataSourceType> {
         key,
         title: <CellContent>Tên học phần</CellContent>,
         render: (_, data, rowIdx) => ({
-            children: <CellContent>{(data as CompletedSubject).name}</CellContent>,
+            children: <CellContent>{(data as RegisteredSubject).name}</CellContent>,
             props: {
                 style: {
                     ...cellStyle,
@@ -404,7 +418,6 @@ function getSubjectFinalScoreCol(
             }
         }),
         sorter: (a, b) => {
-            // console.log('vcl')
             if (isStatRow(a) || isStatRow(b))
                 return 0;
             return a.getFinalScore() - b.getFinalScore()

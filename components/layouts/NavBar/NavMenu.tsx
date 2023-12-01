@@ -15,7 +15,7 @@ import LinkIcon from '@/components/common/(Icons)/NavIcons/LinkIcon';
 
 type GroupKey = 'general' | 'explore';
 type MenuKey = 'home' | 'schedule' | 'my-subjects' | 'all-subjects' | 'stat' | 'links';
-type MySubjectsKey = 'my-subjects-self' | 'my-subjects-majors';
+type MySubjectsKey = 'my-subjects-semester' | 'my-registered-subjects' | 'my-subjects-majors';
 type StatKey = 'stat-credits' | 'stat-score' | 'stat-self';
 
 type AllKey = GroupKey | MenuKey | MySubjectsKey | StatKey;
@@ -98,7 +98,8 @@ const labels: Record<AllKey, string> = {
     'home': 'Trang chủ',
     'schedule': 'Thời khoá biểu',
     'my-subjects': 'Môn học của tôi',
-    'my-subjects-self': 'Cá nhân',
+    'my-subjects-semester': 'Học kì',
+    'my-registered-subjects': 'Môn đã đăng kí',
     'my-subjects-majors': 'Chương trình đào tạo',
     'all-subjects': 'Học phần',
     'explore': 'Khám phá',
@@ -124,7 +125,8 @@ function getMenuItems(
             getNormalMenuItem('schedule', selectedKey, getLabel('schedule'), false, ScheduleIcon),
             getSubMenuItem('my-subjects', getLabel('my-subjects'), MySubjectIcon,
             [
-                getNormalMenuItem('my-subjects-self', selectedKey, getLabel('my-subjects-self'), true),
+                getNormalMenuItem('my-subjects-semester', selectedKey, getLabel('my-subjects-semester'), true),
+                getNormalMenuItem('my-registered-subjects', selectedKey, getLabel('my-registered-subjects'), true),
                 getNormalMenuItem('my-subjects-majors', selectedKey, getLabel('my-subjects-majors'), true)
             ]),
             getNormalMenuItem('all-subjects', selectedKey, getLabel('all-subjects'), false, AllSubjectsIcon)

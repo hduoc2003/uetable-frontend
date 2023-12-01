@@ -1,18 +1,29 @@
 import { SemesterChangeLog, SemesterInfo } from "@/types/semester";
 import { mockAllSemesterInfo } from "./mocks/semester";
-import { CompletedSubject } from "@/types/subject";
+import { RegisteredSubject } from "@/types/subject";
 import Fetcher from "./Fetcher";
+import { delay } from "@/utils/delay";
 
 export class SemesterAPI {
-    static getAllSemesterInfo(): SemesterInfo[] {
+    static async getAllSemesterInfo(): Promise<SemesterInfo[]> {
+        await delay(2000)
+        // console.log(mockAllSemesterInfo)
         return mockAllSemesterInfo;
     }
 
-    static updateSemester(semesterId: string, data: SemesterChangeLog) {
-        // Fetcher.get('/api/v1/get_user')
+    static async getTotalGPA(): Promise<number> {
+        return Math.random()
     }
 
-    static updateSemesterSubject(semesterId: string, subjectId: string, updateInfo: Partial<CompletedSubject>): void {
+    static async updateSemester(data: SemesterInfo) {
+        await delay(2000)
+    }
 
+    static async addSemester(): Promise<{
+        semesterId: string
+    }> {
+        return {
+            semesterId: '1'
+        }
     }
 }

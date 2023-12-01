@@ -1,4 +1,3 @@
-import getEnv from "@/utils/getEnv";
 import axios from "axios";
 
 const Fetcher = axios.create({
