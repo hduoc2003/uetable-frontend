@@ -1,14 +1,40 @@
 "use client"
 import Link from 'next/link'
 import React, {useState} from 'react'
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
+import { CloseCircleFilled, CloseCircleTwoTone, EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
+import Fetcher from '@/api/Fetcher'
+import FetcherAuth from '@/api/FetcherAuth'
+import { useDispatch, useSelector } from 'react-redux'
+import { authSelector } from '@/redux/auth/authSelector'
+import { authActions } from '@/redux/auth/authSlice'
+import { useRouter } from 'next/navigation'
+import Cookies from 'universal-cookie';
+
+interface SignInResponse {
+  message: string,
+  authToken: string,
+  studentid: string,
+}
+
+interface UserInfoResponse {
+  id: string,
+  name: string,
+  studentId: string,
+  date: string,
+  avatar: string,
+}
 
 export default function SignIn() {
+  const cookies = new Cookies();
+  const dispatch = useDispatch();
+  const authState = useSelector(authSelector);
   const [inputValue, setInputValue] = useState('');
   const [inputFocused, setInputFocused] = useState(false);
   const [inputPasswordValue, setInputPasswordValue] = useState('');
   const [inputPasswordFocused, setInputPasswordFocused] = useState(false);
   const [type, setType] = useState("password");
+  const [logInError, setLogInError] = useState("");
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -28,6 +54,49 @@ export default function SignIn() {
     else 
       setType("password");
   }
+
+  async function handleSignIn(){
+    FetcherAuth.get<any, UserInfoResponse>('/users/' + inputValue)
+    .then((response : UserInfoResponse) => {
+      dispatch(authActions.updateAuthState({
+        signedIn: true,
+        username: inputValue,
+        name: response.name,
+      }));
+      router.push('/');
+    })
+  };
+
+  const handleForgotPasswordClick = () => {
+    router.push('/forgotpassword');
+  }
+
+  async function onSignInClick() {
+    setLogInError("");
+
+    Fetcher.post<any, SignInResponse>('/users/auth', {
+      "studentid": inputValue,
+      "password": inputPasswordValue,
+    }).then((response : SignInResponse) => {
+      console.log(response.authToken);
+      const expiresDate = new Date();
+      expiresDate.setDate(expiresDate.getDate() + 999999);
+      cookies.set('authToken', response.authToken, {
+        expires: expiresDate,
+      });
+      cookies.set('studentid', inputValue, {
+        expires: expiresDate,
+      });
+      cookies.set('password', inputPasswordValue, {
+        expires: expiresDate,
+      });
+      handleSignIn();
+    }).catch((error) => {
+      console.log(error);
+      setLogInError(error.response.data.error);
+    });
+  } 
+
 
   return (
     <main className="h-screen flex">
@@ -84,10 +153,18 @@ export default function SignIn() {
                 )}
               </div>
             </div>
+              {logInError != "" && (
+                <div className='w-full p-2'>
+                  <div className='w-full rounded-lg flex bg-red-300 p-4 mt-6'>
+                    <CloseCircleFilled style={{color: '#FF0000'}}/>
+                    <p className='text-sm ml-4'>{logInError}</p>
+                  </div>
+                </div>
+              )}
           </div>
         </div>
         <div className="w-full flex justify-end items-end">
-          <button className="text-sm text-primary mr-8 hover:underline hover:underline-offset-2">Quên mật khẩu?</button>
+          <button className="text-sm text-primary mr-8 hover:underline hover:underline-offset-2" onClick={handleForgotPasswordClick}>Quên mật khẩu?</button>
         </div>
         <div className="w-full flex justify-end items-end">
           Chưa có tài khoản? 
@@ -96,11 +173,11 @@ export default function SignIn() {
           </button>
         </div>
         <div className="w-full flex justify-between">
-        <button className="text-lg text-black rounded-lg px-6 py-2 font-bold ml-8 mt-16 hover:bg-slate-300">
+          <button className="text-lg text-black rounded-lg px-6 py-2 font-bold ml-8 mt-16 hover:bg-slate-300">
             <Link href="/">Quay lại</Link>
           </button>
-          <button className="text-lg text-white rounded-lg bg-primary px-3 py-2 mr-8 mt-16 hover:bg-dark-primary">
-            <Link href="/">Đăng nhập</Link>
+          <button className="text-lg text-white rounded-lg bg-primary px-3 py-2 mr-8 mt-16 hover:bg-dark-primary" onClick={onSignInClick}>
+              Đăng nhập
           </button>
         </div>
       </div>

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { mockDocumentClasses } from '@/api/mocks/document';
 import { LikeOutlined, CommentOutlined, DownloadOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Typography, Progress} from 'antd';
+import Image from 'next/image';
 
 const {Paragraph} = Typography;
 
@@ -55,7 +56,7 @@ export default function Profile() {
         <div className="m-4 bg-white border rounded-2xl shadow-lg">
           <div className="flex">
             <div>
-              <img src={imageURL} className="m-10 w-32 h-32 rounded-full"></img>
+              <Image src={imageURL} alt="Profile Pic"/>
             </div>
             <div className="flex flex-col my-10 mr-10">
               <div className="flex mt-8">
@@ -104,7 +105,7 @@ export default function Profile() {
                   return (
                     <>
                       <div className="border hover:bg-gray-100 hover:shadow bg-white p-6 m-4 flex">
-                        <img src={document.image} className=" m-4 w-[100px] h-[100px]"/>
+                        <Image src={document.image} height={100} width={100} alt="Document Image"/>
                         <div className="flex flex-col gap-1">
                         <p className='text-blue-400 text-lg'>{document.name}</p>
                         <p className="">Tác giả: {document.author}</p>

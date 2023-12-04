@@ -1,10 +1,11 @@
 "use client";
 
 import { THEME } from "@/styles/theme";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "@/redux/auth/authSlice";
 import { authSelector } from "@/redux/auth/authSelector";
+import { AuthState } from "@/redux/auth/authSlice";
 import { Avatar, Badge, Divider, Select, Popover } from "antd";
 import { IoNotificationsOutline, IoNotifications } from "react-icons/io5";
 import SearchBar from "../common/SearchBar/SearchBar";
@@ -12,35 +13,55 @@ import Link from "next/link";
 import { MAIN_FONT } from "@/styles/fonts";
 import { content } from "@/components/layouts/Notifications"
 import NotificationIcon from "../common/(Icons)/NotificationIcon";
+import TokenCheck from "@/api/TokenCheck";
+import FetcherAuth from "@/api/FetcherAuth";
+import { useRouter } from "next/navigation";
+import Cookies from "universal-cookie";
 interface TabProps {
   selected: boolean;
   children: ReactNode;
 }
 
 export default function Header() {
-  const dispatch = useDispatch();
-  const authState = useSelector(authSelector);
   const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
   const [avtStrokeColor, setAvtStrokeColor] = useState<string>(THEME.PRIMARY_COLOR);
   const [notiCount, setNotiCount] = useState(10);
   const [solidNoti, setSolidNoti] = useState(false);
+  const authState = useSelector(authSelector);
+  const dispatch = useDispatch();
+  const cookies = new Cookies();
+  const router = useRouter();
 
-  const handleSignIn = (): void => {
-    dispatch(authActions.updateAuthState({
-      signedIn: true,
-      username: "21020059",
-      name: "Bùi Huy Dược"
-    }))
-  };
-
-  const handleSignOut = (): void => {
-    dispatch(authActions.updateAuthState({
-      signedIn: false
-    }))
-  };
+  useEffect(()=> {
+    FetcherAuth.get('/users/' + cookies.get('studentid'))
+    .then((response) => {
+        dispatch(authActions.updateAuthState({
+            signedIn: true,
+            name: response.name,
+            username: cookies.get('studentid'),
+        }));
+        //console.log(response);
+    }).catch((error) => {
+        dispatch(authActions.updateAuthState({
+            signedIn: false,
+            name: '',
+            username: '',
+        }));
+        //router.push('/signin');
+    });
+  }, []);
 
   const handleOnSearch = (): void => {
     // console.log(value)
+  }
+
+  const handleSignOut = () => {
+    cookies.remove('authToken');
+    dispatch(authActions.updateAuthState({
+      signedIn: false,
+      name: '',
+      username: '',
+    }));
   }
 
   return (
@@ -63,12 +84,11 @@ export default function Header() {
                 </button>
               </Popover>
               <button
-                onClick={handleSignOut}
                 onMouseEnter={() => setAvtStrokeColor(THEME.DARK_PRIMARY_COLOR)}
                 onMouseLeave={() => setAvtStrokeColor(THEME.PRIMARY_COLOR)}
               >
                 <div className="relative flex">
-                  <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={avtURL} size={40}></Avatar>
+                  <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={avtURL} size={40} onClick={handleSignOut}></Avatar>
                   <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" strokeWidth="2" style={{ stroke: avtStrokeColor }}></circle></svg>
                 </div>
               </button>
@@ -92,7 +112,6 @@ export default function Header() {
                   style={{
                     padding: "7px 17px",
                   }}
-                  onClick={handleSignIn}
                 >
                   Đăng nhập
                 </button>
