@@ -106,10 +106,8 @@ export default function SignUp() {
 
             <div className="relative top-2 left-1 w-12">
             <div className="absolute bg-white w-full px-2">
-            <label htmlFor="email" className="text-xs text-gray-400 w-full font-medium"> Email</label>
             </div>
           </div> <br />
-            <input className="border hover:border-sky-500 w-full h-14 rounded-lg px-2" type="text" id = "email" placeholder='Nhập email' /> <br />
 
           <div className="text-sm text-red-600 w-full font-medium italic">{note}</div> <br />
 
