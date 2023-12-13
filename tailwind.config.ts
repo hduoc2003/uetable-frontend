@@ -33,8 +33,11 @@ const config: Config = {
         'table-border': THEME.TABLE_BORDER_COLOR,
         'danger': THEME.DANGER_COLOR,
         'underground': THEME.UNDERGROUND_COLOR,
+        'contrast': THEME.SECONDARY_CONTRAST_COLOR,
         'nav-highlight': NAVBAR_STYLE.ITEM_HIGHLIGHT_COLOR,
-        'nav-selected-bg': NAVBAR_STYLE.ITEM_SELECTED_BACKGROUND_COLOR
+        'nav-selected-bg': NAVBAR_STYLE.ITEM_SELECTED_BACKGROUND_COLOR,
+        'clickable': THEME.CLICKABLE_COLOR,
+        'inherit': 'inherit'
       },
       fontSize: {
         'fs-inherit': 'inherit'

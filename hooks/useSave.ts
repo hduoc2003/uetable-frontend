@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 
 interface UseSaveResult<DataType> {
+    dumpData: DataType
     data: DataType
     setData: (newData: DataType) => void
     save: () => void
@@ -14,6 +15,7 @@ export default function useSave<DataType>(data: DataType): UseSaveResult<DataTyp
     const [currentData, setCurrentData] = useState<DataType>(data);
     const [editing, setEditing] = useState(false);
     return {
+        dumpData: backupData.current,
         data: currentData,
         setData: setCurrentData,
         save: () => {backupData.current = currentData; setEditing(false);},

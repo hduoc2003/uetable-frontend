@@ -148,14 +148,12 @@ export default function Schedule({
                         Huỷ thay đổi
                     </DangerButton>
                     <SaveButton
-                        editing={editing}
                         onClick={() => {
                             dispatch(scheduleActions.saveChanges())
                             dispatch(scheduleActions.updateScheduleState({
                                 editing: false
                             }))
                         }}
-                        disable={!editing}
                     >
                         Lưu
                     </SaveButton>

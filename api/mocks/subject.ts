@@ -1,4 +1,4 @@
-import { RegisteredSubject, SubjectClass } from "@/types/subject";
+import { RegisteredSubject, SubjectAll, SubjectClass } from "@/types/subject";
 
 export const mockSubjectClasses: SubjectClass[] = [
   {
@@ -147,28 +147,99 @@ export const mockSubjectClasses: SubjectClass[] = [
   },
 ];
 
-export const mockCompletedSubjects: RegisteredSubject[] = [
-  new RegisteredSubject("HIS1001", "Lịch sử Đảng Cộng sản Việt Nam", 2, {
+export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] => [{
+  id: "HIS1001",
+  name: "Lịch sử Đảng Cộng sản Việt Nam",
+  credits: 2,
+  score: {
     final: 8.1,
-  }),
-  new RegisteredSubject("INT2208", "Công nghệ phần mềm", 3, {
+  },
+  semesterId,
+  type: 'registered'
+}, {
+  id: "INT2208",
+  name: "Công nghệ phần mềm",
+  credits: 3,
+  score: {
     final: 9.2,
-  }),
-  new RegisteredSubject("INT3202", "Hệ quản trị cơ sở dữ liệu", 3, {
+  },
+  semesterId,
+  type: 'registered'
+}, {
+  id: "INT3202",
+  name: "Hệ quản trị cơ sở dữ liệu",
+  credits: 3,
+  score: {
     final: 8,
-  }),
-  new RegisteredSubject("INT3115", "Thiết kế giao diện người dùng", 3, {
+  },
+  semesterId,
+  type: 'registered'
+}, {
+  id: "INT3115",
+  name: "Thiết kế giao diện người dùng",
+  credits: 3,
+  score: {
     final: 7.1,
-  }),
-  new RegisteredSubject("INT3117", "Kiểm thử và đảm bảo chất lượng phần mềm", 3, {
-    final: 6.5,
-  }),
-  new RegisteredSubject("INT2211", "Cơ sở dữ liệu", 4, {
+  },
+  semesterId,
+  type: 'registered'
+}, {
+  id: "INT3117",
+  name: "Kiểm thử và đảm bảo chất lượng phần mềm",
+  credits: 3,
+  score: {
+    final: 8,
+  },
+  semesterId,
+  type: 'registered'
+}, {
+  id: "INT2211",
+  name: "Cơ sở dữ liệu",
+  credits: 4,
+  score: {
     final: 5,
-  }),
-  new RegisteredSubject("INT2213", "Mạng máy tính", 4, {
+  },
+  semesterId,
+  type: 'registered'
+}, {
+  id: "INT2213",
+  name: "Mạng máy tính",
+  credits: 4,
+  score: {
     final: 1,
-  }),
+  },
+  semesterId,
+  type: 'registered'
+}];
+
+export const mockAllSubjects: SubjectAll[] = [
+  {
+    id: "HIS1001",
+    name: "Lịch sử Đảng Cộng sản Việt Nam",
+    credits: 2,
+    type: "registered",
+    letterGrade: "A+",
+    like: 6,
+    documents: 652,
+    stared: true,
+  },
+  {
+    id: 'INT3117',
+    name: 'Kiểm thử và đảm bảo chất lượng phần mềm',
+    credits: 3,
+    type: 'major',
+    like: 235,
+    documents: 554,
+    stared: false,
+},
+  {
+    id: 'INT2213',
+    name: 'Mạng máy tính',
+    credits: 3,
+    type: 'registered',
+    letterGrade: 'B+',
+    like: 1133,
+    documents: 1313,
+    stared: true,
+  }
 ];
-
-

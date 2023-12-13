@@ -8,15 +8,15 @@ export default function IconWrapper({
     iconProps
 }: {
     Icon: React.FC<IconProps>
-    iconProps: IconProps
+    iconProps?: IconProps
 }) {
     const [solid, setSolid] = useState(false);
     return (
         <div
-            onMouseEnter={iconProps.solidOnHover ? () => {setSolid(true);} : undefined}
-            onMouseLeave={iconProps.solidOnHover ? () => setSolid(false) : undefined}
+            onMouseEnter={iconProps?.solidOnHover ? () => {setSolid(true);} : undefined}
+            onMouseLeave={iconProps?.solidOnHover ? () => setSolid(false) : undefined}
         >
-            <Icon {...iconProps}  solid={solid}/>
+            <Icon solid={solid} {...iconProps} />
         </div>
     );
 }

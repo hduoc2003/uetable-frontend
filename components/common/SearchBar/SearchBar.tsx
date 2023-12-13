@@ -16,7 +16,7 @@ export default function SearchBar(props: InputProps): React.JSX.Element {
             }}
             // bordered={false}
             {...props}
-            className={twMerge('bg-[#F4F4F4] w-[400px] hover:border-2 rounded-xl h-12 border-2 border-transparent', props.className)}
+            className={twMerge('bg-[#F4F4F4] w-1/3 hover:border-2 rounded-xl h-12 border-2 border-transparent', props.className)}
         />
     )
 }

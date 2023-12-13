@@ -46,7 +46,7 @@ export default function Header() {
         }));
         //console.log(response);
       }).catch((error) => {
-        router.push('/');
+        // router.push('/');
       });
   }, [dispatch, router]);
 
@@ -95,7 +95,7 @@ export default function Header() {
         }}
       >
         <div className="flex-1">
-          <SearchBar placeholder="Tìm kiếm học phần" />
+          <SearchBar placeholder="Tìm kiếm học phần" className="w-[25vw]"/>
         </div>
         <LanguaguesSelector />
         {

@@ -1,16 +1,11 @@
 'use client';
 
+import { PageProps } from "@/types/PageProps";
 import { useSearchParams } from "next/navigation";
 
-interface SearchParams {
+export type MySubjectsPageProps = PageProps<{
     subjectId: string
-}
-
-export interface MySubjectsPageProps {
-    searchParams: {
-        subjectId: string
-    }
-}
+}>
 
 export default function MySubjectsPage({
     searchParams: {

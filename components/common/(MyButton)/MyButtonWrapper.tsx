@@ -10,7 +10,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { IoMdDoneAll } from 'react-icons/io'
 
 export default function MyButtonWrapper(props: MyButtonProps) {
-    let className = 'p-1 h-fit w-fit text-fs-inherit border-0 group';
+    let className = 'p-1 h-fit w-fit text-fs-inherit border-0 group hover:!border-contrast hover:text-current';
     const [loading, setLoading] = useState(false);
     const [finished, setFinished] = useState(false);
     if (props.rounded)
@@ -38,7 +38,7 @@ export default function MyButtonWrapper(props: MyButtonProps) {
             disabled={loading && !finished}
         >
             <div className="flex gap-3 items-center">
-                <span>{props.children}</span>
+                {props.children}
                 {loading && (
                     finished ?
                     <IoMdDoneAll size='1.2em'/> :
