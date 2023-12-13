@@ -17,19 +17,29 @@ export interface Subject {
   id: string; /// mã học phần
   name: string; // tên học phần
   credits: number; // tín chỉ
-  type: ('all' | 'major' | 'registered')[]
+  type: ('all' | 'major' | 'registered');
+}
+export interface SubjectAll extends Subject {
+  letterGrade?: LetterGrade; // Điểm
+  like: number; // Số lượt thích
+  documents: number; // Số tài liệu
+  stared: boolean; // Đã yêu thích hay chưa
+  imgLink?: string; // Link ảnh
+  GPA?: number; // Điểm trung bình chung của môn
+  lecturers?: {
+    name: string,
+    email?: string
+  }[] /// Danh sách giảng viên
+  description?: string /// Mô tả môn học
 }
 interface ScoreInfo {
   score: number; // điểm
   weight: number; // trọng số
 }
 
-export type LetterGrade = 'F' | 'D' | 'D+' | 'C' | 'C+' | 'B' | 'B+' | 'A' | 'A+';
-export class RegisteredSubject implements Subject {
-  id: string; /// mã học phần
-  name: string; // tên học phần
-  credits: number; // tín chỉ
-  type: ("all" | "major" | "registered")[]; // Mặc định trả về ['registered'] luôn
+export type LetterGrade = 'F' | 'D' | 'D+' | 'C' | 'C+' | 'B' | 'B+' | 'A' | 'A+' | 'Chưa hoàn thành';
+export interface RegisteredSubject extends Subject {
+  // type: "registered";
   semesterId: string; // id của học kì
   score: {
     midTerm?: ScoreInfo; // điểm giữa kì
@@ -37,79 +47,5 @@ export class RegisteredSubject implements Subject {
     otherTerm?: ScoreInfo; // điểm thành phần
     final?: number; // điểm tổng trong hệ 10
   };
-
-  constructor(
-    id: string,
-    name: string,
-    credits: number,
-    score: typeof RegisteredSubject.prototype.score,
-    semesterId: string
-  ) {
-    this.id = id;
-    this.name = name;
-    this.credits = credits;
-    this.score = score;
-    this.type = ['registered']
-    this.semesterId = semesterId
-  }
-
-  getFinalScore(): number {
-    let res = 0;
-    let weight = 0;
-    const { midTerm, finalTerm, otherTerm, final } = this.score;
-    if (typeof midTerm !== "undefined") {
-      weight += midTerm.weight;
-      res += midTerm.score * midTerm.weight;
-    }
-    if (typeof finalTerm !== "undefined") {
-      weight += finalTerm.weight;
-      res += finalTerm.score * finalTerm.weight;
-    }
-    if (typeof otherTerm !== "undefined") {
-      weight += otherTerm.weight;
-      res += otherTerm.score * otherTerm.weight;
-    }
-    if (weight !== 1) return final ?? 0;
-    this.score.final = res;
-    return res;
-  }
-
-  get4Grade(): number {
-    let finalScore = this.getFinalScore();
-    if (finalScore < 4) return 0;
-    if (finalScore < 5) return 1;
-    if (finalScore < 5.5) return 1.5;
-    if (finalScore < 6.5) return 2;
-    if (finalScore < 7) return 2.5;
-    if (finalScore < 8) return 3;
-    if (finalScore < 8.5) return 3.5;
-    if (finalScore < 9) return 3.7;
-    return 4;
-  }
-
-  getLetterGrade(): LetterGrade {
-    switch (this.get4Grade()) {
-      case 0:
-        return "F";
-      case 1:
-        return "D";
-      case 1.5:
-        return "D+";
-      case 2:
-        return "C";
-      case 2.5:
-        return "C+";
-      case 3:
-        return "B";
-      case 3.5:
-        return "B+";
-      case 3.7:
-        return "A";
-      case 4:
-        return "A+";
-      default:
-        return "F";
-    }
-  }
 }
 

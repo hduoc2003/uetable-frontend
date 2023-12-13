@@ -1,5 +1,4 @@
-import useSave from '@/hooks/useSave'
-import { SemesterChangeLog, SemesterInfo } from '@/types/semester'
+import { SemesterInfo } from '@/types/semester'
 import { RegisteredSubject, LetterGrade } from '@/types/subject'
 import { ConfigProvider, Table, Typography } from 'antd'
 import Space from 'antd/es/space'
@@ -9,26 +8,30 @@ import React, { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import TaskBar from './TaskBar'
 import SubjectInfo from './SubjectInfo'
-import { useRouter } from 'next/navigation'
-import { openNewTab } from '@/utils/openNewTab'
-import { MySubjectsPageProps } from '@/app/(dashboard)/mysubjects/page'
 import SelectedIcon from '@/components/common/(Icons)/SelectedIcon'
 import DangerButton from '@/components/common/(MyButton)/DangerButton'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectRootSemester, selectSemesterById } from '@/redux/semester/semesterSelector'
+import { RootState, useThunkDispatch } from '@/redux/store'
+import { allSemesterMode } from '@/utils/semester'
+import { crudSubjectThunk } from '@/redux/semester/actions/crudSubject'
+import search from '@/utils/search'
+import genId from '@/utils/genId'
+import { get4Grade, getFinalScore, getLetterGrade } from '@/utils/subjects'
 
 const { Title, Text } = Typography;
 
 interface SemesterInfoProps {
-    semesterInfo: SemesterInfo
-    onUpdateSemester: (data: SemesterInfo) => Promise<void>
-    onDeleteTable: () => void
-    semesterMode?: boolean
     loading?: boolean
+    searchingSubject: string
 }
 
 interface TableStat {
     id: keyof Pick<SemesterInfo, 'semesterGPA' | 'yearGPA' | 'sumOfCredits'>
     isStatRow?: true
 }
+
+const statKeys: TableStat['id'][] = ['semesterGPA', 'yearGPA', 'sumOfCredits']
 
 type TableDataSourceType = RegisteredSubject | TableStat;
 
@@ -45,32 +48,35 @@ const statResultColSpan = 2;
 const tableCols = 8;
 
 export default function SemesterInfoTable({
-    semesterInfo: _semesterInfo,
-    onUpdateSemester,
-    onDeleteTable,
-    semesterMode = true,
-    loading = false
+    loading: _loading = false,
+    searchingSubject
 }: SemesterInfoProps) {
-    const {
-        data: semesterInfo,
-        setData: setSemesterInfo,
-        save: saveTable,
-        discard: discardTableChange,
-        editing,
-        startEditing
-    } = useSave<SemesterInfo>(_semesterInfo);
+    const dispatch = useDispatch();
+    const thunkDispatch = useThunkDispatch();
+    const {currentId, pending} = useSelector(selectRootSemester)
+    const {semesterInfo} = useSelector((state: RootState) => selectSemesterById(state, currentId))
+
     const [dataSource, setDataSource] = useState<TableDataSourceType[]>([])
     const [columns, setColumns] = useState<ColumnsType<TableDataSourceType>>([]);
+    const [editingSubject, setEditingSubject] = useState<RegisteredSubject>()
+    const [openSubjectInfo, setOpenSubjectInfo] = useState(false);
+    const [loading, setLoading] = useState(_loading);
+    const [selectedSubjects, setSelectedSubjects] = useState<React.Key[]>([])
+
+    console.log(dataSource.length)
 
     useEffect(() => {
-        if (semesterMode)
+        let filtered = search<RegisteredSubject>(searchingSubject, semesterInfo.subjects, ['id', 'name']);
+        // for (let i = 0; i < filtered.length; ++i)
+        //     filtered[i].id = genId();
+        if (!allSemesterMode(currentId))
             setDataSource([
-                ...(semesterInfo.subjects ?? []),
+                ...filtered,
                 { id: 'sumOfCredits' }, { id: 'semesterGPA' }, { id: 'yearGPA' }
             ]);
         else
             setDataSource([
-                ...(semesterInfo.subjects ?? []),
+                ...filtered,
                 { id: 'sumOfCredits' }, { id: 'yearGPA' }
             ]);
         setColumns([
@@ -81,11 +87,9 @@ export default function SemesterInfoTable({
             getSubject4GradeCol('4-grade'),
             getSubjectFinalScoreCol('final-score'),
             getSubjectLetterGradeCol('letter-grade', semesterInfo),
-            getOtherScoreCol('others-score')
+            // getOtherScoreCol('others-score')
         ])
-    }, [semesterInfo, semesterMode])
-
-    const [selectedSubjects, setSelectedSubjects] = useState<React.Key[]>([])
+    }, [currentId, searchingSubject, semesterInfo])
 
     return (
         <div>
@@ -102,21 +106,19 @@ export default function SemesterInfoTable({
             >
                 <Space direction='vertical' size={'small'} className='mt-3 w-full group/table'>
                     <TaskBar
-                        editing={editing}
-                        title={semesterInfo.title}
-                        handleTitleChange={handleTitleChange}
-                        startEditing={startEditing}
-                        onSave={handleSave}
-                        onSaveDone={saveTable}
-                        discardChange={discardTableChange}
-                        onDeleteTable={onDeleteTable}
-                        onAddSubject={() => handleUpdateSubject(new RegisteredSubject(
-                            '', '', 0, { final: 0 }, semesterInfo.id
-                        ))}
-                        semesterMode={semesterMode}
+                        onAddSubject={() => handleClickSubject({
+                            id: '',
+                            type: 'registered',
+                            semesterId: semesterInfo.id,
+                            score: {
+                                final: 0
+                            },
+                            name: '',
+                            credits: 0
+                        })}
                     />
                     <Table
-                        loading={loading}
+                        loading={loading || pending}
                         dataSource={dataSource}
                         columns={columns}
                         pagination={false}
@@ -131,12 +133,12 @@ export default function SemesterInfoTable({
                         onRow={(data) => (
                             !isStatRow(data) ? {
                                 className: 'hover:bg-gray-200 cursor-pointer group',
-                                onClick: () => handleUpdateSubject(data)
+                                onClick: () => handleClickSubject(data)
                             } : {
 
                             }
                         )}
-                        rowSelection={semesterMode ? {
+                        rowSelection={!allSemesterMode(currentId) ? {
                             renderCell(checked, record, index, originNode) {
                                 return !isStatRow(record) ? {
                                     props: {
@@ -161,58 +163,46 @@ export default function SemesterInfoTable({
 
                 </Space>
             </ConfigProvider>
-            {/* <SubjectInfo
-                key={editingSubject.current?.id}
+            {
+                <SubjectInfo
+                // key={(editingSubject?.id ?? '') + editingSubject?.getFinalScore?.()}
+                // key={editingSubject.current?.id ?? ''}
                 semesterName={semesterInfo.title}
-                subjectInfo={editingSubject.current as RegisteredSubject}
-                onSave={(newCompletedSubject) => {
-                    // setSemesterInfo(newSemesterInfo);
+                subjectInfo={editingSubject}
+                onSave={(newSubject) => {
                     setOpenSubjectInfo(false);
-                }}
-                onDelete={(subjectId) => {
-                    setSemesterInfo({
-                        ...semesterInfo,
-                        subjects: semesterInfo.subjects.filter((info) => info.id !== subjectId)
-                    })
-                    setOpenSubjectInfo(false);
-                    semesterChange.current.deletedSubject.push(subjectId)
+                    thunkDispatch(crudSubjectThunk({
+                        type: newSubject.id === '' ? 'add' : 'update',
+                        subject: newSubject
+                    }))
                 }}
                 open={openSubjectInfo}
                 onCancel={() => setOpenSubjectInfo(false)}
-            /> */}
-
+            />
+            }
         </div>
     )
 
-    function handleTitleChange(title: string) {
-        setSemesterInfo({ ...semesterInfo, title });
-        startEditing();
-    }
-
-    function handleUpdateSubject(subject: RegisteredSubject) {
-        openNewTab<MySubjectsPageProps['searchParams']>('/mysubjects', {
-            subjectId: subject.id
-        })
+    function handleClickSubject(subject: RegisteredSubject) {
+        setEditingSubject(subject);
+        setOpenSubjectInfo(true);
     }
 
     function handleDeleteSubject() {
-        startEditing();
-        setSemesterInfo({
-            ...semesterInfo,
-            subjects: semesterInfo.subjects.filter((info) => !selectedSubjects.includes(info.id))
-        })
+        thunkDispatch(crudSubjectThunk({
+            type: 'delete',
+            subject: selectedSubjects as string[]
+        }))
         setSelectedSubjects([])
-    }
-
-    async function handleSave() {
-        await onUpdateSemester(semesterInfo);
     }
 }
 
-function LetterGradeTag({
-    grade
+export function LetterGradeTag({
+    grade,
+    className
 }: {
-    grade: LetterGrade
+    grade: LetterGrade,
+    className?: string
 }) {
     let color: string;
     switch (grade) {
@@ -235,11 +225,14 @@ function LetterGradeTag({
         case 'A+':
             color = '#54E346'
             break;
+        case 'Chưa hoàn thành':
+            color = '#e1e1e1';
+            break;
     }
     return (
-        <div className='w-[55px] inline-block rounded' style={{ backgroundColor: color }}>
+        <div className={twMerge('h-fit max-w-fit min-w-[55px] px-4 flex items-center justify-center rounded', className)} style={{ backgroundColor: color }}>
             <Text
-                className='font-bold text-sm'
+                className='font-bold text-sm whitespace-nowrap'
             >
                 {grade}
             </Text>
@@ -252,7 +245,7 @@ const headerStyle: React.CSSProperties = {
     textAlign: 'center'
 }
 
-function CellContent({
+export function CellContent({
     children,
     className
 }: {
@@ -272,7 +265,7 @@ const cellStyle: React.CSSProperties = {
 }
 
 function isStatRow(data: TableDataSourceType): data is TableStat {
-    return !(data instanceof RegisteredSubject)
+    return statKeys.includes(data.id as TableStat['id'])
 }
 
 function getOrderCol(key: ColKey): ColumnType<TableDataSourceType> {
@@ -385,7 +378,7 @@ function getSubject4GradeCol(key: ColKey): ColumnType<TableDataSourceType> {
         key,
         title: <CellContent>Điểm hệ 4</CellContent>,
         render: (_, data, rowIdx) => ({
-            children: isStatRow(data) ? null : data.get4Grade(),
+            children: isStatRow(data) ? null : get4Grade(data),
             props: {
                 style: cellStyle,
                 colSpan: isStatRow(data) ? 0 : 1
@@ -406,7 +399,7 @@ function getSubjectFinalScoreCol(
         key,
         title: <CellContent>Điểm hệ 10</CellContent>,
         render: (_, data, rowIdx) => ({
-            children: isStatRow(data) ? null : data.getFinalScore(),
+            children: isStatRow(data) ? null : getFinalScore(data),
             props: {
                 style: cellStyle,
                 colSpan: isStatRow(data) ? 0 : 1
@@ -420,7 +413,7 @@ function getSubjectFinalScoreCol(
         sorter: (a, b) => {
             if (isStatRow(a) || isStatRow(b))
                 return 0;
-            return a.getFinalScore() - b.getFinalScore()
+            return getFinalScore(a) - getFinalScore(b)
         }
     }
 }
@@ -437,7 +430,7 @@ function getSubjectLetterGradeCol(key: ColKey, semesterInfo: SemesterInfo): Colu
                         {semesterInfo[data.id]?.toFixed(data.id === 'sumOfCredits' ? 0 : 2)}
                     </Typography.Title>
                     :
-                    <LetterGradeTag grade={data.getLetterGrade()} />,
+                    <div className='inline-block'><LetterGradeTag grade={getLetterGrade(data)} /></div>,
                 props: {
                     style: cellStyle,
                     colSpan: statRow ? statResultColSpan : 1
@@ -457,7 +450,7 @@ function getOtherScoreCol(key: ColKey): ColumnType<TableDataSourceType> {
         key,
         title: <CellContent>Điểm khác</CellContent>,
         render: (_, data, rowIdx) => ({
-            children: isStatRow(data) ? null : data.getFinalScore(),
+            children: isStatRow(data) ? null : getFinalScore(data),
             props: {
                 style: cellStyle,
                 colSpan: isStatRow(data) ? 0 : 1,

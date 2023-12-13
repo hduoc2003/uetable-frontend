@@ -5,42 +5,44 @@ import DangerButton from "@/components/common/(MyButton)/DangerButton";
 import MyButtonWrapper from "@/components/common/(MyButton)/MyButtonWrapper";
 import { SaveButton } from "@/components/common/(MyButton)/SaveButton";
 import EditableText from "@/components/common/EditableText";
+import { crudSemesterThunk } from "@/redux/semester/actions/crudSemester";
+import { saveChangesThunk } from "@/redux/semester/actions/saveChanges";
+import { selectRootSemester, selectSemesterById } from "@/redux/semester/semesterSelector";
+import { semesterActions } from "@/redux/semester/semesterSlice";
+import { RootState, useThunkDispatch } from "@/redux/store";
+import { allSemesterMode } from "@/utils/semester";
 import { Flex, Popconfirm, Popover } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function TaskBar({
-    editing,
-    title,
-    handleTitleChange,
-    startEditing,
-    discardChange,
-    onSave: save,
-    onSaveDone,
     onAddSubject,
-    onDeleteTable,
-    semesterMode
 }: {
-    editing: boolean
-    title: string
-    handleTitleChange: (title: string) => void
-    startEditing: () => void
-    discardChange: () => void
-    onSave: () => Promise<void>
-    onSaveDone: () => void
     onAddSubject: () => void
-    onDeleteTable: () => void
-    semesterMode: boolean
 }) {
+    const dispatch = useDispatch();
+    const thunkDispatch = useThunkDispatch();
+    const { currentId, editing } = useSelector(selectRootSemester)
+    const { semesterInfo } = useSelector((state: RootState) => selectSemesterById(state, currentId));
+    const [delayEditing, setDelayEditing] = useState(editing);
+
+    useEffect(() => {
+        if (editing)
+            setDelayEditing(true);
+        else
+            setTimeout(() => setDelayEditing(false), 1500);
+    }, [editing])
+
     return (
         <div className='flex items-center gap-3 w-full h-fit'>
             <EditableText
-                defaultValue={title}
-                normalText={<strong className='text-lg'>{title}</strong>}
+                defaultValue={semesterInfo.title}
+                normalText={<strong className='text-lg'>{semesterInfo.title}</strong>}
                 onComplete={handleTitleChange}
-                mode={semesterMode ? 'editable' : 'normal'}
+                mode={allSemesterMode(currentId) ? 'editable' : 'normal'}
             // editing={editing}
             />
-            {semesterMode &&
+            {!allSemesterMode(currentId) &&
                 <>
                     <MyButtonWrapper
                         rounded
@@ -51,16 +53,16 @@ export default function TaskBar({
                         {/* color="rgb(74 222 128)" */}
                     </MyButtonWrapper>
                     <div className="group-hover/table:visible group-hover/table:opacity-100 transition-opacity duration-500 opacity-0">
-                        <DeleteTable onDeleteTable={onDeleteTable} />
+                        <DeleteTable />
                     </div>
-                    {editing &&
+                    {delayEditing &&
                         <>
-                            <DangerButton className="ml-auto" onClick={discardChange}>
+                            <DangerButton className="ml-auto" onClick={() => dispatch(semesterActions.discardChanges())}>
                                 Huỷ
                             </DangerButton>
                             <SaveButton
-                                onClick={save}
-                                onDoneAnimationEnd={onSaveDone}
+                                onClick={handleSave}
+                            // onDoneAnimationEnd={onSaveDone}
                             >
                                 Lưu thay đổi
                             </SaveButton>
@@ -70,20 +72,21 @@ export default function TaskBar({
             }
         </div>
     );
+
+    async function handleSave() {
+        await thunkDispatch(saveChangesThunk())
+    }
+
+    function handleTitleChange(newTitle: string) {
+        dispatch(semesterActions.changeTitle(newTitle))
+    }
 }
 
-function DeleteTable({
-    onDeleteTable
-}: {
-    onDeleteTable: () => void
-}) {
+function DeleteTable() {
     const [open, setOpen] = useState(false);
-    const handleConfirm = () => {
-        setOpen(false);
-    }
-    const handleCancel = () => {
-        setOpen(false);
-    }
+    const thunkDispatch = useThunkDispatch();
+    const { currentId } = useSelector(selectRootSemester)
+
     return (
         <Popover
             title={
@@ -96,7 +99,10 @@ function DeleteTable({
                         className="w-fit ml-auto"
                         onClick={() => {
                             setOpen(false);
-                            onDeleteTable();
+                            thunkDispatch(crudSemesterThunk({
+                                'type': 'delete',
+                                'semesterId': currentId
+                            }))
                         }}
                     >
                         Xoá
