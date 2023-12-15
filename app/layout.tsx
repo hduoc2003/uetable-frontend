@@ -31,7 +31,7 @@ export default function RootLayout({
                 Input: {
                   activeBg: THEME.SECONDARY_COLOR,
                   lineWidth: 2
-                }
+                },
               }
             }}
           >

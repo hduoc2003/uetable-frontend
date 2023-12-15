@@ -1,11 +1,13 @@
-export interface MyButtonProps {
-    className?: string
-    children?: React.ReactNode
-    onClick?: () => (any | Promise<any>)
+import { ButtonProps } from "antd"
+
+export interface MyButtonProps extends ButtonProps {
+    // className?: string
+    // children?: React.ReactNode
+    onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => (any | Promise<any>)
     onDoneAnimationEnd?: () => any
     iconSize?: string | number
-    style?: React.CSSProperties
-    ref?: React.RefObject<HTMLButtonElement>
+    // style?: React.CSSProperties
+    // ref?: React.RefObject<HTMLButtonElement>
     rounded?: boolean
-    htmlType?: "button" | "reset" | "submit"
+    // htmlType?: "button" | "reset" | "submit"
 }

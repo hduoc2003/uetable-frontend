@@ -1,11 +1,5 @@
-import { LetterGrade, RegisteredSubject, SubjectAll } from "@/types/subject";
+import { LetterGrade, RegisteredSubject, Subject, SubjectAll } from "@/types/subject";
 import { isUndefined } from "lodash";
-
-export function letterGrade(subject: SubjectAll | undefined): LetterGrade {
-    return subject?.type !== "registered" || !subject?.letterGrade
-        ? "Chưa hoàn thành"
-        : subject?.letterGrade;
-}
 
 export function getFinalScore(subject: RegisteredSubject | undefined) {
     if (isUndefined(subject))
@@ -45,7 +39,9 @@ export function get4Grade(subject: RegisteredSubject | undefined): number {
     return 4;
 }
 
-export function getLetterGrade(subject: RegisteredSubject  | undefined): LetterGrade {
+export function getLetterGrade(subject: Subject  | undefined): LetterGrade {
+    if (!isRegisteredSubject(subject))
+        return 'Chưa hoàn thành';
     switch (get4Grade(subject)) {
         case 0:
             return "F";
@@ -68,4 +64,8 @@ export function getLetterGrade(subject: RegisteredSubject  | undefined): LetterG
         default:
             return "F";
     }
+}
+
+export function isRegisteredSubject(subject: Subject | undefined): subject is RegisteredSubject {
+    return subject?.type === 'registered'
 }

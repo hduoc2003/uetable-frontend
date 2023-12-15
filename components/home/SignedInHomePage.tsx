@@ -15,10 +15,10 @@ import Main from "../layouts/Main";
 
 export default function SignedInHomePage() {
   return (
-    <Main>
+    <Main title='Trang chủ'>
       <Flex vertical gap='large'>
         <NextSubjectInfo />
-        <Schedule />
+        <Schedule onlyViewMode/>
       </Flex>
     </Main>
   );

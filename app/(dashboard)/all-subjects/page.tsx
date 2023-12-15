@@ -1,6 +1,6 @@
 'use client';
 
-import { SubjectAPI } from "@/api/subjectAPI";
+import { SubjectAllAPI } from "@/api/subjectAPI";
 import HeartIcon from "@/components/common/(Icons)/HeartIcon";
 import IconWrapper from "@/components/common/(Icons)/IconWrapper";
 import DecorBox from "@/components/common/DecorBox";
@@ -17,7 +17,7 @@ import { Key, ReactNode, useEffect, useState } from "react";
 import useSWR from "swr";
 import { useDebouncedCallback } from "use-debounce";
 
-type SortType = Parameters<typeof SubjectAPI.getAllSubject>[0];
+type SortType = Parameters<typeof SubjectAllAPI.getSomeSubjects>[0];
 
 const sortOptions: { value: SortType; label: React.ReactNode }[] = [{
     value: 'last-access',
@@ -70,7 +70,7 @@ export default function AllSubjectsPage() {
                         )
                     }}
                     dataKey={(subject) => subject.id}
-                    fetchMore={async (from, to) => SubjectAPI.getAllSubject(sortBy, from, to, searchValue)}
+                    fetchMore={async (from, to) => SubjectAllAPI.getSomeSubjects(sortBy, from, to, searchValue)}
                     // filter={(data) => {
                     //     return search(searchValue, data, ['id', 'name'])
                     // }}

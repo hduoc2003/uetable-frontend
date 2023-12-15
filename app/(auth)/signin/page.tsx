@@ -59,6 +59,7 @@ export default function SignIn() {
     .then((response : UserInfoResponse) => {
       dispatch(authActions.updateAuthState({
         signedIn: true,
+        logging: false,
         username: inputValue,
         name: response.name,
       }));

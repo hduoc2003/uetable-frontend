@@ -43,7 +43,7 @@ export default function SemesterPage() {
   }, [semesterData, dispatch])
 
   return (
-    <Main title='Quản lý môn học'>
+    <Main title='Thông tin học kì'>
       <div className="flex flex-col gap-5">
         <Something
           onSearchChange={handleSearchSubject}

@@ -1,4 +1,4 @@
-import { SubjectAll, SubjectClass } from "@/types/subject";
+import { RegisteredSubject, SubjectAll, SubjectClass } from "@/types/subject";
 import { mockAllSubjects, mockSubjectClasses } from "./mocks/subject";
 import { delay } from "@/utils/delay";
 import _ from "lodash";
@@ -7,8 +7,8 @@ export function getSubjectClasses(): SubjectClass[] {
   return mockSubjectClasses;
 }
 
-export class SubjectAPI {
-  static async getAllSubject(
+export class SubjectAllAPI {
+  static async getSomeSubjects(
     sortBy: "stared" | "rating" | "last-access",
     from: number,
     to: number,
@@ -37,7 +37,6 @@ export class SubjectAPI {
       name: "Lịch sử Đảng Cộng sản Việt Nam",
       credits: 2,
       type: "registered",
-      letterGrade: "A+",
       like: 6,
       documents: 652,
       stared: true,
@@ -49,12 +48,33 @@ export class SubjectAPI {
       }, {
         name: 'Phạm Anh Việt Gia',
         email: ':V@gmail.com'
-      }]
+      }],
+      score: {
+        final: 10
+      }
     };
     return data;
   }
 
-  static async getDocuments(sortBy: 'latest' | 'rating', from: number, to: number) {
+  static async getDocuments(sortBy: 'latest' | 'rating', from: number, to: number, subjectId: string) {
 
+  }
+
+}
+
+export class RegisteredSubjectAPI {
+  static async getSubjectById(subjectId: string): Promise<RegisteredSubject> {
+    await delay(2000);
+    return {
+      id: "HIS1001",
+      name: "Lịch sử Đảng Cộng sản Việt Nam",
+      credits: 2,
+      score: {
+        final: 8.1,
+      },
+      semesterId: '222',
+      type: 'registered',
+      lecturer: 'Bùi Huy Dược'
+    }
   }
 }

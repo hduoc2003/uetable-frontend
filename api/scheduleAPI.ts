@@ -14,7 +14,7 @@ export function getScheduleInfo(shouldDispatch: boolean = true): ScheduleInfo {
             headerRowColor: THEME.PRIMARY_COLOR,
             dividerRowColor: "#262626",
             hasDivider: true,
-            displayColumnSettings: false,
+            hiddenColumns: []
         }
     }
 

@@ -7,6 +7,7 @@ import { cloneDeep } from 'lodash';
 import { discardChanges } from './actions/discardChanges';
 import { saveChanges } from './actions/saveChanges';
 import { updateScheduleState } from './actions/updateScheduleState';
+import { addHiddenColumns } from './actions/addHiddenColumns';
 
 export interface ScheduleState {
     fetched: boolean
@@ -33,6 +34,7 @@ export const {reducer: scheduleReducer, actions: scheduleActions} = createSlice(
         updateScheduleStyle,
         updateScheduleSubjects,
         discardChanges,
-        saveChanges
+        saveChanges,
+        addHiddenColumns
     }
 })

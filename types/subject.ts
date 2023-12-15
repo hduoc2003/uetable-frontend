@@ -14,23 +14,11 @@ export interface SubjectClass {
 }
 
 export interface Subject {
+
   id: string; /// mã học phần
   name: string; // tên học phần
   credits: number; // tín chỉ
   type: ('all' | 'major' | 'registered');
-}
-export interface SubjectAll extends Subject {
-  letterGrade?: LetterGrade; // Điểm
-  like: number; // Số lượt thích
-  documents: number; // Số tài liệu
-  stared: boolean; // Đã yêu thích hay chưa
-  imgLink?: string; // Link ảnh
-  GPA?: number; // Điểm trung bình chung của môn
-  lecturers?: {
-    name: string,
-    email?: string
-  }[] /// Danh sách giảng viên
-  description?: string /// Mô tả môn học
 }
 interface ScoreInfo {
   score: number; // điểm
@@ -47,5 +35,19 @@ export interface RegisteredSubject extends Subject {
     otherTerm?: ScoreInfo; // điểm thành phần
     final?: number; // điểm tổng trong hệ 10
   };
+  lecturer?: string // giảng viên chính
+}
+
+export interface SubjectAll extends Subject, Pick<RegisteredSubject, 'score'> {
+  like: number; // Số lượt thích
+  documents: number; // Số tài liệu
+  stared: boolean; // Đã yêu thích hay chưa
+  imgLink?: string; // Link ảnh
+  GPA?: number; // Điểm trung bình chung của môn
+  lecturers?: {
+    name: string,
+    email?: string
+  }[] /// Danh sách giảng viên
+  description?: string /// Mô tả môn học
 }
 

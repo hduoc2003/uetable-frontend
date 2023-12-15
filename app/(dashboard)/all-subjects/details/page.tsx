@@ -1,6 +1,6 @@
 'use client';
 
-import { SubjectAPI } from "@/api/subjectAPI";
+import { SubjectAllAPI } from "@/api/subjectAPI";
 import Documents from "@/components/all-subjects/details/Documents";
 import Overview from "@/components/all-subjects/details/Overview";
 import RelatedSubject from "@/components/all-subjects/details/Related";
@@ -28,7 +28,7 @@ export default function AllSubjectsDetailsPage({
     subjectId
   }
 }: AllSubjectsDetailsPageProps) {
-  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAPI.getSubjectById);
+  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
 
   return (
     <Main title={'Thông tin học phần'}>

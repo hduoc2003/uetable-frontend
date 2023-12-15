@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Spin } from 'antd'
+import { Button, ButtonProps, Spin } from 'antd'
 import React, { useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { MyButtonProps } from './MyButtonProps'
@@ -10,12 +10,13 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { IoMdDoneAll } from 'react-icons/io'
 
 export default function MyButtonWrapper(props: MyButtonProps) {
-    let className = 'p-1 h-fit w-fit text-fs-inherit border-0 group hover:!border-contrast hover:text-current';
+    let className = 'p-1 h-fit w-fit text-fs-inherit border-0 group hover:!border-contrast hover:!text-contrast';
     const [loading, setLoading] = useState(false);
     const [finished, setFinished] = useState(false);
     if (props.rounded)
         className += ' rounded-full'
-    const onClick = () => {
+    const onClick: ButtonProps['onClick'] = (e) => {
+        console.log('haha', isAsyncFunction(props.onClick), props.onDoneAnimationEnd)
         if (isAsyncFunction(props.onClick)) {
             setLoading(true);
             props.onClick().then(() => {
@@ -28,7 +29,7 @@ export default function MyButtonWrapper(props: MyButtonProps) {
             })
         }
         else
-            props.onClick?.();
+            props.onClick?.(e);
     }
     return (
         <Button

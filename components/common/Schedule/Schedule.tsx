@@ -1,14 +1,11 @@
 import { SaveButton } from '../(MyButton)/SaveButton';
-import React, { useId, useState } from 'react';
-import { Button, ColorPicker, ConfigProvider, Space, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import React, { useId, useRef, useState } from 'react';
+import { ColorPicker, Table } from 'antd';
+import { TableRef, type ColumnsType } from 'antd/es/table';
 import ScheduleCell from "./ScheduleCell";
-import type { MenuProps } from 'antd';
-import { Dropdown } from 'antd';
-import { AiTwotoneSetting } from "react-icons/ai";
-import MyCheckbox from "../Checkbox";
+import html2canvas from 'html2canvas';
+
 // @ts-ignore
-import { LightenDarkenColor } from 'lighten-darken-color';
 import { useDispatch, useSelector } from "react-redux";
 import { scheduleDataSelector, scheduleSelector } from "@/redux/schedule/scheduleSelector";
 import { scheduleActions } from '@/redux/schedule/scheduleSlice';
@@ -16,6 +13,10 @@ import ScheduleSetting from './ScheduleSetting';
 import Download from '../(MyButton)/Download';
 import { THEME } from '@/styles/theme';
 import DangerButton from '../(MyButton)/DangerButton';
+import { Weekdays } from '@/types/schedule';
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import TitleWithBox from '../TitleWithBox';
+import { delay } from '@/utils/delay';
 
 const numberOfLessons = 12;
 
@@ -27,7 +28,8 @@ interface ScheduleProps {
 interface TableData {
     lesson: number
 }
-type ColumnKey = 'lesson' | 'time' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
+type ColumnKey = 'lesson' | 'time' | Weekdays
+
 const weekdays: ({ name: string, asNumber: number, key: ColumnKey })[] = [
     {
         name: 'Thứ hai',
@@ -73,9 +75,9 @@ export default function Schedule({
     let columns: ColumnsType<TableData> = [];
     let data: TableData[] = [];
     const rowId = useId();
+    const tableRef = useRef<TableRef>(null);
     const { scheduleStyle, subjectClassData } = useSelector(scheduleDataSelector);
     const { editing } = useSelector(scheduleSelector)
-    const [hidenColumns, setHidenColumns] = useState<(React.Key | undefined)[]>([]);
     const cellStyle: Record<'normal' | 'header' | 'lesson' | 'time' | 'divider' | 'subject', React.CSSProperties> = {
         'normal': {},
         'divider': {
@@ -116,62 +118,78 @@ export default function Schedule({
     const dispatch = useDispatch();
     const [hoverSubject, setHoverSubject] = useState(-1);
 
-    const handleHideColumn = (colKey: React.Key) => {
-        setHidenColumns([...hidenColumns, colKey]);
-    }
-
     initData();
 
     const MainComponent = (
-        <div className={`flex flex-col gap-3 scale-[${scale}]`}>
+        <div className={`flex flex-col gap-5 scale-[${scale}]`}>
             {!onlyViewMode &&
                 <div className="flex gap-5">
-                    <div className="flex-1">
-                        <MyCheckbox
-                            checked={scheduleStyle.displayColumnSettings}
-                            onClick={() => dispatch(scheduleActions.updateScheduleStyle({
-                                displayColumnSettings: !scheduleStyle.displayColumnSettings
-                            }))}
-                        >
-                            <div className="font-semibold">Hiện cài đặt cột</div>
-                        </MyCheckbox>
-                    </div>
-                    <DangerButton
-                        onClick={() => {
-                            dispatch(scheduleActions.discardChanges())
-                            dispatch(scheduleActions.updateScheduleState({
-                                editing: false
-                            }))
-                        }}
-                        disable={!editing}
-                    >
-                        Huỷ thay đổi
-                    </DangerButton>
-                    <SaveButton
-                        onClick={() => {
-                            dispatch(scheduleActions.saveChanges())
-                            dispatch(scheduleActions.updateScheduleState({
-                                editing: false
-                            }))
-                        }}
-                    >
-                        Lưu
-                    </SaveButton>
+                    <TitleWithBox title='Thời khoá biểu' className='flex-1' />
+                    {editing &&
+                        <>
+                            <DangerButton
+                                onClick={async () => {
+                                    await delay(500);
+                                    dispatch(scheduleActions.discardChanges())
+                                }}
+                                onDoneAnimationEnd={() => {
+                                    dispatch(scheduleActions.updateScheduleState({
+                                        editing: false
+                                    }))
+                                }}
+                            >
+                                Huỷ thay đổi
+                            </DangerButton>
+                            <SaveButton
+                                onClick={async () => {
+                                    await delay(500);
+                                    dispatch(scheduleActions.saveChanges())
+                                }}
+                                onDoneAnimationEnd={() => {
+                                    dispatch(scheduleActions.updateScheduleState({
+                                        editing: false
+                                    }))
+                                }}
+                            >
+                                Lưu
+                            </SaveButton>
+                        </>
+                    }
 
-                    <Download></Download>
-                    <ScheduleSetting onHideColumn={() => setHidenColumns([])} />
+                    <Download onClick={handleDownload}></Download>
+                    <ScheduleSetting />
                 </div>
             }
             <Table
-                columns={columns.filter((val) => !hidenColumns.includes(val.key))}
+                columns={columns.filter((val) => !scheduleStyle.hiddenColumns.includes(val.key as Weekdays))}
                 dataSource={data}
                 pagination={false}
                 bordered={scheduleStyle.hasBorder}
                 rowKey={() => rowId}
+                ref={tableRef}
             />
         </div>
     );
 
+    async function handleDownload() {
+        const element = tableRef.current;
+        console.log('before')
+        const canvas = await html2canvas(element);
+        console.log('after')
+        const data = canvas.toDataURL('image/jpg');
+        const link = document.createElement('a');
+
+        if (typeof link.download === 'string') {
+          link.href = data;
+          link.download = 'image.jpg';
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          window.open(data);
+        }
+    }
     function isDivider(data: TableData) {
         if (scheduleStyle.hasDivider)
             return data.lesson === -1;
@@ -182,14 +200,12 @@ export default function Schedule({
         columns.push({
             title:
                 <TableHeader
-                    colorPicker
                     colKey={'lesson'}
-                    displaySetting={scheduleStyle.displayColumnSettings}
-                    onHideColumn={handleHideColumn}
                     color={scheduleStyle.lessonColumnColor}
                     onColorPick={(color) => dispatch(scheduleActions.updateScheduleStyle({
                         lessonColumnColor: color
                     }))}
+                    onlyViewMode={onlyViewMode}
                 >
                     Tiết
                 </TableHeader>,
@@ -205,14 +221,12 @@ export default function Schedule({
         columns.push({
             title:
                 <TableHeader
-                    colorPicker
                     colKey={'time'}
-                    displaySetting={scheduleStyle.displayColumnSettings}
-                    onHideColumn={handleHideColumn}
                     color={scheduleStyle.timeColumnColor}
                     onColorPick={(color) => dispatch(scheduleActions.updateScheduleStyle({
                         timeColumnColor: color
                     }))}
+                    onlyViewMode={onlyViewMode}
                 >
                     Thời gian
                 </TableHeader>,
@@ -229,10 +243,8 @@ export default function Schedule({
             columns.push({
                 title:
                     <TableHeader
-                        colorPicker={false}
                         colKey={day.key}
-                        displaySetting={scheduleStyle.displayColumnSettings}
-                        onHideColumn={handleHideColumn}
+                        onlyViewMode={onlyViewMode}
                     >
                         {day.name}
                     </TableHeader>,
@@ -322,86 +334,116 @@ export default function Schedule({
 
 const settingIconColor = 'black';
 
+function isWeeksday(col: ColumnKey): col is Weekdays {
+    return col !== 'lesson' && col !== 'time'
+}
+
 function TableHeader({
     children,
-    colorPicker,
     color,
     colKey,
-    displaySetting,
-    onHideColumn,
     onColorPick,
+    onlyViewMode
 }: {
     children: React.ReactNode
-    colorPicker?: boolean
     color?: string
     colKey: ColumnKey
-    displaySetting: boolean
-    onHideColumn: (colKey: React.Key) => void
     onColorPick?: (pickedColor: string) => void
+    onlyViewMode: boolean;
 }) {
-    const items: MenuProps['items'] = [
-        {
-            key: 'hide_column',
-            label: 'Ẩn cột',
-            onClick: () => onHideColumn(colKey)
-        },
-    ];
-    const [openDropDown, setOpenDropDown] = useState(false);
-    const [openColorPicker, setOpenColorPicker] = useState(false);
-
-    if (colorPicker)
-        items.push({
-            key: 'color_picker',
-            label:
-                <Space
-                    onMouseEnter={() => setOpenColorPicker(true)}
-                    onMouseLeave={() => setOpenColorPicker(false)}
-                >
-                    Chọn màu
-                    <ColorPicker
-                        value={color}
-                        onChange={(_, pickedColor) => onColorPick?.(pickedColor)}
-                        trigger='hover'
-                        open={openColorPicker}
-                        arrow={false}
-                    />
-                </Space>,
-            onClick: () => setOpenDropDown(true)
-        })
-
-    const [hoverSetting, setHoverSetting] = useState(false);
-
+    const [hovering, setHovering] = useState(false);
+    const dispatch = useDispatch();
+    if (onlyViewMode)
+        return children
     return (
-        <div className={`flex justify-center items-center relative p-[5px]`}
-        >
-            <div className="flex-1">{children}</div>
-            {displaySetting &&
-                <ConfigProvider
-                    theme={{
-                        components: {
-                            Dropdown: {
-                                zIndexPopup: 0
-                            }
-                        }
-                    }}
-                >
-                    <Dropdown
-                        menu={{ items }}
-                        open={openDropDown}
-                        onOpenChange={(flag) => setOpenDropDown(flag)}
+        <div className={'relative group/header'}>
+            {isWeeksday(colKey) ?
+                <>
+                    {children}
+                    <button
+                        className='absolute right-1 -translate-y-1/2 top-1/2 opacity-0 group-hover/header:opacity-100 transition-opacity duration-300'
+                        onMouseEnter={() => setHovering(true)}
+                        onMouseLeave={() => setHovering(false)}
+                        onClick={() => dispatch(scheduleActions.addHiddenColumns(colKey))}
                     >
-                        <div
-                            onMouseEnter={() => setHoverSetting(true)}
-                            onMouseLeave={() => setHoverSetting(false)}
-                        >
-                            <AiTwotoneSetting
-                                size={17}
-                                color={hoverSetting ? LightenDarkenColor(settingIconColor, 80) : settingIconColor}
-                            />
-                        </div>
-                    </Dropdown>
-                </ConfigProvider>
+                        {!hovering ?
+                            // <EyeIcon solidOnHover size={17} />
+                            <IoMdEye size={20} />
+                            :
+                            <IoMdEyeOff size={20} />
+                        }
+                    </button>
+                </>
+                :
+                <ColorPicker value={color} onChange={(_, pickedColor) => onColorPick?.(pickedColor)}>
+                    <button>{children}</button>
+                </ColorPicker>
             }
         </div>
     )
+    // const items: MenuProps['items'] = [
+    //     {
+    //         key: 'hide_column',
+    //         label: 'Ẩn cột',
+    //         onClick: () => onHideColumn(colKey)
+    //     },
+    // ];
+    // const [openDropDown, setOpenDropDown] = useState(false);
+    // const [openColorPicker, setOpenColorPicker] = useState(false);
+
+    // if (colorPicker)
+    //     items.push({
+    //         key: 'color_picker',
+    //         label:
+    //             <Space
+    //                 onMouseEnter={() => setOpenColorPicker(true)}
+    //                 onMouseLeave={() => setOpenColorPicker(false)}
+    //             >
+    //                 Chọn màu
+    //                 <ColorPicker
+    //                     value={color}
+    //                     onChange={(_, pickedColor) => onColorPick?.(pickedColor)}
+    //                     trigger='hover'
+    //                     open={openColorPicker}
+    //                     arrow={false}
+    //                 />
+    //             </Space>,
+    //         onClick: () => setOpenDropDown(true)
+    //     })
+
+    // const [hoverSetting, setHoverSetting] = useState(false);
+
+    // return (
+    //     <div className={`flex justify-center items-center relative p-[5px]`}
+    //     >
+    //         <div className="flex-1">{children}</div>
+    //         {displaySetting &&
+    //             <ConfigProvider
+    //                 theme={{
+    //                     components: {
+    //                         Dropdown: {
+    //                             zIndexPopup: 0
+    //                         }
+    //                     }
+    //                 }}
+    //             >
+    //                 <Dropdown
+    //                     menu={{ items }}
+    //                     open={openDropDown}
+    //                     onOpenChange={(flag) => setOpenDropDown(flag)}
+    //                 >
+    //                     <div
+    //                         onMouseEnter={() => setHoverSetting(true)}
+    //                         onMouseLeave={() => setHoverSetting(false)}
+    //                     >
+    //                         <AiTwotoneSetting
+    //                             size={17}
+    //                             color={hoverSetting ? LightenDarkenColor(settingIconColor, 80) : settingIconColor}
+    //                         />
+    //                     </div>
+    //                 </Dropdown>
+    //             </ConfigProvider>
+    //         }
+    //     </div>
+    // )
 }
