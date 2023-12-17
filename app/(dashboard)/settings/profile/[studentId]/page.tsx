@@ -1,11 +1,19 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { mockDocumentClasses } from '@/api/mocks/document';
 import { LikeOutlined, CommentOutlined, DownloadOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Typography, Progress} from 'antd';
 import Image from 'next/image';
+import Fetcher from '@/api/Fetcher';
+import { UserInfoResponse } from '@/api/userAPI';
+import { authSelector } from '@/redux/auth/authSelector';
+import { authActions } from '@/redux/auth/authSlice';
+import { useRouter } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import Cookies from 'universal-cookie';
 
 const {Paragraph} = Typography;
+const cookies = new Cookies()
 
 export default function Profile() {
 
@@ -19,8 +27,25 @@ export default function Profile() {
   const [biography, hasBiogrpahy] = useState(true);
   var percentage = 70;
 
-  const [imageURL, setImageURL] = useState("https://i.imgur.com/bD4NtE6.jpeg");
+  const [imageURL, setImageURL] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const authState = useSelector(authSelector);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  useEffect(() => {
+    Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'))
+      .then((response) => {
+        dispatch(authActions.updateAuthState({
+          signedIn: true,
+          name: response.name,
+          username: cookies.get('studentid'),
+        }));
+        //console.log(response);
+      }).catch((error) => {
+        router.push('/');
+      });
+  }, [dispatch, router]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] as File | undefined;
@@ -104,7 +129,6 @@ export default function Profile() {
                   return (
                     <>
                       <div className="border hover:bg-gray-100 hover:shadow bg-white p-6 m-4 flex">
-                        <Image src={document.image} height={100} width={100} alt="Document Image"/>
                         <div className="flex flex-col gap-1">
                         <p className='text-blue-400 text-lg'>{document.name}</p>
                         <p className="">Tác giả: {document.author}</p>

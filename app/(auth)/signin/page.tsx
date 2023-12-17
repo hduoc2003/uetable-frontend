@@ -77,7 +77,6 @@ export default function SignIn() {
       "studentid": inputValue,
       "password": inputPasswordValue,
     }).then((response : SignInResponse) => {
-      console.log(response.authToken);
       const expiresDate = new Date();
       expiresDate.setDate(expiresDate.getDate() + 999999);
       cookies.set('authToken', response.authToken, {
