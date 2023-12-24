@@ -18,6 +18,7 @@ import LikedIcon from '../(Icons)/LikedIcon';
 import DisLikeIcon from '../(Icons)/DisLikeIcon';
 import DisLikedIcon from '../(Icons)/DisLikedIcon';
 import { set } from 'lodash';
+import ReportForm from '../Report/Report';
 
 interface Props {
     className?: string;
@@ -40,6 +41,7 @@ export default function CommentInfo({
     editable = false, 
 }: any) {
   const [isOpen, setOpen] = useState(false);
+  const [openReportForm, setOpenReportForm] = useState(false);
   const [isOpenNav, setOpenNav] = useState(false);
   const inputReference = useRef(null);
   const [isSending, setIsSending] = useState(-1);
@@ -52,6 +54,7 @@ export default function CommentInfo({
   const [isDisLike, setDisLike] = useState(hasDisLiked);
   const cookies = new Cookies();
 
+  const toggleReportForm = () => setOpenReportForm(!openReportForm);
   const toggleMenu = () => setOpen(!isOpen);
   const toggleSubmit = () => setSubmit(!isSubmit);
   const toggleLike = () => {setLike(!isLike); setDisLike(false);}
@@ -140,7 +143,7 @@ export default function CommentInfo({
                       <div style={{ color: '#1A1D1F'}}>Xem lịch sử chỉnh sửa</div>
                     </button>
                     <hr style={{marginTop: '8px', marginBottom: '8px'}}></hr>
-                    <button className="actions__option" style={{alignItems: 'start'}}>
+                    <button className="actions__option" style={{alignItems: 'start'}} onClick={toggleReportForm}>
                       <div><ReportIcon size='20px' className='icon'/></div>
                       <div className="flex" style={{ flexDirection: 'column'}}>
                         <Text style={{textAlign: 'left'}}> Báo cáo bình luận</Text>
@@ -192,7 +195,21 @@ export default function CommentInfo({
           </div>
         </div>)}
       </div>
-      
+      <ReportForm
+      // key={(editingSubject?.id ?? '') + editingSubject?.getFinalScore?.()}
+      // key={editingSubject.current?.id ?? ''}
+      reportInfo = {
+        {
+          pageId: Id, 
+          pageType: "C"
+        }
+      }
+      onSave= {(newSubject) => {
+        setOpenReportForm(false);
+      }}
+      open={openReportForm}
+      onCancel={() => setOpenReportForm(false)}
+      />
     </div>
   )
 }
