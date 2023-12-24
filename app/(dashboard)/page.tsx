@@ -13,9 +13,9 @@ import StarIcon from '@/components/common/(Icons)/StarIcon';
 import HeartIcon from '@/components/common/(Icons)/HeartIcon';
 import IconWrapper from '@/components/common/(Icons)/IconWrapper';
 import SubjectPreview from '@/components/common/Preview/SubjectPreview';
-import { Col, Row } from 'antd';
 import Main from '@/components/layouts/Main';
 import AllSubjectsPage from './all-subjects/page';
+import Profile from './settings/profile/page';
 
 export default function HomePage() {
   // const authState = useSelector(authSelector);
@@ -27,10 +27,7 @@ export default function HomePage() {
   //   <SignedInHomePage/>
   // );
   return (
-    <>
-      <MySubjectsPage/>
-    {/* <AllSubjectsPage /> */}
-    </>
+    <Profile/>
   )
   // return <DashboardLoading/>
 };

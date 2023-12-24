@@ -44,6 +44,7 @@ export default function Header() {
           name: response.name,
           username: cookies.get('studentid'),
         }));
+        setAvtURL(response.avatar);
         //console.log(response);
       }).catch((error) => {
         // router.push('/');
