@@ -1,6 +1,6 @@
 'use client';
 
-import { SubjectAPI } from '@/api/subjectAPI';
+import { SubjectAllAPI } from '@/api/subjectAPI';
 import { SubjectAll } from '@/types/subject';
 import genId from '@/utils/genId';
 import { Col, Row, Skeleton, Spin, Typography } from 'antd'

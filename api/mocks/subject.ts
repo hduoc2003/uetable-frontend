@@ -147,7 +147,7 @@ export const mockSubjectClasses: SubjectClass[] = [
   },
 ];
 
-export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] => [{
+export const mockRegisteredSubjects = (semesterId: string): RegisteredSubject[] => [{
   id: "HIS1001",
   name: "Lịch sử Đảng Cộng sản Việt Nam",
   credits: 2,
@@ -218,10 +218,12 @@ export const mockAllSubjects: SubjectAll[] = [
     name: "Lịch sử Đảng Cộng sản Việt Nam",
     credits: 2,
     type: "registered",
-    letterGrade: "A+",
     like: 6,
     documents: 652,
     stared: true,
+    score: {
+      final: 10
+    }
   },
   {
     id: 'INT3117',
@@ -231,15 +233,21 @@ export const mockAllSubjects: SubjectAll[] = [
     like: 235,
     documents: 554,
     stared: false,
+    lecturers: [],
+    score: {
+      final: 10
+    }
 },
   {
     id: 'INT2213',
     name: 'Mạng máy tính',
     credits: 3,
     type: 'registered',
-    letterGrade: 'B+',
     like: 1133,
     documents: 1313,
     stared: true,
+    score: {
+      final: 10
+    }
   }
 ];

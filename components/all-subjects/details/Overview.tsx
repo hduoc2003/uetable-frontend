@@ -7,7 +7,7 @@ import { CellContent, LetterGradeTag } from '@/components/mysubjects/SemesterInf
 import { SubjectAll } from '@/types/subject';
 import genId from '@/utils/genId';
 import search from '@/utils/search';
-import { letterGrade } from '@/utils/subjects';
+import { getLetterGrade } from '@/utils/subjects';
 import { Drawer, List, Skeleton, Space, Table, Typography } from 'antd'
 import { isUndefined } from 'lodash';
 import React, { useState } from 'react'
@@ -19,6 +19,7 @@ const { Title, Text } = Typography;
 interface Props {
     subject?: SubjectAll
 }
+
 type SubjectInfoKey = 'id' | 'credits' | 'gpa' | 'lecturers';
 const subjectInfo: SubjectInfoKey[] = ['id', 'credits', 'gpa', 'lecturers'];
 
@@ -36,7 +37,7 @@ export default function Overview({
                             loading ? <Skeleton.Input active className='!w-[80%]' /> :
                                 <div className="flex gap-4 items-center animate__animated animate__fadeIn">
                                     <Title level={3} className="!mb-0">{`${subject?.name}`}</Title>
-                                    <LetterGradeTag grade={letterGrade(subject)} className="py-1" />
+                                    <LetterGradeTag grade={getLetterGrade(subject)} className="py-1" />
                                 </div>
                         }
                     />

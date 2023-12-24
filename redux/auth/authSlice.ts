@@ -3,6 +3,7 @@ import { updateAuthState } from "./actions/changeAuthState";
 
 export interface AuthState {
     signedIn?: boolean,
+    logging: boolean,
     role?: "admin" | "user",
     username?: string,
     name?: string,
@@ -10,6 +11,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
     signedIn: false,
+    logging: true,
     role: "user",
 }
 

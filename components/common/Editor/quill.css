@@ -1,0 +1,16 @@
+.ql-toolbar {
+    border: 2px solid #DEDFE0 !important;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    font-family: '__Inter_e66fe9', '__Inter_Fallback_e66fe9' !important;
+}
+
+.ql-container {
+    border: 2px solid #DEDFE0 !important;
+    border-top-width: 0px !important;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    min-height: 100px !important;
+    font-family: '__Inter_e66fe9', '__Inter_Fallback_e66fe9' !important;
+    font-size: 14px;
+}

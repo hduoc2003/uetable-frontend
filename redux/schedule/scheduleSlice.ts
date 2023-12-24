@@ -1,27 +1,36 @@
 import { updateScheduleSubjects } from './actions/updateScheduleSubjects';
 import { createSlice } from "@reduxjs/toolkit";
 import { ScheduleInfo } from "@/types/schedule";
-import { getScheduleInfo } from "@/api/scheduleAPI";
 import { updateScheduleStyle } from "./actions/updateScheduleStyle";
-import { cloneDeep } from 'lodash';
 import { discardChanges } from './actions/discardChanges';
 import { saveChanges } from './actions/saveChanges';
 import { updateScheduleState } from './actions/updateScheduleState';
+import { addHiddenColumns } from './actions/addHiddenColumns';
+import { initData } from './actions/initData';
 
 export interface ScheduleState {
-    fetched: boolean
     tempData: ScheduleInfo
     realData: ScheduleInfo
     editing: boolean
 }
 
-const initTempData: ScheduleInfo = getScheduleInfo(false);
-const initRealData: ScheduleInfo = cloneDeep(initTempData);
+const initTempData: ScheduleInfo = {
+    subjectClassData: [],
+    scheduleStyle: {
+        hasBorder: false,
+        roundedBorder: false,
+        lessonColumnColor: '',
+        timeColumnColor: '',
+        headerRowColor: '',
+        dividerRowColor: '',
+        hasDivider: false,
+        hiddenColumns: []
+    }
+}
 
 const initialState: ScheduleState = {
-    fetched: true,
     tempData: initTempData,
-    realData: initRealData,
+    realData: initTempData,
     editing: false
 }
 
@@ -33,6 +42,8 @@ export const {reducer: scheduleReducer, actions: scheduleActions} = createSlice(
         updateScheduleStyle,
         updateScheduleSubjects,
         discardChanges,
-        saveChanges
+        saveChanges,
+        addHiddenColumns,
+        initData
     }
 })

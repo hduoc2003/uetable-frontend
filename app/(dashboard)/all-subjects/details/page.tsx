@@ -1,6 +1,6 @@
 'use client';
 
-import { SubjectAPI } from "@/api/subjectAPI";
+import { SubjectAllAPI } from "@/api/subjectAPI";
 import { CommentAPI } from "@/api/commentAPI";
 import { CommentType } from "@/types/comment";
 import Documents from "@/components/all-subjects/details/Documents";
@@ -15,7 +15,6 @@ import Main from "@/components/layouts/Main";
 import { LetterGradeTag } from "@/components/mysubjects/SemesterInfoTable/SemesterInfoTable";
 import { PageProps } from "@/types/PageProps";
 import { SubjectAll } from "@/types/subject";
-import { letterGrade } from "@/utils/subjects";
 import { Divider, Skeleton, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
@@ -32,7 +31,7 @@ export default function AllSubjectsDetailsPage({
     subjectId
   }
 }: AllSubjectsDetailsPageProps) {
-  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAPI.getSubjectById);
+  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
 
   return (
     <Main title={'Thông tin học phần'}>

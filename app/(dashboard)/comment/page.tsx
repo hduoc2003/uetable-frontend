@@ -1,26 +1,16 @@
 'use client';
 
-import { SubjectAPI } from "@/api/subjectAPI";
-import { CommentAPI } from "@/api/commentAPI";
-import { CommentType } from "@/types/comment";
 import Documents from "@/components/all-subjects/details/Documents";
 import Overview from "@/components/all-subjects/details/Overview";
 import RelatedSubject from "@/components/all-subjects/details/Related";
-import Taskbar from "@/components/all-subjects/details/TaskBar";
-import CommentInfo from "@/components/common/Comment/CommentInfo";
-import DecorBox from "@/components/common/DecorBox";
-import Tag from "@/components/common/Tag";
 import TitleWithBox from "@/components/common/TitleWithBox";
 import Main from "@/components/layouts/Main";
-import { LetterGradeTag } from "@/components/mysubjects/SemesterInfoTable/SemesterInfoTable";
 import { PageProps } from "@/types/PageProps";
 import { SubjectAll } from "@/types/subject";
-import { letterGrade } from "@/utils/subjects";
-import { Divider, Skeleton, Typography } from "antd";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Divider, Typography } from "antd";
 import useSWR from "swr";
-import Fetcher from '@/api/Fetcher'
 import {CommentList} from  "@/components/common/Comment/CommentList"
+import { SubjectAllAPI } from "@/api/subjectAPI";
 
 const { Text, Title } = Typography;
 
@@ -33,7 +23,7 @@ export default function AllSubjectsDetailsPage({
     subjectId
   }
 }: AllSubjectsDetailsPageProps) {
-  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAPI.getSubjectById);
+  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
   const comments = [
     {
         "Id": 317,

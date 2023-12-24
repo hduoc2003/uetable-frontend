@@ -16,10 +16,19 @@ import SubjectPreview from '@/components/common/Preview/SubjectPreview';
 import { Col, Row } from 'antd';
 import Main from '@/components/layouts/Main';
 import AllSubjectsPage from './all-subjects/page';
+import RegisteredSubjectPage from './mysubjects/registered/page';
+import RegisteredSubjectDetailsPage from './mysubjects/registered/details/page';
+import { authSelector } from '@/redux/auth/authSelector';
+import NotSignedInHomePage from '@/components/home/NotSignedInHomePage/NotSignedInHomePage';
+import SignedInHomePage from '@/components/home/SignedInHomePage';
+import CalendarPage from './schedule/calendar/page';
+import SemesterPage from './mysubjects/semester/page';
 
 export default function HomePage() {
+
+  return <CalendarPage />
   // const authState = useSelector(authSelector);
-  // if (!authState.signedIn)
+  // if (authState.signedIn)
   //   return (
   //     <NotSignedInHomePage/>
   //   )
@@ -28,8 +37,13 @@ export default function HomePage() {
   // );
   return (
     <>
-      <MySubjectsPage/>
+    <SemesterPage/>
+      {/* <MySubjectsPage/> */}
     {/* <AllSubjectsPage /> */}
+    {/* <RegisteredSubjectPage/> */}
+    {/* <RegisteredSubjectDetailsPage searchParams={{
+        subjectId: 'duoc'
+      }} /> */}
     </>
   )
   // return <DashboardLoading/>

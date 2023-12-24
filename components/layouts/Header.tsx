@@ -17,14 +17,11 @@ import Fetcher from "@/api/Fetcher";
 import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
 import { UserInfoResponse } from "@/api/userAPI";
+import { cookies } from "@/app/(dashboard)/layout";
 interface TabProps {
   selected: boolean;
   children: ReactNode;
 }
-
-const cookies = new Cookies()
-
-
 
 export default function Header() {
   const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
@@ -35,20 +32,6 @@ export default function Header() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [scroll, setScroll] = useState(false)
-
-  useEffect(() => {
-    Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'))
-      .then((response) => {
-        dispatch(authActions.updateAuthState({
-          signedIn: true,
-          name: response.name,
-          username: cookies.get('studentid'),
-        }));
-        //console.log(response);
-      }).catch((error) => {
-        // router.push('/');
-      });
-  }, [dispatch, router]);
 
   const handleOnSearch = (): void => {
   }
@@ -73,6 +56,7 @@ export default function Header() {
     cookies.remove('authToken');
     dispatch(authActions.updateAuthState({
       signedIn: false,
+      logging: false,
       name: '',
       username: '',
     }));

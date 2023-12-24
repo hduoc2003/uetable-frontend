@@ -8,9 +8,9 @@ import HeartIcon from "../(Icons)/HeartIcon";
 import InfoIcon from "../(Icons)/InfoIcon";
 import { useEffect, useState } from "react";
 import { AllSubjectsDetailsPageProps } from "@/app/(dashboard)/all-subjects/details/page";
-import { SubjectAPI } from "@/api/subjectAPI";
+import { SubjectAllAPI } from "@/api/subjectAPI";
 import { isUndefined } from "lodash";
-import { letterGrade } from "@/utils/subjects";
+import { getLetterGrade } from "@/utils/subjects";
 
 interface Props {
     subject?: SubjectAll;
@@ -24,7 +24,7 @@ const { Text, Title } = Typography;
 export default function SubjectPreview(props: Props) {
     const { subject, loading = false, onStar, imgHeight } = props;
     const [stared, setStared] = useState(subject?.stared)
-    const grade: LetterGrade = letterGrade(subject);
+    const grade: LetterGrade = getLetterGrade(subject);
     const params: AllSubjectsDetailsPageProps['searchParams'] = {
         subjectId: subject?.id ?? ''
     }
@@ -65,6 +65,6 @@ export default function SubjectPreview(props: Props) {
         setStared(!stared);
         onStar?.(!stared)
         if (!isUndefined(subject?.id))
-            SubjectAPI.starSubject(subject?.id, !stared)
+            SubjectAllAPI.starSubject(subject?.id, !stared)
     }
 }

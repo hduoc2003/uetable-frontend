@@ -1,5 +1,6 @@
 import { SubjectClass } from "./subject"
 
+export type Weekdays = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
 export interface ScheduleStyle {
     hasBorder: boolean
     roundedBorder: boolean
@@ -8,7 +9,7 @@ export interface ScheduleStyle {
     headerRowColor: string
     dividerRowColor: string
     hasDivider: boolean
-    displayColumnSettings: boolean
+    hiddenColumns: Weekdays[]
 }
 
 export interface ScheduleInfo {
