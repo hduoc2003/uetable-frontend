@@ -7,7 +7,7 @@ import { THEME } from "@/styles/theme";
 import MyCountDown from "../common/MyCountDown";
 import { Button, Flex, Popover, Space } from "antd";
 import { HiInformationCircle, HiSpeakerphone } from "react-icons/hi";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { lessonToHour, nowToNextSubjectClass } from "@/utils/subjectClass";
 import { useSelector } from "react-redux";
 import { scheduleDataSelector } from "@/redux/schedule/scheduleSelector";
@@ -18,7 +18,7 @@ export default function SignedInHomePage() {
     <Main title='Trang chủ'>
       <Flex vertical gap='large'>
         <NextSubjectInfo />
-        <Schedule onlyViewMode/>
+        <Schedule onlyViewMode />
       </Flex>
     </Main>
   );
@@ -30,6 +30,10 @@ function NextSubjectInfo() {
     time: timeToNextSubject,
     subjectClass: nextSubjectClass
   }, setNextSubjectInfo] = useState(() => nowToNextSubjectClass(subjectClassData));
+
+  useEffect(() => {
+      setNextSubjectInfo(nowToNextSubjectClass(subjectClassData))
+  }, [subjectClassData])
 
 
   const [countdownKey, setCountdownKey] = useState(0);
@@ -48,18 +52,20 @@ function NextSubjectInfo() {
       }
       placement="right"
     >
-      <Space className="text-xl border w-fit border-slate-200 rounded-lg p-2 bg-gray-200">
-        <HiInformationCircle size={'1.3em'} color={THEME.PRIMARY_COLOR} />
-        <p>
-          Bạn sẽ có tiết học
-          <strong className="font-semibold">{` ${nextSubjectClass?.name} `}</strong>
-          vào lúc
-          <strong className="font-semibold">
-            {` ${lessonToHour(nextSubjectClass.lessonStart)}h-${lessonToHour(nextSubjectClass.lessonEnd) + 1}h
+      {nextSubjectClass &&
+        <Space className="text-xl border w-fit border-slate-200 rounded-lg p-2 bg-gray-200">
+          <HiInformationCircle size={'1.3em'} color={THEME.PRIMARY_COLOR} />
+          <p>
+            Bạn sẽ có tiết học
+            <strong className="font-semibold">{` ${nextSubjectClass?.name} `}</strong>
+            vào lúc
+            <strong className="font-semibold">
+              {` ${lessonToHour(nextSubjectClass.lessonStart)}h-${lessonToHour(nextSubjectClass.lessonEnd) + 1}h
                 Thứ ${nextSubjectClass.weekDay}`}
-          </strong>
-        </p>
-      </Space>
+            </strong>
+          </p>
+        </Space>
+      }
     </Popover>
   );
 }

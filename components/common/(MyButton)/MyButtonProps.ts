@@ -9,5 +9,6 @@ export interface MyButtonProps extends ButtonProps {
     // style?: React.CSSProperties
     // ref?: React.RefObject<HTMLButtonElement>
     rounded?: boolean
+    displayChildrenWhenLoading?: boolean
     // htmlType?: "button" | "reset" | "submit"
 }

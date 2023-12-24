@@ -21,19 +21,23 @@ import RegisteredSubjectDetailsPage from './mysubjects/registered/details/page';
 import { authSelector } from '@/redux/auth/authSelector';
 import NotSignedInHomePage from '@/components/home/NotSignedInHomePage/NotSignedInHomePage';
 import SignedInHomePage from '@/components/home/SignedInHomePage';
+import CalendarPage from './schedule/calendar/page';
+import SemesterPage from './mysubjects/semester/page';
 
 export default function HomePage() {
 
-  const authState = useSelector(authSelector);
-  if (!authState.signedIn)
-    return (
-      <NotSignedInHomePage/>
-    )
-  return (
-    <SignedInHomePage/>
-  );
+  return <CalendarPage />
+  // const authState = useSelector(authSelector);
+  // if (authState.signedIn)
+  //   return (
+  //     <NotSignedInHomePage/>
+  //   )
+  // return (
+  //   <SignedInHomePage/>
+  // );
   return (
     <>
+    <SemesterPage/>
       {/* <MySubjectsPage/> */}
     {/* <AllSubjectsPage /> */}
     {/* <RegisteredSubjectPage/> */}

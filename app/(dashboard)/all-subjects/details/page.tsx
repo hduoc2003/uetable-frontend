@@ -12,7 +12,6 @@ import Main from "@/components/layouts/Main";
 import { LetterGradeTag } from "@/components/mysubjects/SemesterInfoTable/SemesterInfoTable";
 import { PageProps } from "@/types/PageProps";
 import { SubjectAll } from "@/types/subject";
-import { letterGrade } from "@/utils/subjects";
 import { Divider, Skeleton, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";

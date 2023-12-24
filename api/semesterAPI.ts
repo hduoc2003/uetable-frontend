@@ -33,16 +33,32 @@ export class SemesterAPI {
 
     }
 
-    static async updateSemester(data: SemesterInfo): Promise<{
+    static async updateSemester(semesterInfo: SemesterInfo): Promise<{
         totalGPA: number
     }> {
-        await delay(2000)
+        console.log('haha')
+        try {
+            let res = await Fetcher.post('/score/updateSemesterCourseList', {
+                semesterId: semesterInfo.id,
+                subjects: semesterInfo.subjects
+            });
+            console.log(res);
+            // return res;
+        } catch (error) {
+            console.log(error)
+        }
+        // await delay(2000)
         return {
             totalGPA: 100
         }
     }
 
     static async getStat(subjects: SemesterInfo['subjects']): Promise<Pick<SemesterInfo, 'sumOfCredits' | 'yearGPA' | 'semesterGPA'>> {
+        try {
+            let res = await Fetcher.get('/score/getTempGPA')
+        } catch (error) {
+
+        }
         await delay(1000);
         return {
             sumOfCredits: 5,

@@ -37,16 +37,16 @@ const defaultProps: UploadProps = {
     }
 };
 
-export default function UploadFile(props: UploadProps) {
+export default function UploadFileArea(props: UploadProps) {
     return (
         <Dragger {...defaultProps} {...props}>
             <div className='p-4'>
                 <Image src={UploadIcon} alt={'Tải tài liệu lên'} className='m-auto w-[50px] h-[50px]' />
                 <Paragraph strong className='text-base'>Nhấn hoặc kéo thả để tải tài liệu</Paragraph>
                 <Paragraph type='secondary' className='text-left'>
-                    <Text strong type='danger'>* </Text>Lưu ý:
-                    Dung lượng tệp không vượt quá <strong>{process.env.ACCEPTABLE_FILE_SIZE}MB</strong>. <br />
-                    {/* - Đuôi mở rộng được chấp nhận: <strong>{process.env.ACCEPTABLE_FILE_EXTENSION}</strong>. */}
+                    <Text strong type='danger'>* </Text>Lưu ý: <br/>
+                    - Dung lượng tệp không vượt quá <strong>{process.env.ACCEPTABLE_FILE_SIZE}MB</strong>. <br />
+                    - Đuôi mở rộng được chấp nhận: <strong>{process.env.ACCEPTABLE_FILE_EXTENSION}</strong>.
                 </Paragraph>
             </div>
         </Dragger>

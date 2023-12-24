@@ -5,12 +5,8 @@ import { getURL } from "@/utils/navigation";
 import { Space, Typography } from "antd";
 import Link from "next/link";
 import { SubjectDocumentsPageProps } from "../documents/page";
-import PreviewList from "@/components/common/Preview/PreviewList";
 import Preview from "@/components/common/Preview/Preview";
 import MultiCarousel from "@/components/common/MultiCarousel";
-import { useState, useCallback, Ref, useEffect } from "react";
-import { useElementRect } from "@/hooks/useElementRect";
-import AngleRightIcon from "@/components/common/(Icons)/AngleRightIcon";
 import MyButtonWrapper from "@/components/common/(MyButton)/MyButtonWrapper";
 
 const { Text } = Typography;

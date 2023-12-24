@@ -31,7 +31,9 @@ export default function DashboardLayout({
                     name: response.name,
                     username: cookies.get('studentid'),
                 }));
-                //console.log(response);
+                // Fetcher.get('http://127.0.0.1:8000/api/schedule/autoCreateEventClass')
+                // .then((res) => console.log(res))
+                // .catch((err) => console.log(err))
             }).catch((error) => {
                 // router.push('/');
                 dispatch(authActions.updateAuthState({

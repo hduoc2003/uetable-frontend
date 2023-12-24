@@ -33,6 +33,7 @@ export class SubjectAllAPI {
   static async getSubjectById(subjectId: string): Promise<SubjectAll> {
     await delay(2000);
     let data: SubjectAll = {
+      idInDb: '1',
       id: "HIS1001",
       name: "Lịch sử Đảng Cộng sản Việt Nam",
       credits: 2,
@@ -66,6 +67,7 @@ export class RegisteredSubjectAPI {
   static async getSubjectById(subjectId: string): Promise<RegisteredSubject> {
     await delay(2000);
     return {
+      idInDb: '1',
       id: "HIS1001",
       name: "Lịch sử Đảng Cộng sản Việt Nam",
       credits: 2,

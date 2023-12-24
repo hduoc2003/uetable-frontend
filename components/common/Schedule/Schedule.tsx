@@ -1,5 +1,5 @@
 import { SaveButton } from '../(MyButton)/SaveButton';
-import React, { useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { ColorPicker, Table } from 'antd';
 import { TableRef, type ColumnsType } from 'antd/es/table';
 import ScheduleCell from "./ScheduleCell";
@@ -13,10 +13,13 @@ import ScheduleSetting from './ScheduleSetting';
 import Download from '../(MyButton)/Download';
 import { THEME } from '@/styles/theme';
 import DangerButton from '../(MyButton)/DangerButton';
-import { Weekdays } from '@/types/schedule';
+import { ScheduleInfo, Weekdays } from '@/types/schedule';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import TitleWithBox from '../TitleWithBox';
 import { delay } from '@/utils/delay';
+import useSWR from 'swr';
+import { ScheduleAPI } from '@/api/scheduleAPI';
+import { semesterActions } from '@/redux/semester/semesterSlice';
 
 const numberOfLessons = 12;
 
@@ -72,6 +75,14 @@ export default function Schedule({
     onlyViewMode = false,
     scale = 1
 }: ScheduleProps) {
+
+    const dispatch = useDispatch();
+    const {data: scheduleInfo, isLoading} = useSWR<ScheduleInfo>('get schedule info', ScheduleAPI.getScheduleInfo);
+    useEffect(() => {
+        if (scheduleInfo)
+            dispatch(scheduleActions.initData(scheduleInfo))
+    }, [dispatch, scheduleInfo])
+
     let columns: ColumnsType<TableData> = [];
     let data: TableData[] = [];
     const rowId = useId();
@@ -115,7 +126,6 @@ export default function Schedule({
         // borderRadius: scheduleStyle.roundedBorder ? 6 : 0,
         verticalAlign: 'top'
     }
-    const dispatch = useDispatch();
     const [hoverSubject, setHoverSubject] = useState(-1);
 
     initData();
@@ -161,6 +171,7 @@ export default function Schedule({
                 </div>
             }
             <Table
+                loading={isLoading}
                 columns={columns.filter((val) => !scheduleStyle.hiddenColumns.includes(val.key as Weekdays))}
                 dataSource={data}
                 pagination={false}

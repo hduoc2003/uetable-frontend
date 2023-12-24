@@ -7,15 +7,15 @@ import { RegisteredSubject } from "@/types/subject";
 import Note from "./Note/Note";
 
 interface Props {
-  subject: RegisteredSubject | undefined
+  subjectId: string
 }
 
 export default function Content({
-  subject
+  subjectId
 }: Props) {
   return (
     <div className="pr-5">
-        <Documents subject={subject}/>
+        <Documents subjectId={subjectId}/>
         <Divider />
         <Note />
         <Divider />

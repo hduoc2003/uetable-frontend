@@ -4,6 +4,8 @@ const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import { StringMap } from 'quill';
 import './quill.css'
 import dynamic from 'next/dynamic';
+import { useRef } from 'react';
+import { ReactQuillProps } from 'react-quill';
 
 // var Size = Quill.import('formats/size');
 // Size.whitelist = fontSize;
@@ -23,11 +25,13 @@ const modules: StringMap = {
 export default function Editor() {
     return (
         <ReactQuill
+
             theme="snow"
             modules={modules}
             // value={'hê'}
             onChange={(value) => console.log(value)}
             placeholder="Nhập dữ liệu"
+            // className='w-[500px] h-[500px]'
         />
     );
 }
