@@ -1,3 +1,8 @@
 export interface UserInfoResponse {
-    name: string
+    id: number,
+    name: string,
+    studentId: string,
+    date: string,
+    avatar: string,
+    bio: string,
 }

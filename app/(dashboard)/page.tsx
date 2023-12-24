@@ -13,9 +13,9 @@ import StarIcon from '@/components/common/(Icons)/StarIcon';
 import HeartIcon from '@/components/common/(Icons)/HeartIcon';
 import IconWrapper from '@/components/common/(Icons)/IconWrapper';
 import SubjectPreview from '@/components/common/Preview/SubjectPreview';
-import { Col, Row } from 'antd';
 import Main from '@/components/layouts/Main';
 import AllSubjectsPage from './all-subjects/page';
+import Profile from './settings/profile/page';
 import RegisteredSubjectPage from './mysubjects/registered/page';
 import RegisteredSubjectDetailsPage from './mysubjects/registered/details/page';
 import { authSelector } from '@/redux/auth/authSelector';
@@ -36,15 +36,7 @@ export default function HomePage() {
   //   <SignedInHomePage/>
   // );
   return (
-    <>
-    <SemesterPage/>
-      {/* <MySubjectsPage/> */}
-    {/* <AllSubjectsPage /> */}
-    {/* <RegisteredSubjectPage/> */}
-    {/* <RegisteredSubjectDetailsPage searchParams={{
-        subjectId: 'duoc'
-      }} /> */}
-    </>
+    <Profile/>
   )
   // return <DashboardLoading/>
 };
