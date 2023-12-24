@@ -37,7 +37,7 @@ export default function Profile() {
   const searchParams = useSearchParams();
   const studentid = searchParams.get('studentid');
 
-  useEffect(() => { 
+  useEffect(() => {
     console.log(studentid);
     if (studentid != currentStudentId) setOther(true);
     console.log(other);
@@ -87,8 +87,8 @@ export default function Profile() {
       "birth": birth,
     }).then((response) => {
       console.log(response)
-    }).catch((error) => { 
-        
+    }).catch((error) => {
+
     });
     console.log(newName);
   }
@@ -102,7 +102,7 @@ export default function Profile() {
     }).then((response) => {
       console.log(response)
     }).catch((error) => {
-        
+
     });
     console.log(dateString);
   }
@@ -124,7 +124,7 @@ export default function Profile() {
       const fileExtension = selectedFile.name.split('.').pop();
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
-    
+
       if (fileExtension && allowedExtensions.includes(fileExtension)) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -179,7 +179,7 @@ export default function Profile() {
                   <Paragraph className="font-semibold text-lg pt-3">{mssv}</Paragraph>
                 </div>
             </div>
-          : 
+          :
           <div className="flex">
             <div className='p-12'>
               <Avatar src={imageURL} className='' alt="Profile Pic" size={100}></Avatar>
@@ -226,7 +226,7 @@ export default function Profile() {
               <div className="flex p-6 justify-between">
                 <div className="font-bold text-2xl">Bio</div>
               </div>
-              { other ? 
+              { other ?
               <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3">{bio}</Paragraph>
               :
               <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => {handleFinishEditBio(newValue)} }}>{bio}</Paragraph>
