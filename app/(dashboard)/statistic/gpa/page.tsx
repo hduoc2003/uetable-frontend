@@ -1,3 +1,4 @@
+'use client'
 import Fetcher from '@/api/Fetcher';
 import { Select } from 'antd';
 import React, { PureComponent, useEffect, useState } from 'react';
@@ -22,7 +23,7 @@ interface ResponseType {
   students: number,
 }
 
-export function ScoreColumn() {
+export default function ScoreColumn() {
   const [data, setData] = useState<Stat[]>();
   const [allYearInfo, setAllYearInfo] = useState<Info[]>([]);
   const [currentYearId, setCurrentYearId] = useState<string>("");
@@ -42,7 +43,8 @@ export function ScoreColumn() {
   }, []);
 
   useEffect(() => {
-    setCurrentYearId(allYearInfo[0].id.toString());
+    if (allYearInfo && allYearInfo.length > 0)
+      setCurrentYearId(allYearInfo[0].id.toString());
   }, [allYearInfo]);
 
   useEffect(() => {

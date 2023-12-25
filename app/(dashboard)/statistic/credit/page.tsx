@@ -1,3 +1,4 @@
+'use client'
 import Fetcher from '@/api/Fetcher';
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
@@ -18,11 +19,11 @@ interface Info {
 export default function CreditColumn() {
   const [data, setData] = useState<Stat[]>();
 
-  const [allSemesterInfo, setAllSemesterInfo] = useState<Info[]>([{ id: 29, title: "Học kỳ 1 năm học 2020-2021" }]);
-  const [allYearInfo, setAllYearInfo] = useState<Info[]>([{ id: 18, title: "QH-2018" }]);
+  const [allSemesterInfo, setAllSemesterInfo] = useState<Info[]>([]);
+  const [allYearInfo, setAllYearInfo] = useState<Info[]>([]);
 
-  const [currentSemesterId, setCurrentSemesterId] = useState<string>("29");
-  const [currentYearId, setCurrentYearId] = useState<string>("18");
+  const [currentSemesterId, setCurrentSemesterId] = useState<string>("");
+  const [currentYearId, setCurrentYearId] = useState<string>("");
 
 
   useEffect(() => {
@@ -50,8 +51,10 @@ export default function CreditColumn() {
   }, []);
 
   useEffect(() => {
-    setCurrentSemesterId(allSemesterInfo[0].id.toString());
-    setCurrentYearId(allYearInfo[0].id.toString());
+    if (allSemesterInfo && allSemesterInfo.length > 0)
+      setCurrentSemesterId(allSemesterInfo[0].id.toString());
+    if (allYearInfo && allYearInfo.length > 0)
+      setCurrentYearId(allYearInfo[0].id.toString());
   }, [allYearInfo, allSemesterInfo]);
 
   useEffect(() => {
@@ -135,7 +138,7 @@ export default function CreditColumn() {
     function SelectSemester() {
       return (
         <Select
-          defaultValue={selectedSemester}
+          value={selectedSemester}
           className="w-[300px] h-full"
           options={
             [
@@ -168,7 +171,7 @@ export default function CreditColumn() {
     function SelectYear() {
       return (
         <Select
-          defaultValue={selectedYear}
+          value={selectedYear}
           className="w-[170px] h-full"
           options={
             [
