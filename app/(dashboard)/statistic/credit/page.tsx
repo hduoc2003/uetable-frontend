@@ -16,23 +16,30 @@ interface Info {
   title: string,
 }
 
+const initInfo = 
+[
+  {
+    id: 0,
+    title: ""
+  }
+];
+
 export default function CreditColumn() {
   const [data, setData] = useState<Stat[]>();
 
-  const [allSemesterInfo, setAllSemesterInfo] = useState<Info[]>([]);
-  const [allYearInfo, setAllYearInfo] = useState<Info[]>([]);
+  const [allSemesterInfo, setAllSemesterInfo] = useState<Info[]>(initInfo);
+  const [allYearInfo, setAllYearInfo] = useState<Info[]>(initInfo);
 
-  const [currentSemesterId, setCurrentSemesterId] = useState<string>("");
-  const [currentYearId, setCurrentYearId] = useState<string>("");
+  const [currentSemesterId, setCurrentSemesterId] = useState<string>("Học kỳ 1 năm học 2020-2021");
+  const [currentYearId, setCurrentYearId] = useState<string>("QH-2018");
 
 
   useEffect(() => {
     const newSemesterData = [];
-    for (let i = 29; i <= 41; i++) {
-      if (i == 29) setCurrentSemesterId(i.toString());
+    for (let i = 1; i <= 10; i++) {
       const newSemester = {
         id: i,
-        title: "Học kỳ " + ((i - 29) % 3 + 1) + " năm học " + (2020 + Math.floor((i - 29) / 3)) + "-" + (2021 + Math.floor((i - 29) / 3)),
+        title: "Học kỳ " + ((i - 1) % 3 + 1) + " năm học " + (2020 + Math.floor((i - 1) / 3)) + "-" + (2021 + Math.floor((i - 1) / 3)),
       }
       newSemesterData.push(newSemester);
     }
@@ -40,7 +47,6 @@ export default function CreditColumn() {
 
     const newYearData = [];
     for (let i = 18; i <= 25; i++) {
-      if (i == 18) setCurrentYearId(i.toString());
       const newYear = {
         id: i,
         title: "QH-20" + i,
@@ -51,13 +57,7 @@ export default function CreditColumn() {
   }, []);
 
   useEffect(() => {
-    if (allSemesterInfo && allSemesterInfo.length > 0)
-      setCurrentSemesterId(allSemesterInfo[0].id.toString());
-    if (allYearInfo && allYearInfo.length > 0)
-      setCurrentYearId(allYearInfo[0].id.toString());
-  }, [allYearInfo, allSemesterInfo]);
-
-  useEffect(() => {
+    if (currentSemesterId && currentYearId)
     Fetcher.get<any, Stat[]>('/statistic/getCreditRangeInSemester', {
       params: {
         semesterId: currentSemesterId,

@@ -26,12 +26,11 @@ interface ResponseType {
 export default function ScoreColumn() {
   const [data, setData] = useState<Stat[]>();
   const [allYearInfo, setAllYearInfo] = useState<Info[]>([]);
-  const [currentYearId, setCurrentYearId] = useState<string>("");
+  const [currentYearId, setCurrentYearId] = useState<string>("QH-2018");
 
   useEffect(() => {
     const newYearData = [];
     for (let i = 18; i <= 25; i++) {
-      if (i == 18) setCurrentYearId(i.toString());
       const newYear = {
         id: i,
         title: "QH-20" + i,
@@ -43,17 +42,11 @@ export default function ScoreColumn() {
   }, []);
 
   useEffect(() => {
-    if (allYearInfo && allYearInfo.length > 0)
-      setCurrentYearId(allYearInfo[0].id.toString());
-  }, [allYearInfo]);
-
-  useEffect(() => {
     Fetcher.get<any, ResponseType>('/statistic/getAverageGpaBySchoolYear', {
       params: {
         schoolYear: currentYearId,
       }
     }).then((response) => {
-      console.log(response);
       setData(response.result);
     }).catch((error) => {
 
@@ -61,7 +54,7 @@ export default function ScoreColumn() {
   }, [currentYearId]);
 
   return (
-    <Main title="Thống kê GPA">
+    <Main title="Thống kê - Điểm số">
       <div className="flex gap-5">
         <DecorBox />
         <YearFilter
