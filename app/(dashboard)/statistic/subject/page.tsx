@@ -128,7 +128,7 @@ export default function SubjectColumn() {
     }
 
     return (
-        <Main title="Tìm kiếm môn học">
+        <Main title="Thống kê - Tìm kiếm môn học">
             <div className='flex-col gap-5'>
                 <SearchBar placeholder='Tìm kiếm môn học' onChange={handleSearchChange} value={subjectName} />
                 {subjectName.length > 0 && searchResultList.length > 0 && (
