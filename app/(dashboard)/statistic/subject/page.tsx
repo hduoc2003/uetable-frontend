@@ -1,3 +1,4 @@
+'use client'
 import Fetcher from '@/api/Fetcher';
 import SearchIcon from '@/components/common/(Icons)/SearchIcon';
 import SearchBar from '@/components/common/SearchBar/SearchBar';
@@ -31,7 +32,7 @@ interface SubjectDetail {
 
 }
 
-export function SubjectColumn() {
+export default function SubjectColumn() {
     const [data, setData] = useState<Stat[]>();
     const [subjectName, setSubjectName] = useState("");
     const [searchResultList, setSearchResultList] = useState<Subject[]>([]);
@@ -129,7 +130,7 @@ export function SubjectColumn() {
     return (
         <Main title="Tìm kiếm môn học">
             <div className='flex-col gap-5'>
-                <SearchBar placeholder='Tìm kiêm môn học' onChange={handleSearchChange} value={subjectName} />
+                <SearchBar placeholder='Tìm kiếm môn học' onChange={handleSearchChange} value={subjectName} />
                 {subjectName.length > 0 && searchResultList.length > 0 && (
                     <div className='absolute rounded-2xl border w-[400px] flex-col pt-4 pb-2 mt-1 z-[2] bg-white'>
                         {searchResultList.map((subject, index) => {

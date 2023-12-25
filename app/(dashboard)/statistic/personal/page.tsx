@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 import DecorBox from '@/components/common/DecorBox';
@@ -10,7 +11,7 @@ interface stat {
   credits: number,
 }
 
-export function PersonalColumn() {
+export default function PersonalColumn() {
 
   const [data, setData] = useState<stat[]>();
 
@@ -31,7 +32,7 @@ export function PersonalColumn() {
         <span className="font-semibold text-2xl">Tổng GPA qua từng học kỳ</span>
       </div>
       <LineChart
-        width={900}
+        width={1100}
         height={250}
         data={data}
         syncId="anyId"
@@ -51,7 +52,7 @@ export function PersonalColumn() {
         <span className="font-semibold text-2xl">Tín chỉ đăng ký từng học kỳ</span>
       </div>
       <LineChart
-        width={900}
+        width={1100}
         height={250}
         data={data}
         syncId="anyId"
