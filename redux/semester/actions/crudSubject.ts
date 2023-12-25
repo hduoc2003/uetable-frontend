@@ -32,14 +32,14 @@ export const crudSubjectThunk = createAsyncThunk<Payload, ThunkPayload>(
         selectRootSemester(thunkAPI.getState()).currentId
       ))
       subjects = [...subjects]
-      _.remove(subjects, (data) => subject.includes(data.id))
+      _.remove(subjects, (data) => subject.includes(data.code))
     } else {
       ({ idx: semesterIdx, semesterInfo: { subjects } } = selectSemesterById(
         thunkAPI.getState(),
         subject.semesterId
       ))
       subjects = [...subjects]
-      const { subjectIdx } = selectRegisteredSubjectById(thunkAPI.getState(), subject.semesterId, subject.id)
+      const { subjectIdx } = selectRegisteredSubjectById(thunkAPI.getState(), subject.semesterId, subject.code)
 
       switch (type) {
         case 'add':

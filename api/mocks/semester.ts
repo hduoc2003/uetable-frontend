@@ -1,13 +1,13 @@
 import { SemesterInfo } from "@/types/semester";
 import genId from "@/utils/genId";
-import { mockCompletedSubjects } from "./subject";
+import { mockRegisteredSubjects } from "./subject";
 import _ from "lodash";
 
 
 export const mockSemesterInfo: SemesterInfo = {
   id: 'lmao',
   title: 'Học kì ',
-  subjects: mockCompletedSubjects('lmao'),
+  subjects: mockRegisteredSubjects('lmao'),
   sumOfCredits: 100,
   semesterGPA: 4,
   yearGPA: 4,

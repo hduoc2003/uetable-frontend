@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { scheduleActions } from "@/redux/schedule/scheduleSlice";
 import { scheduleDataSelector } from "@/redux/schedule/scheduleSelector";
 import { useState } from "react";
+import MyButtonWrapper from "../(MyButton)/MyButtonWrapper";
 
 const tableSettingTask: Record<'show-hiden-columns' | 'change-header-color' | 'styling-table' | 'delete-table', React.ReactNode> = {
     // 'column-setting': 'Cài đặt cột',
@@ -27,11 +28,7 @@ let stylingTableTask = {
 type StylingTableKey = keyof typeof stylingTableTask;
 
 
-export default function ScheduleSetting({
-    onHideColumn
-}: {
-    onHideColumn: () => void
-}) {
+export default function ScheduleSetting() {
 
     const dispatch = useDispatch();
     const { scheduleStyle } = useSelector(scheduleDataSelector);
@@ -100,7 +97,9 @@ export default function ScheduleSetting({
     const handleTableSetting: MenuProps['onClick'] = (e) => {
         switch (e.key as TableSettingKey | StylingTableKey) {
             case 'show-hiden-columns':
-                onHideColumn();
+                dispatch(scheduleActions.updateScheduleStyle({
+                    hiddenColumns: []
+                }))
                 setOpen(true);
                 break;
             case 'change-header-color':
@@ -141,12 +140,12 @@ export default function ScheduleSetting({
                 open={open}
                 onOpenChange={(flag: boolean) => setOpen(flag)}
             >
-                <Button>
+                <MyButtonWrapper className="border-2 px-2">
                     <Space>
                         <div className="font-semibold">Cài đặt bảng</div>
                         <DownOutlined />
                     </Space>
-                </Button>
+                </MyButtonWrapper>
             </Dropdown>
         </ConfigProvider>
     );

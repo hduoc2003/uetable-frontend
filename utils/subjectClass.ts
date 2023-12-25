@@ -35,11 +35,18 @@ export function nowToSubjectClass(subjectClass: SubjectClass): number {
 
 export function nowToNextSubjectClass(subjectClasses: SubjectClass[]): {
     time: number
-    subjectClass: SubjectClass
+    subjectClass: SubjectClass | undefined
     index: number
 } {
-    if (subjectClasses.length === 0)
-        throw new Error('Hàm nowToNextSubjectClass có subjectClasses rỗng')
+    if (subjectClasses.length === 0) {
+
+        // throw new Error('Hàm nowToNextSubjectClass có subjectClasses rỗng')
+        return {
+            time: 0,
+            subjectClass: undefined,
+            index: 0
+        }
+    }
     let mi: number = 0;
     let minTime = nowToSubjectClass(subjectClasses[0]);
 

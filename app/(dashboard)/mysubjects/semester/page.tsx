@@ -26,7 +26,7 @@ export default function SemesterPage() {
 
   const dispatch = useDispatch();
   const thunkDispatch = useThunkDispatch();
-  const {pending, currentId} = useSelector(selectRootSemester)
+  const { pending, currentId } = useSelector(selectRootSemester)
   const [searchingSubject, setSearchingSubject] = useState('');
 
   const handleSearchSubject = useDebouncedCallback((subject: string) => {
@@ -43,7 +43,7 @@ export default function SemesterPage() {
   }, [semesterData, dispatch])
 
   return (
-    <Main title='Quản lý môn học'>
+    <Main title='Thông tin học kì'>
       <div className="flex flex-col gap-5">
         <Something
           onSearchChange={handleSearchSubject}
@@ -66,7 +66,7 @@ function Something({
 
   const dispatch = useDispatch();
   const thunkDispatch = useThunkDispatch();
-  const {currentId} = useSelector(selectRootSemester);
+  const { currentId } = useSelector(selectRootSemester);
   const allSemesterInfo = useSelector(selectAllSemester)
 
   return (

@@ -1,0 +1,7 @@
+.fc-scrollgrid-section-header .fc-scroller {
+    overflow: unset !important;
+}
+
+.fc .fc-timegrid-col.fc-day-today {
+    background-color: transparent !important;
+}

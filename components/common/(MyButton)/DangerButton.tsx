@@ -2,21 +2,13 @@ import { Button } from 'antd'
 import { BaseButtonProps } from 'antd/es/button/button'
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
+import { MyButtonProps } from './MyButtonProps'
+import MyButtonWrapper from './MyButtonWrapper'
 
-export default function DangerButton({
-    children,
-    onClick,
-    disable = false,
-    className
-} : {
-    children: React.ReactNode
-    onClick?: () => void
-    disable?: boolean
-    className?: string
-}) {
+export default function DangerButton(props : MyButtonProps) {
     return (
-        <Button danger className={twMerge('group hover:bg-danger', className)} onClick={onClick} disabled={disable}>
-            <div className='group-hover:text-secondary'>{children}</div>
-        </Button>
+        <MyButtonWrapper {...props} danger className={twMerge('group hover:bg-danger border px-2 hover:!border-danger', props.className)}>
+            <div className='group-hover:text-secondary'>{props.children}</div>
+        </MyButtonWrapper>
     )
 }

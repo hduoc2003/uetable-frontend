@@ -1,6 +1,6 @@
 'use client';
 
-import { SubjectAPI } from "@/api/subjectAPI";
+import { SubjectAllAPI } from "@/api/subjectAPI";
 import { AllSubjectsDetailsPageProps } from "@/app/(dashboard)/all-subjects/details/page";
 import MyButtonWrapper from "@/components/common/(MyButton)/MyButtonWrapper";
 import Preview from "@/components/common/Preview/Preview";
@@ -24,7 +24,7 @@ interface Props {
 export default function RelatedSubject({
     subjectId
 }: Props) {
-    const { data: relatedSubjects, isLoading } = useSWR([subjectId], ([subjectId]) => SubjectAPI.getRelatedSubject(subjectId, 1, 6))
+    const { data: relatedSubjects, isLoading } = useSWR([subjectId], ([subjectId]) => SubjectAllAPI.getRelatedSubject(subjectId, 1, 6))
     return (
         <Space size={'large'} direction="vertical" className="w-full">
             <TitleWithBox title={<Link href={"/all-subjects"}>Môn học liên quan</Link>} />
@@ -35,7 +35,7 @@ export default function RelatedSubject({
                         <div className="mb-5">
                             <Preview
                                 imgSrc={subject?.imgLink ?? 'https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg'}
-                                url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.id ?? '' })}
+                                url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.code ?? '' })}
                                 title={subject?.name ?? ''}
                                 loading={isLoading}
                                 imgHeight={180}
@@ -43,7 +43,7 @@ export default function RelatedSubject({
                         </div>
                     )
                 }}
-                rowKey={(subject) => subject?.id ?? genId()}
+                rowKey={(subject) => subject?.code ?? genId()}
             // grid={{gutter: 16, column: 1}}
             />
             <Link href={"/all-subjects"}>

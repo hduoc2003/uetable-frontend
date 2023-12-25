@@ -9,6 +9,7 @@ import { RegisteredSubject } from '@/types/subject'
 import { allSemesterMode } from '@/utils/semester'
 import { get4Grade, getFinalScore, getLetterGrade } from '@/utils/subjects'
 import { Divider, Form, Input, Modal, Popover, Space, Typography } from 'antd'
+import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
@@ -17,6 +18,7 @@ const { Title, Text } = Typography;
 
 interface FormValue {
     id: string
+    code: string
     name: string
     credits: string
     finalScore: string
@@ -54,11 +56,11 @@ export default function SubjectInfo({
                             {subjectInfo?.name}
                         </Space>
                     </Title>
-                    {subjectInfo?.id &&
+                    {subjectInfo?.code &&
                         <OpenNewTabButton<MySubjectsPageProps['searchParams']>
-                            content={subjectInfo?.id}
+                            content={subjectInfo?.code}
                             url='/mysubjects'
-                            searchParams={{ 'subjectId': subjectInfo?.id ?? 'vcl' }}
+                            searchParams={{ 'subjectId': subjectInfo?.code ?? 'vcl' }}
                         />
                     }
                 </div>
@@ -84,10 +86,26 @@ function Content({
 }) {
     const {currentId} = useSelector(selectRootSemester);
     const [form] = Form.useForm();
+    const initialValues: FormValue | undefined = isUndefined(subjectInfo) ? undefined : {
+        id: subjectInfo.id,
+        code: subjectInfo?.code,
+        name: subjectInfo?.name,
+        credits: '' + subjectInfo?.credits,
+        finalScore: '' + getFinalScore(subjectInfo),
+        '4score': '' + get4Grade(subjectInfo),
+        'letter-score': '' + getLetterGrade(subjectInfo),
+        midTermScore: '' + (subjectInfo?.score.midTerm?.score ?? 0),
+        midTermW: '' + (subjectInfo?.score.midTerm?.weight ?? 0),
+        finalTermScore: '' + (subjectInfo?.score.finalTerm?.score ?? 0),
+        finalTermW: '' + (subjectInfo?.score.finalTerm?.weight ?? 0),
+        otherTermScore: '' + (subjectInfo?.score.otherTerm?.score ?? 0),
+        otherTermW: '' + (subjectInfo?.score.otherTerm?.weight ?? 0)
+    }
     const handleSubmit = (value: FormValue) => {
         console.log(typeof value.finalTermScore)
         onSave({
-            id: value.id.trim(),
+            id: subjectInfo?.id as string,
+            code: value.code.trim(),
             name: value.name,
             credits: +value.credits,
             score: {
@@ -116,27 +134,14 @@ function Content({
             form={form}
             name="subject"
             onFinish={handleSubmit}
-            initialValues={{
-                id: subjectInfo?.id,
-                name: subjectInfo?.name,
-                credits: subjectInfo?.credits,
-                finalScore: getFinalScore(subjectInfo),
-                '4score': get4Grade(subjectInfo),
-                'letter-score': getLetterGrade(subjectInfo),
-                midTermScore: subjectInfo?.score.midTerm?.score ?? 0,
-                midTermW: subjectInfo?.score.midTerm?.weight ?? 0,
-                finalTermScore: subjectInfo?.score.finalTerm?.score ?? 0,
-                finalTermW: subjectInfo?.score.finalTerm?.weight ?? 0,
-                otherTermScore: subjectInfo?.score.otherTerm?.score ?? 0,
-                otherTermW: subjectInfo?.score.otherTerm?.weight ?? 0
-            }}
+            initialValues={initialValues}
             className='flex flex-col'
         >
             <Divider className='border' />
             <table>
                 <tbody>
                     <tr key={0} className='group/r1'>
-                        <FieldBlock formNames={['id']} title='Học phần' labels={['Mã học phần']} disable={subjectInfo?.id !== ''} contents={[subjectInfo?.id]} type='first' className='group-hover/r1:bg-[#F5F6F8]' />
+                        <FieldBlock formNames={['id']} title='Học phần' labels={['Mã học phần']} disable={subjectInfo?.code !== ''} contents={[subjectInfo?.code]} type='first' className='group-hover/r1:bg-[#F5F6F8]' />
                         <FieldBlock labels={['Tên học phần']} contents={[subjectInfo?.name]} disable className='group-hover/r1:bg-[#F5F6F8]' formNames={['name']} />
                         <FieldBlock labels={['Số tín chỉ']} contents={[subjectInfo?.credits]} disable type='last' className='group-hover/r1:bg-[#F5F6F8]' formNames={['credits']} />
                     </tr>

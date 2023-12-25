@@ -147,8 +147,8 @@ export const mockSubjectClasses: SubjectClass[] = [
   },
 ];
 
-export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] => [{
-  id: "HIS1001",
+export const mockRegisteredSubjects = (semesterId: string): RegisteredSubject[] => [{
+  code: "HIS1001",
   name: "Lịch sử Đảng Cộng sản Việt Nam",
   credits: 2,
   score: {
@@ -157,7 +157,7 @@ export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] =
   semesterId,
   type: 'registered'
 }, {
-  id: "INT2208",
+  code: "INT2208",
   name: "Công nghệ phần mềm",
   credits: 3,
   score: {
@@ -166,7 +166,7 @@ export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] =
   semesterId,
   type: 'registered'
 }, {
-  id: "INT3202",
+  code: "INT3202",
   name: "Hệ quản trị cơ sở dữ liệu",
   credits: 3,
   score: {
@@ -175,7 +175,7 @@ export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] =
   semesterId,
   type: 'registered'
 }, {
-  id: "INT3115",
+  code: "INT3115",
   name: "Thiết kế giao diện người dùng",
   credits: 3,
   score: {
@@ -184,7 +184,7 @@ export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] =
   semesterId,
   type: 'registered'
 }, {
-  id: "INT3117",
+  code: "INT3117",
   name: "Kiểm thử và đảm bảo chất lượng phần mềm",
   credits: 3,
   score: {
@@ -193,7 +193,7 @@ export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] =
   semesterId,
   type: 'registered'
 }, {
-  id: "INT2211",
+  code: "INT2211",
   name: "Cơ sở dữ liệu",
   credits: 4,
   score: {
@@ -202,7 +202,7 @@ export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] =
   semesterId,
   type: 'registered'
 }, {
-  id: "INT2213",
+  code: "INT2213",
   name: "Mạng máy tính",
   credits: 4,
   score: {
@@ -214,32 +214,40 @@ export const mockCompletedSubjects = (semesterId: string): RegisteredSubject[] =
 
 export const mockAllSubjects: SubjectAll[] = [
   {
-    id: "HIS1001",
+    code: "HIS1001",
     name: "Lịch sử Đảng Cộng sản Việt Nam",
     credits: 2,
     type: "registered",
-    letterGrade: "A+",
     like: 6,
     documents: 652,
     stared: true,
+    score: {
+      final: 10
+    }
   },
   {
-    id: 'INT3117',
+    code: 'INT3117',
     name: 'Kiểm thử và đảm bảo chất lượng phần mềm',
     credits: 3,
     type: 'major',
     like: 235,
     documents: 554,
     stared: false,
+    lecturers: [],
+    score: {
+      final: 10
+    }
 },
   {
-    id: 'INT2213',
+    code: 'INT2213',
     name: 'Mạng máy tính',
     credits: 3,
     type: 'registered',
-    letterGrade: 'B+',
     like: 1133,
     documents: 1313,
     stared: true,
+    score: {
+      final: 10
+    }
   }
 ];

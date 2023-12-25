@@ -1,11 +1,13 @@
 import './globals.css'
 import 'animate.css'
+import 'react-toastify/dist/ReactToastify.css';
 import type { Metadata } from 'next'
 import { ReduxProvider } from '@/redux/provider';
 import { MAIN_FONT } from '@/styles/fonts';
 import { ConfigProvider } from 'antd';
 import { THEME } from '@/styles/theme';
-import Fetcher from '@/api/Fetcher';
+import { ToastContainer } from 'react-toastify';
+import SWRProvider from '@/components/provider/SWRProvider';
 
 export const metadata: Metadata = {
   title: 'UETable',
@@ -31,11 +33,17 @@ export default function RootLayout({
                 Input: {
                   activeBg: THEME.SECONDARY_COLOR,
                   lineWidth: 2
-                }
+                },
               }
             }}
           >
-            {children}
+            <SWRProvider>
+              {children}
+
+              <ToastContainer
+                position='bottom-right'
+              />
+            </SWRProvider>
           </ConfigProvider>
         </ReduxProvider>
       </body>

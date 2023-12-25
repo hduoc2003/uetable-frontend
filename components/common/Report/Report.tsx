@@ -1,17 +1,8 @@
 'use client'
-import { MySubjectsPageProps } from '@/app/(dashboard)/mysubjects/page'
-import ExclamationIcon from '@/components/common/(Icons)/ExclamationIcon'
-import OpenNewTabButton from '@/components/common/(MyButton)/OpenNewTabButton'
 import { SaveButton } from '@/components/common/(MyButton)/SaveButton'
 import DecorBox from '@/components/common/DecorBox'
-import { selectRootSemester } from '@/redux/semester/semesterSelector'
-import { RegisteredSubject } from '@/types/subject'
-import { allSemesterMode } from '@/utils/semester'
-import { get4Grade, getFinalScore, getLetterGrade } from '@/utils/subjects'
-import { Divider, Form, Input, Modal, Popover, Space, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { twMerge } from 'tailwind-merge'
+import { Divider, Form, Modal, Space, Typography } from 'antd'
+import React, { useState } from 'react'
 import DynamicRadioButtons from './DynamicRadioButtons'
 import './report.css'
 import TextArea from 'antd/es/input/TextArea'
@@ -28,7 +19,7 @@ const options = [
 interface FormValue {
     pageType: string
     pageId: string
-    content: string 
+    content: string
     type: number
 }
 
@@ -106,10 +97,10 @@ function Content({
             className='flex flex-col'
         >
             <Divider className='border' style={{marginTop: '8px', marginBottom: '16px'}}/>
-            
+
             {/* <p>Selected option: {selectedOption}</p> */}
-            <Form.Item<FormValue> name={'type'}> 
-                <DynamicRadioButtons options={options} onSelect={handleOptionSelect} /> 
+            <Form.Item<FormValue> name={'type'}>
+                <DynamicRadioButtons options={options} onSelect={handleOptionSelect} />
             </Form.Item>
             <Text strong style={{marginBottom: '8px', fontSize: '16px'}}> Nội dung báo cáo </Text>
             <Form.Item<FormValue>

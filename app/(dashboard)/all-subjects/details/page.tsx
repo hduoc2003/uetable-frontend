@@ -1,6 +1,6 @@
 'use client';
 
-import { SubjectAPI } from "@/api/subjectAPI";
+import { SubjectAllAPI } from "@/api/subjectAPI";
 import { CommentAPI } from "@/api/commentAPI";
 import { CommentType } from "@/types/comment";
 import Documents from "@/components/all-subjects/details/Documents";
@@ -15,7 +15,6 @@ import Main from "@/components/layouts/Main";
 import { LetterGradeTag } from "@/components/mysubjects/SemesterInfoTable/SemesterInfoTable";
 import { PageProps } from "@/types/PageProps";
 import { SubjectAll } from "@/types/subject";
-import { letterGrade } from "@/utils/subjects";
 import { Divider, Skeleton, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
@@ -32,7 +31,7 @@ export default function AllSubjectsDetailsPage({
     subjectId
   }
 }: AllSubjectsDetailsPageProps) {
-  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAPI.getSubjectById);
+  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
 
   return (
     <Main title={'Thông tin học phần'}>
@@ -40,16 +39,16 @@ export default function AllSubjectsDetailsPage({
         <div className="flex flex-col gap-8 w-3/4">
           <Overview subject={subject} />
           <Divider />
-          <Documents subjectId={subjectId}/>
+          <Documents subjectId={subjectId} />
           <Divider />
           <div className="flex flex-col">
-            <TitleWithBox title={'Bình luận'} boxContent={4} size="middle"/>
+            <TitleWithBox title={'Bình luận'} boxContent={4} size="middle" />
             {subjectId}
-            <div style={{marginTop: '40px'}}>
-              <CommentInfo className="comments__item"/>
-              <CommentInfo className="comments__answer"/>
-              <CommentInfo className="comments__item"/>
-              <CommentInfo className="comments__item"/>
+            <div style={{ marginTop: '40px' }}>
+              <CommentInfo className="comments__item" />
+              <CommentInfo className="comments__answer" />
+              <CommentInfo className="comments__item" />
+              <CommentInfo className="comments__item" />
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ const headerText = "";
 
 export default function NotSignedInHomePage() {
   return (
-    <Main className="flex flex-col gap-[50px]">
+    <Main className="flex flex-col gap-[50px]" title='Trang chủ'>
       <AboutScheduleAndMySubjects />
 
       <AboutAllSubjects />

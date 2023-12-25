@@ -12,13 +12,16 @@ import React, { useMemo, useState } from 'react'
 import NavCurve from '../../../public/images/curve-nav.svg'
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import LinkIcon from '@/components/common/(Icons)/NavIcons/LinkIcon';
+import { useRouter } from 'next/navigation';
+import _ from 'lodash';
 
 type GroupKey = 'general' | 'explore';
-type MenuKey = 'home' | 'schedule' | 'my-subjects' | 'all-subjects' | 'stat' | 'links';
-type MySubjectsKey = 'my-subjects-semester' | 'my-registered-subjects' | 'my-subjects-majors';
-type StatKey = 'stat-credits' | 'stat-score' | 'stat-self';
+type MenuKey = '' | 'schedule' | 'mysubjects' | 'all-subjects' | 'statistic' | 'links';
+type ScheduleKey = 'subject-class' | 'calendar' | 'exam';
+type MySubjectsKey = 'semester' | 'registered' | 'curriculum';
+type StatKey = 'credit' | 'gpa' | 'personal' | 'subject';
 
-type AllKey = GroupKey | MenuKey | MySubjectsKey | StatKey;
+type AllKey = GroupKey | MenuKey | MySubjectsKey | ScheduleKey | StatKey;
 
 const _key = (key: AllKey) => key;
 
@@ -27,6 +30,7 @@ export default function NavMenu({
 } : {
     expand: boolean
 }) {
+    const router = useRouter();
     const [selectedKey, setselectedKey] = useState<AllKey>();
     const menuItems = useMemo(() => getMenuItems(selectedKey, expand), [selectedKey, expand]);
     const [r] = useAutoAnimate();
@@ -49,6 +53,10 @@ export default function NavMenu({
                 onSelect={(info) => setselectedKey(info.key as AllKey)}
                 items={menuItems}
                 {...(expand ? {} : {expandIcon: null})}
+                onClick={(e) => {
+                    console.log(e.keyPath)
+                    router.push('/' + _.join(_.reverse(e.keyPath), '/'))
+                }}
             />
             {/* </div> */}
         </ConfigProvider>
@@ -95,19 +103,23 @@ const iconClassName = (selected: boolean) => {
 
 const labels: Record<AllKey, string> = {
     'general': 'Chung',
-    'home': 'Trang chủ',
+    '': 'Trang chủ',
     'schedule': 'Thời khoá biểu',
-    'my-subjects': 'Môn học của tôi',
-    'my-subjects-semester': 'Học kì',
-    'my-registered-subjects': 'Môn đã đăng kí',
-    'my-subjects-majors': 'Chương trình đào tạo',
+    'mysubjects': 'Môn học của tôi',
+    'semester': 'Điểm học kì',
+    'registered': 'Môn đã đăng kí',
+    'curriculum': 'Chương trình đào tạo',
     'all-subjects': 'Học phần',
     'explore': 'Khám phá',
-    'stat': 'Thống kê',
-    'stat-credits': 'Tín chỉ',
-    'stat-score': 'Điểm số',
-    'stat-self': 'Cá nhân',
-    'links': 'Liên kết'
+    'statistic': 'Thống kê',
+    'credit': 'Tín chỉ',
+    'gpa': 'Điểm số',
+    'personal': 'Cá nhân',
+    'subject': 'Các môn học',
+    'links': 'Liên kết',
+    'subject-class': 'Lịch học',
+    calendar: 'Lịch làm việc',
+    exam: 'Lịch thi'
 }
 
 
@@ -121,21 +133,27 @@ function getMenuItems(
 
     return [
         getGroupMenuItem('general', 'Chung', [
-            getNormalMenuItem('home', selectedKey, getLabel('home'), false, HomeIcon),
-            getNormalMenuItem('schedule', selectedKey, getLabel('schedule'), false, ScheduleIcon),
-            getSubMenuItem('my-subjects', getLabel('my-subjects'), MySubjectIcon,
+            getNormalMenuItem('', selectedKey, getLabel(''), false, HomeIcon),
+            getSubMenuItem('schedule', getLabel('schedule'), ScheduleIcon,
             [
-                getNormalMenuItem('my-subjects-semester', selectedKey, getLabel('my-subjects-semester'), true),
-                getNormalMenuItem('my-registered-subjects', selectedKey, getLabel('my-registered-subjects'), true),
-                getNormalMenuItem('my-subjects-majors', selectedKey, getLabel('my-subjects-majors'), true)
+                getNormalMenuItem('subject-class', selectedKey, getLabel('subject-class'), true),
+                getNormalMenuItem('calendar', selectedKey, getLabel('calendar'), true),
+                getNormalMenuItem('exam', selectedKey, getLabel('exam'), true)
+            ]),
+            getSubMenuItem('mysubjects', getLabel('mysubjects'), MySubjectIcon,
+            [
+                getNormalMenuItem('semester', selectedKey, getLabel('semester'), true),
+                getNormalMenuItem('registered', selectedKey, getLabel('registered'), true),
+                getNormalMenuItem('curriculum', selectedKey, getLabel('curriculum'), true)
             ]),
             getNormalMenuItem('all-subjects', selectedKey, getLabel('all-subjects'), false, AllSubjectsIcon)
         ]),
         getGroupMenuItem('explore', 'Khám phá', [
-            getSubMenuItem('stat', getLabel('stat'), StatIcon, [
-                getNormalMenuItem('stat-credits', selectedKey, getLabel('stat-credits'), true),
-                getNormalMenuItem('stat-score', selectedKey, getLabel('stat-score'), true),
-                getNormalMenuItem('stat-self', selectedKey, getLabel('stat-self'), true)
+            getSubMenuItem('statistic', getLabel('statistic'), StatIcon, [
+                getNormalMenuItem('credit', selectedKey, getLabel('credit'), true),
+                getNormalMenuItem('gpa', selectedKey, getLabel('gpa'), true),
+                getNormalMenuItem('personal', selectedKey, getLabel('personal'), true),
+                getNormalMenuItem('subject', selectedKey, getLabel('subject'), true)
             ]),
             getNormalMenuItem('links', selectedKey, getLabel('links'), false, LinkIcon)
         ])
