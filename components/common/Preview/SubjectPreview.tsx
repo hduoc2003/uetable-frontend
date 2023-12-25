@@ -26,7 +26,7 @@ export default function SubjectPreview(props: Props) {
     const [stared, setStared] = useState(subject?.stared)
     const grade: LetterGrade = getLetterGrade(subject);
     const params: AllSubjectsDetailsPageProps['searchParams'] = {
-        subjectId: subject?.id ?? ''
+        subjectId: subject?.code ?? ''
     }
 
     return (
@@ -64,7 +64,7 @@ export default function SubjectPreview(props: Props) {
     function handleStar() {
         setStared(!stared);
         onStar?.(!stared)
-        if (!isUndefined(subject?.id))
-            SubjectAllAPI.starSubject(subject?.id, !stared)
+        if (!isUndefined(subject?.code))
+            SubjectAllAPI.starSubject(subject?.code, !stared)
     }
 }

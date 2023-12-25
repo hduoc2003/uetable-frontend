@@ -39,16 +39,16 @@ export default function AllSubjectsDetailsPage({
         <div className="flex flex-col gap-8 w-3/4">
           <Overview subject={subject} />
           <Divider />
-          <Documents subjectId={subjectId}/>
+          <Documents subjectId={subjectId} />
           <Divider />
           <div className="flex flex-col">
-            <TitleWithBox title={'Bình luận'} boxContent={4} size="middle"/>
+            <TitleWithBox title={'Bình luận'} boxContent={4} size="middle" />
             {subjectId}
-            <div style={{marginTop: '40px'}}>
-              <CommentInfo className="comments__item"/>
-              <CommentInfo className="comments__answer"/>
-              <CommentInfo className="comments__item"/>
-              <CommentInfo className="comments__item"/>
+            <div style={{ marginTop: '40px' }}>
+              <CommentInfo className="comments__item" />
+              <CommentInfo className="comments__answer" />
+              <CommentInfo className="comments__item" />
+              <CommentInfo className="comments__item" />
             </div>
           </div>
         </div>

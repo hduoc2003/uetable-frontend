@@ -14,8 +14,8 @@ export interface SubjectClass {
 }
 
 export interface Subject {
-  idInDb: string; // id của môn học lưu trong Db khác với mã học phần, đcm VanhG
-  id: string; /// mã học phần
+  id: string; // id của môn học lưu trong Db khác với mã học phần, đcm VanhG
+  code: string; /// mã học phần
   name: string; // tên học phần
   credits: number; // tín chỉ
   type: ('all' | 'major' | 'registered');

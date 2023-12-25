@@ -5,7 +5,7 @@ import { Divider } from "antd";
 export default function RegisteredSubjectPage() {
   return (
     <Main title='Quản lý môn học'>
-        {/* <div className="flex">
+      {/* <div className="flex">
             <div className="w-3/4">
 
             </div>

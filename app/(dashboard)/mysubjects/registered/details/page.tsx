@@ -21,7 +21,7 @@ export default function RegisteredSubjectDetailsPage({
         subjectId
     }
 }: RegisteredSubjectDetailsPageProps) {
-    const {data: subject, isLoading} = useSWR([fetchId, subjectId], ([_, subjectId]) => RegisteredSubjectAPI.getSubjectById(subjectId));
+    const { data: subject, isLoading } = useSWR([fetchId, subjectId], ([_, subjectId]) => RegisteredSubjectAPI.getSubjectById(subjectId));
     console.log(subject)
     return (
         <Main title='Môn học của tôi'>
@@ -30,7 +30,7 @@ export default function RegisteredSubjectDetailsPage({
                     <Content subjectId={subjectId} />
                 </div>
                 <Divider type="vertical" className="h-auto" />
-                <SubjectInfo subject={subject}/>
+                <SubjectInfo subject={subject} />
             </div>
         </Main>
     );

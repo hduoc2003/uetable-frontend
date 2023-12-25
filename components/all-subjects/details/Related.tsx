@@ -35,7 +35,7 @@ export default function RelatedSubject({
                         <div className="mb-5">
                             <Preview
                                 imgSrc={subject?.imgLink ?? 'https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg'}
-                                url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.id ?? '' })}
+                                url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.code ?? '' })}
                                 title={subject?.name ?? ''}
                                 loading={isLoading}
                                 imgHeight={180}
@@ -43,7 +43,7 @@ export default function RelatedSubject({
                         </div>
                     )
                 }}
-                rowKey={(subject) => subject?.id ?? genId()}
+                rowKey={(subject) => subject?.code ?? genId()}
             // grid={{gutter: 16, column: 1}}
             />
             <Link href={"/all-subjects"}>

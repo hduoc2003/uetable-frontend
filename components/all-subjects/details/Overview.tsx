@@ -100,7 +100,7 @@ function Info({
                     (() => {
                         switch (type) {
                             case 'id':
-                                return `Mã học phần: ${subject?.id}`
+                                return `Mã học phần: ${subject?.code}`
                             case 'credits':
                                 return `Số tín chỉ: ${subject?.credits}`
                             case 'gpa':

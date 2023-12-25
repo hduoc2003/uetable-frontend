@@ -3,7 +3,7 @@ import { RegisteredSubject, LetterGrade } from '@/types/subject'
 import { ConfigProvider, Table, Typography } from 'antd'
 import Space from 'antd/es/space'
 import { ColumnType, ColumnsType } from 'antd/es/table'
-import _ from 'lodash'
+import _, { isUndefined } from 'lodash'
 import React, { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import TaskBar from './TaskBar'
@@ -28,10 +28,8 @@ interface SemesterInfoProps {
 
 interface TableStat {
     id: keyof Pick<SemesterInfo, 'semesterGPA' | 'yearGPA' | 'sumOfCredits'>
-    isStatRow?: true
+    isStatRow: true
 }
-
-const statKeys: TableStat['id'][] = ['semesterGPA', 'yearGPA', 'sumOfCredits']
 
 type TableDataSourceType = RegisteredSubject | TableStat;
 
@@ -47,14 +45,20 @@ type ColKey = 'order' |
 const statResultColSpan = 2;
 const tableCols = 8;
 
+function getRowKey(tableDataSource: TableDataSourceType) {
+    if (isStatRow(tableDataSource))
+        return tableDataSource.id;
+
+}
+
 export default function SemesterInfoTable({
     loading: _loading = false,
     searchingSubject
 }: SemesterInfoProps) {
     const dispatch = useDispatch();
     const thunkDispatch = useThunkDispatch();
-    const {currentId, pending} = useSelector(selectRootSemester)
-    const {semesterInfo} = useSelector((state: RootState) => selectSemesterById(state, currentId))
+    const { currentId, pending } = useSelector(selectRootSemester)
+    const { semesterInfo } = useSelector((state: RootState) => selectSemesterById(state, currentId))
 
     const [dataSource, setDataSource] = useState<TableDataSourceType[]>([])
     const [columns, setColumns] = useState<ColumnsType<TableDataSourceType>>([]);
@@ -72,12 +76,15 @@ export default function SemesterInfoTable({
         if (!allSemesterMode(currentId))
             setDataSource([
                 ...filtered,
-                { id: 'sumOfCredits' }, { id: 'semesterGPA' }, { id: 'yearGPA' }
+                { id: 'sumOfCredits', isStatRow: true },
+                { id: 'semesterGPA', isStatRow: true },
+                { id: 'yearGPA', isStatRow: true }
             ]);
         else
             setDataSource([
                 ...filtered,
-                { id: 'sumOfCredits' }, { id: 'yearGPA' }
+                { id: 'sumOfCredits', isStatRow: true },
+                { id: 'yearGPA', isStatRow: true }
             ]);
         setColumns([
             getOrderCol('order'),
@@ -107,7 +114,8 @@ export default function SemesterInfoTable({
                 <Space direction='vertical' size={'small'} className='mt-3 w-full group/table'>
                     <TaskBar
                         onAddSubject={() => handleClickSubject({
-                            id: '',
+                            id: genId(),
+                            code: '',
                             type: 'registered',
                             semesterId: semesterInfo.id,
                             score: {
@@ -123,7 +131,7 @@ export default function SemesterInfoTable({
                         columns={columns}
                         pagination={false}
                         // bordered
-                        rowKey={(subject) => subject.id}
+                        rowKey={(subject) => isStatRow(subject) ? subject.id : subject.code}
                         size='middle'
                         className='shadow-md'
                         showSorterTooltip={false}
@@ -155,9 +163,9 @@ export default function SemesterInfoTable({
                     />
                     {selectedSubjects.length > 0 &&
                         <div className='flex gap-3 items-center py-2'>
-                        <SelectedIcon/>
-                        <Text strong className='text-royal-gray flex-1'>{`${selectedSubjects.length} môn học đã chọn`}</Text>
-                        <DangerButton onClick={handleDeleteSubject}>Xoá môn học</DangerButton>
+                            <SelectedIcon />
+                            <Text strong className='text-royal-gray flex-1'>{`${selectedSubjects.length} môn học đã chọn`}</Text>
+                            <DangerButton onClick={handleDeleteSubject}>Xoá môn học</DangerButton>
                         </div>
                     }
 
@@ -165,20 +173,20 @@ export default function SemesterInfoTable({
             </ConfigProvider>
             {
                 <SubjectInfo
-                // key={(editingSubject?.id ?? '') + editingSubject?.getFinalScore?.()}
-                // key={editingSubject.current?.id ?? ''}
-                semesterName={semesterInfo.title}
-                subjectInfo={editingSubject}
-                onSave={(newSubject) => {
-                    setOpenSubjectInfo(false);
-                    thunkDispatch(crudSubjectThunk({
-                        type: newSubject.id === '' ? 'add' : 'update',
-                        subject: newSubject
-                    }))
-                }}
-                open={openSubjectInfo}
-                onCancel={() => setOpenSubjectInfo(false)}
-            />
+                    // key={(editingSubject?.id ?? '') + editingSubject?.getFinalScore?.()}
+                    // key={editingSubject.current?.id ?? ''}
+                    semesterName={semesterInfo.title}
+                    subjectInfo={editingSubject}
+                    onSave={(newSubject) => {
+                        setOpenSubjectInfo(false);
+                        thunkDispatch(crudSubjectThunk({
+                            type: newSubject.code === '' ? 'add' : 'update',
+                            subject: newSubject
+                        }))
+                    }}
+                    open={openSubjectInfo}
+                    onCancel={() => setOpenSubjectInfo(false)}
+                />
             }
         </div>
     )
@@ -265,7 +273,7 @@ const cellStyle: React.CSSProperties = {
 }
 
 function isStatRow(data: TableDataSourceType): data is TableStat {
-    return statKeys.includes(data.id as TableStat['id'])
+    return 'isStatRow' in data;
 }
 
 function getOrderCol(key: ColKey): ColumnType<TableDataSourceType> {
@@ -314,7 +322,7 @@ function getSubjectIdCol(key: ColKey): ColumnType<TableDataSourceType> {
         key,
         title: <CellContent>Mã học phần</CellContent>,
         render: (_, data, rowIdx) => ({
-            children: <CellContent>{data.id}</CellContent>,
+            children: <CellContent>{isStatRow(data) ? '' : data.code}</CellContent>,
             props: {
                 style: cellStyle,
                 colSpan: isStatRow(data) ? 0 : 1,

@@ -1,3 +1,4 @@
+'use client'
 import { SaveButton } from '../(MyButton)/SaveButton';
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { ColorPicker, Table } from 'antd';

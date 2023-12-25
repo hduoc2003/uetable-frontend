@@ -2,13 +2,13 @@
 import Fetcher from '@/api/Fetcher';
 import { CloseCircleFilled } from '@ant-design/icons';
 import Link from 'next/link'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useSearchParams } from 'next/navigation';
 
 export default function ResetPassword() {
-    
+
     const searchParams = useSearchParams();
-    
+
 
     const authToken = searchParams.get("token");
 
@@ -61,22 +61,22 @@ export default function ResetPassword() {
                                     </div>
                                     <div className="w-full flex flex-col pr-4">
                                         <input
-                                        value={inputPassword}
-                                        onChange={handleInputChange}
-                                        onFocus={handleInputFocus}
-                                        type="text"
-                                        className={`w-full border rounded-lg text-black caret-black p-4 m-2 ${inputFocused && inputPassword === '' ? 'border-red-500':''}`}
-                                        placeholder="Nhập mật khẩu mới">
+                                            value={inputPassword}
+                                            onChange={handleInputChange}
+                                            onFocus={handleInputFocus}
+                                            type="text"
+                                            className={`w-full border rounded-lg text-black caret-black p-4 m-2 ${inputFocused && inputPassword === '' ? 'border-red-500' : ''}`}
+                                            placeholder="Nhập mật khẩu mới">
                                         </input>
                                         {inputFocused && inputPassword === '' && (
-                                        <p className="text-red-500 ml-2 text-sm">Vui lòng nhập mật khẩu</p>
+                                            <p className="text-red-500 ml-2 text-sm">Vui lòng nhập mật khẩu</p>
                                         )}
                                     </div>
                                 </div>
                                 {submitError != "" && (
                                     <div className='w-full p-2'>
                                         <div className='w-full rounded-lg flex bg-red-300 p-4 mt-6'>
-                                            <CloseCircleFilled style={{color: '#FF0000'}}/>
+                                            <CloseCircleFilled style={{ color: '#FF0000' }} />
                                             <p className='text-sm ml-4'>{submitError}</p>
                                         </div>
                                     </div>
@@ -84,7 +84,7 @@ export default function ResetPassword() {
                             </div>
                         )
                     }
-                    
+
                 </div>
                 {
                     changeSuccess == false && (
@@ -107,7 +107,7 @@ export default function ResetPassword() {
                         </div>
                     )
                 }
-                
+
             </div>
         </div>
     );

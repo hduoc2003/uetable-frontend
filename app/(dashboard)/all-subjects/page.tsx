@@ -69,11 +69,11 @@ export default function AllSubjectsPage() {
                             />
                         )
                     }}
-                    dataKey={(subject) => subject.id}
+                    dataKey={(subject) => subject.code}
                     fetchMore={async (from, to) => SubjectAllAPI.getSomeSubjects(sortBy, from, to, searchValue)}
-                    // filter={(data) => {
-                    //     return search(searchValue, data, ['id', 'name'])
-                    // }}
+                // filter={(data) => {
+                //     return search(searchValue, data, ['id', 'name'])
+                // }}
                 // fetchMore={SubjectAPI.getAllSubject}
                 />
             </div>

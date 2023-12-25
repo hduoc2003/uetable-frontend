@@ -52,7 +52,7 @@ export const selectRegisteredSubjectById = createSelector([
     semesterIdx: number
     subject: RegisteredSubject
 } => {
-    let idx = _.findIndex(semester.semesterInfo.subjects, (subject) => subject.id === subjectId)
+    let idx = _.findIndex(semester.semesterInfo.subjects, (subject) => subject.code === subjectId)
     if (idx === -1)
         throw new Error(`Function getRegisteredSubjectById: Subject with id ${subjectId} not found`)
     return {

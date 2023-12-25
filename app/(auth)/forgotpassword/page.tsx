@@ -2,10 +2,10 @@
 import Fetcher from '@/api/Fetcher';
 import { CloseCircleFilled } from '@ant-design/icons';
 import Link from 'next/link'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Cookies from 'universal-cookie';
 
-export default function ForgotPassword () {
+export default function ForgotPassword() {
     const [inputMSSV, setMSSV] = useState("");
     const [inputFocused, setInputFocused] = useState(false);
     const [submitError, setSubmitError] = useState("");
@@ -40,7 +40,7 @@ export default function ForgotPassword () {
         }).then((response) => {
             console.log(response);
             setNoti("Thành công! Hãy kiểm tra mail của bạn.");
-            const expiresDate = new Date(Date.now() + 60000); 
+            const expiresDate = new Date(Date.now() + 60000);
             cookies.set('forgotpassword', true, {
                 expires: expiresDate,
             })
@@ -67,15 +67,15 @@ export default function ForgotPassword () {
                             </div>
                             <div className="w-full flex flex-col pr-4">
                                 <input
-                                value={inputMSSV}
-                                onChange={handleInputChange}
-                                onFocus={handleInputFocus}
-                                type="text"
-                                className={`w-full border rounded-lg text-black caret-black p-4 m-2 ${inputFocused && inputMSSV === '' ? 'border-red-500':''}`}
-                                placeholder="Nhập MSSV">
+                                    value={inputMSSV}
+                                    onChange={handleInputChange}
+                                    onFocus={handleInputFocus}
+                                    type="text"
+                                    className={`w-full border rounded-lg text-black caret-black p-4 m-2 ${inputFocused && inputMSSV === '' ? 'border-red-500' : ''}`}
+                                    placeholder="Nhập MSSV">
                                 </input>
                                 {inputFocused && inputMSSV === '' && (
-                                <p className="text-red-500 ml-2 text-sm">Vui lòng nhập MSSV</p>
+                                    <p className="text-red-500 ml-2 text-sm">Vui lòng nhập MSSV</p>
                                 )}
                             </div>
                         </div>
@@ -85,7 +85,7 @@ export default function ForgotPassword () {
                         {submitError != "" && (
                             <div className='w-full p-2'>
                                 <div className='w-full rounded-lg flex bg-red-300 p-4 mt-6'>
-                                    <CloseCircleFilled style={{color: '#FF0000'}}/>
+                                    <CloseCircleFilled style={{ color: '#FF0000' }} />
                                     <p className='text-sm ml-4'>{submitError}</p>
                                 </div>
                             </div>
