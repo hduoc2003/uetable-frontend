@@ -18,10 +18,13 @@ import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
 import { UserInfoResponse } from "@/api/userAPI";
 import { cookies } from "@/app/(dashboard)/layout";
+import { contentt } from "./Settings";
 interface TabProps {
   selected: boolean;
   children: ReactNode;
 }
+
+
 
 export default function Header() {
   const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
@@ -44,6 +47,12 @@ export default function Header() {
         setScroll(false);
       }
     };
+    if (authState?.signedIn) {
+      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
+      .then((response) => {
+          setAvtURL(response.avatar);
+      });
+    }
 
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -60,6 +69,11 @@ export default function Header() {
       name: '',
       username: '',
     }));
+    router.push('/');
+  }
+
+  const handleProfile = () => {
+    router.push('/settings/profile?studentid=' + cookies.get('studentid'));
   }
 
   return (
@@ -99,8 +113,10 @@ export default function Header() {
                 onMouseLeave={() => setAvtStrokeColor(THEME.PRIMARY_COLOR)}
               >
                 <div className="relative flex">
-                  <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={avtURL} size={40} onClick={handleSignOut}></Avatar>
-                  <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" strokeWidth="2" style={{ stroke: avtStrokeColor }}></circle></svg>
+                  <Popover content={contentt(handleProfile, handleSignOut)} trigger="click" arrow={true} placement="bottom" className="bg-white">
+                    <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={avtURL} size={40}></Avatar>
+                    <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" strokeWidth="2" style={{ stroke: avtStrokeColor }}></circle></svg>
+                  </Popover>
                 </div>
               </button>
               <div className="ml-3">
