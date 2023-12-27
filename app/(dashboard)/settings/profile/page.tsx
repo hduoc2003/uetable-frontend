@@ -17,10 +17,10 @@ const { Paragraph } = Typography;
 const cookies = new Cookies();
 export default function Profile() {
 
-  const [name, setName] = useState('Hoàng Minh Thái');
-  const [birth, setBirth] = useState("2003-01-13");
-  const [mssv, setMSSV] = useState('21020034');
-  const [bio, setBio] = useState('amogus');
+  const [name, setName] = useState("");
+  const [birth, setBirth] = useState("");
+  const [mssv, setMSSV] = useState("");
+  const [bio, setBio] = useState("");
   const [changedImage, hasChangedImage] = useState(false);
   const [setUpAccount, hasSetUpAccount] = useState(true);
   const [personalInfo, finishedPersonalInfo] = useState(true);
@@ -28,7 +28,7 @@ export default function Profile() {
   const [other, setOther] = useState(false);
   const [docData, setDocData] = useState<DocumentClass[]>([]);
   const router = useRouter();
-  var percentage = 70;
+  const [percentage, setPercentage] = useState(20);
   const currentStudentId = cookies.get('studentid');
 
   const [imageURL, setImageURL] = useState("");
@@ -38,9 +38,7 @@ export default function Profile() {
   const studentid = searchParams.get('studentid');
 
   useEffect(() => {
-    console.log(studentid);
     if (studentid != currentStudentId) setOther(true);
-    console.log(other);
     Fetcher.get<any, UserInfoResponse>('/users/' + studentid)
       .then((response) => {
         setImageURL(response.avatar);
@@ -55,7 +53,6 @@ export default function Profile() {
         else if (error.response.status == 404) {
 
         }
-        //console.log(studentid);
       });
 
     Fetcher.get<any, DocumentClass[]>('/document/getMyDocumentByStudentId', {
@@ -63,12 +60,33 @@ export default function Profile() {
         "studentId": studentid,
       }
     }).then((response) => {
-      console.log(response);
       setDocData(response);
     }).catch((error) => {
 
     })
   }, [studentid, currentStudentId, other, router]);
+
+  useEffect(() => {
+    setPercentage(20);
+    if (imageURL) {
+      hasChangedImage(true);
+      setPercentage(p => p + 30);
+    } else {
+      hasChangedImage(false);
+    }
+    if (bio) {
+      hasBiogrpahy(true);
+      setPercentage(p => p+20);
+    } else {
+      hasBiogrpahy(false);
+    }
+    if (name && mssv && birth) {
+      finishedPersonalInfo(true);
+      setPercentage(p => p + 30);
+    } else {
+      finishedPersonalInfo(false);
+    }
+  }, [bio, name, imageURL, birth, mssv])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] as File | undefined;
@@ -86,11 +104,10 @@ export default function Profile() {
       "avatar": imageURL,
       "birth": birth,
     }).then((response) => {
-      console.log(response)
+      
     }).catch((error) => {
 
     });
-    console.log(newName);
   }
 
   const handleFinishEditBirth: DatePickerProps['onChange'] = (date, dateString) => {
@@ -100,11 +117,10 @@ export default function Profile() {
       "avatar": imageURL,
       "birth": dateString,
     }).then((response) => {
-      console.log(response)
+
     }).catch((error) => {
 
     });
-    console.log(dateString);
   }
 
   const handleFinishEditBio = (newBio: string) => {
@@ -112,11 +128,10 @@ export default function Profile() {
     Fetcher.post('/users/changeBio', {
       "bio": newBio,
     }).then((response) => {
-      console.log(response)
+      
     }).catch((error) => {
 
     });
-    console.log(newBio);
   }
 
   const changeImage = () => {
@@ -131,9 +146,6 @@ export default function Profile() {
           if (e.target) {
             const dataURL = e.target.result as string;
             setImageURL(dataURL);
-            if (!changedImage) {
-              percentage += 20;
-            }
             hasChangedImage(true);
           }
         };
@@ -145,7 +157,7 @@ export default function Profile() {
             'Content-Type': 'multipart/form-data',
           }
         }).then((response) => {
-          console.log(response);
+          
         }).catch((error) => {
 
         });
@@ -268,56 +280,64 @@ export default function Profile() {
           {
             setUpAccount ?
               <div className="flex gap-2">
-                <CheckOutlined />
-                <p className='font-medium text-sm'>Setup Account</p>
+                <span style={{color: 'green'}}>
+                  <CheckOutlined/>
+                </span>
+                <p className='font-medium text-sm'>Kích hoạt tài khoản</p>
                 <p className='font-medium text-gray-400 text-sm'>20%</p>
               </div>
               :
               <div className="flex gap-2">
                 <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Setup Account</p>
+                <p className='font-medium text-gray-400 text-sm'>Kích hoạt tài khoản</p>
                 <p className='text-green-400 font-semibold text-sm'>20%</p>
               </div>
           }
           {
             changedImage ?
               <div className="flex gap-2">
-                <CheckOutlined />
-                <p className='font-medium text-sm'>Upload your photo</p>
+                <span style={{color: 'green'}}>
+                  <CheckOutlined/>
+                </span>
+                <p className='font-medium text-sm'>Cập nhật ảnh đại diện</p>
                 <p className='font-medium text-gray-400 text-sm'>30%</p>
               </div>
               :
               <div className="flex gap-2">
                 <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Upload your photo</p>
+                <p className='font-medium text-gray-400 text-sm'>Cập nhật ảnh đại diện</p>
                 <p className='text-green-400 font-semibold text-sm'>30%</p>
               </div>
           }
           {
             personalInfo ?
               <div className="flex gap-2">
-                <CheckOutlined />
-                <p className='font-medium text-sm'>Personal Info</p>
+                <span style={{color: 'green'}}>
+                  <CheckOutlined/>
+                </span>
+                <p className='font-medium text-sm'>Thông tin cá nhân</p>
                 <p className='font-medium text-gray-400 text-sm'>30%</p>
               </div>
               :
               <div className="flex gap-2">
                 <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Personal Info</p>
+                <p className='font-medium text-gray-400 text-sm'>Thông tin cá nhân</p>
                 <p className='text-green-400 font-semibold text-sm'>30%</p>
               </div>
           }
           {
             biography ?
               <div className="flex gap-2">
-                <CheckOutlined />
-                <p className='font-medium text-sm'>Biography</p>
+                <span style={{color: 'green'}}>
+                  <CheckOutlined/>
+                </span>
+                <p className='font-medium text-sm'>Cập nhật Bio</p>
                 <p className='font-medium text-gray-400 text-sm'>20%</p>
               </div>
               :
               <div className="flex gap-2">
                 <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Biography</p>
+                <p className='font-medium text-gray-400 text-sm'>Cập nhật Bio</p>
                 <p className='text-green-400 font-semibold text-sm'>20%</p>
               </div>
           }
