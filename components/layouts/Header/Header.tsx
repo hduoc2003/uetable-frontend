@@ -8,17 +8,17 @@ import { authSelector } from "@/redux/auth/authSelector";
 import { AuthState } from "@/redux/auth/authSlice";
 import { Avatar, Badge, Divider, Select, Popover } from "antd";
 import { IoNotificationsOutline, IoNotifications } from "react-icons/io5";
-import SearchBar from "../common/SearchBar/SearchBar";
+import SearchBar from "../../common/SearchBar/SearchBar";
 import Link from "next/link";
 import { MAIN_FONT } from "@/styles/fonts";
-import { content } from "@/components/layouts/Notifications"
-import NotificationIcon from "../common/(Icons)/NotificationIcon";
+import NotificationIcon from "../../common/(Icons)/NotificationIcon";
 import Fetcher from "@/api/Fetcher";
 import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
 import { UserInfoResponse } from "@/api/userAPI";
 import { cookies } from "@/app/(dashboard)/layout";
-import { contentt } from "./Settings";
+import { contentt } from "../Settings";
+import Notifications from "./Notifications";
 interface TabProps {
   selected: boolean;
   children: ReactNode;
@@ -29,8 +29,6 @@ interface TabProps {
 export default function Header() {
   const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
   const [avtStrokeColor, setAvtStrokeColor] = useState<string>(THEME.PRIMARY_COLOR);
-  const [notiCount, setNotiCount] = useState(10);
-  const [solidNoti, setSolidNoti] = useState(false);
   const authState = useSelector(authSelector);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -58,7 +56,7 @@ export default function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [authState?.signedIn, authState?.username]);
   // console.log(value)
 
   const handleSignOut = () => {
@@ -98,16 +96,8 @@ export default function Header() {
         <LanguaguesSelector />
         {
           authState.signedIn ?
-            <div className="flex mr-5">
-              <Popover content={content} trigger="click" arrow={false} placement="bottom" className="bg-white">
-                <button onClick={() => { setNotiCount(0); setSolidNoti(true); }}>
-                  <Badge count={notiCount} overflowCount={9} title="Thông báo" className={`mr-7 ${MAIN_FONT.className}`}>
-                    <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300">
-                      <NotificationIcon solid={solidNoti} />
-                    </div>
-                  </Badge>
-                </button>
-              </Popover>
+            <div className="flex mr-5 items-center">
+              <Notifications />
               <button
                 onMouseEnter={() => setAvtStrokeColor(THEME.DARK_PRIMARY_COLOR)}
                 onMouseLeave={() => setAvtStrokeColor(THEME.PRIMARY_COLOR)}
@@ -163,8 +153,5 @@ function LanguaguesSelector() {
       className={`w-[110px] mr-[30px] h-[45%]`}
     />
   )
-}
-function useMemo(arg0: () => Cookies, arg1: never[]) {
-  throw new Error("Function not implemented.");
 }
 
