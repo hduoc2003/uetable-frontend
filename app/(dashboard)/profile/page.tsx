@@ -68,7 +68,6 @@ export default function Profile() {
 
       } 
       setDocData(response);
-      console.log(response);
     }).catch((error) => {
 
     })
