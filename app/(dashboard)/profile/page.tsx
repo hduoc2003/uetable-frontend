@@ -51,7 +51,7 @@ export default function Profile() {
           router.push('/signin');
         }
         else if (error.response.status == 404) {
-
+            router.push('/');
         }
       });
 
@@ -60,7 +60,15 @@ export default function Profile() {
         "studentId": studentid,
       }
     }).then((response) => {
+      let data = response;
+      for (let i = 0; i < data.length; i++) {
+        let time = data[i].createdAt.split('-');
+        let date = time[2].split('T');
+        data[i].createdAt = date[0] + '/' + time[1] + '/' + time[0];
+
+      } 
       setDocData(response);
+      console.log(response);
     }).catch((error) => {
 
     })
@@ -174,7 +182,7 @@ export default function Profile() {
       <div className="flex">
         <div className="m-4 bg-white border rounded-2xl shadow-lg w-full">
           {other ?
-            <div className="flex p-12 gap-[100px]">
+            <div className="flex p-12 gap-[150px]">
               <div>
                 <Avatar src={imageURL} className='' alt="Profile Pic" size={100}></Avatar>
               </div>
@@ -234,27 +242,45 @@ export default function Profile() {
                 </div>
               </div>
             }
-            <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
-              <div className="flex p-6 justify-between">
-                <div className="font-bold text-2xl">Bio</div>
-              </div>
-              {other ?
-                <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3">{bio}</Paragraph>
-                :
-                <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => { handleFinishEditBio(newValue) } }}>{bio}</Paragraph>
-              }
-            </div>
-            <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 p-6">
+            {
+                other ? (
+                    bio && (
+                    <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
+                        <div className="flex p-6 justify-between">
+                            <div className="font-bold text-2xl">Bio</div>
+                        </div>
+                        <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3">{bio}</Paragraph>
+                    </div>
+                    )
+                ) : (
+                <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
+                    <div className="flex p-6 justify-between">
+                        <div className="font-bold text-2xl">Bio</div>
+                    </div>
+                    <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => { handleFinishEditBio(newValue) } }}>{bio}</Paragraph>
+                </div>
+                )
+            }
+
+            <div className="w-full bg-white border rounded-2xl hover:shadow p-6">
               <div className="font-bold text-2xl mb-4">Tài liệu</div>
               <div>
                 {docData.map((document) => {
                   return (
                     <>
-                      <div className="border hover:bg-gray-100 hover:shadow bg-white p-6 m-4 flex">
-                        <Image src={document.link} height={100} width={100} alt="Document Image" className='mr-5' />
-                        <div className="flex flex-col gap-3">
+                      <div className="border hover:bg-gray-100 hover:shadow bg-white p-6 m-4 flex cursor-pointer" onClick={() => {
+                        router.push('/all-subjects/documents/details?documentId=' + document.id);
+                      }}>
+                        {
+                            document.link.slice(-3) == "pdf" ?
+                            <Image src="https://i.imgur.com/WccjHlP.png" height={100} width={100} alt="Document Image" className='mr-5' />
+                            :
+                            <Image src="https://i.imgur.com/sYktWfS.png" height={100} width={100} alt="Document Image" className='mr-5' />                            
+                        }
+                        <div className="flex flex-col gap-2">
                           <p className='text-blue-400 text-2xl'>{document.name}</p>
-                          <p className="text-">Môn học: {document.category}</p>
+                          <p className="">Môn học: {document.subjectName}</p>
+                          <p className='text-sm'>Upload bởi: {name}</p>
                           <div className="flex gap-10">
                             <div className="flex">
                               <p>{document.like}</p>
@@ -264,6 +290,7 @@ export default function Profile() {
                               <p>{document.download}</p>
                               <DownloadOutlined />
                             </div>
+                            <p>{document.createdAt}</p>
                           </div>
                         </div>
                       </div>
@@ -274,7 +301,8 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="m-4 bg-white border rounded-2xl shadow-lg flex flex-col p-6 gap-3 max-h-full">
+        { !other && 
+        <div className="m-4 bg-white border rounded-2xl shadow-lg flex flex-col p-6 gap-3 h-max-full">
           <text className="font-bold text-xl">Hoàn thành profile</text>
           <Progress type="circle" percent={percentage} strokeColor="#1dc14e" strokeWidth={10} size={200} />
           {
@@ -342,6 +370,7 @@ export default function Profile() {
               </div>
           }
         </div>
+      }
       </div>
     </main>
   );

@@ -73,7 +73,7 @@ export default function Header() {
   }
 
   const handleProfile = () => {
-    router.push('/settings/profile?studentid=' + cookies.get('studentid'));
+    router.push('/profile?studentid=' + cookies.get('studentid'));
   }
 
   return (

@@ -8,6 +8,8 @@ export interface DocumentClass {
     download: string;
     category: string;
     link: string;
+    subjectName: string;
+    createdAt: string;
 }
 
 export interface UserUploadFile {
