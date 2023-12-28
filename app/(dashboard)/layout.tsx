@@ -2,12 +2,12 @@
 import Fetcher from '@/api/Fetcher';
 import { UserInfoResponse } from '@/api/userAPI';
 import Footer from '@/components/layouts/Footer'
-import Header from '@/components/layouts/Header'
+import Header from '@/components/layouts/Header/Header'
 import NavBar from '@/components/layouts/NavBar/NavBar'
 import { authSelector } from '@/redux/auth/authSelector'
 import { authActions } from '@/redux/auth/authSlice';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'universal-cookie';
 
@@ -22,7 +22,8 @@ export default function DashboardLayout({
 
     const dispatch = useDispatch();
     const router = useRouter();
-    useEffect(() => {
+    const handleLogin = useCallback(() => {
+        console.log('vcl')
         Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'))
             .then((response) => {
                 dispatch(authActions.updateAuthState({
@@ -31,17 +32,25 @@ export default function DashboardLayout({
                     name: response.name,
                     username: cookies.get('studentid'),
                 }));
+                console.log(response)
                 // Fetcher.get('http://127.0.0.1:8000/api/schedule/autoCreateEventClass')
                 // .then((res) => console.log(res))
                 // .catch((err) => console.log(err))
             }).catch((error) => {
                 // router.push('/');
+                console.log(error)
                 dispatch(authActions.updateAuthState({
                     signedIn: false,
                     logging: false
                 }));
             });
-    }, [dispatch, router]);
+    }, [dispatch])
+
+    useEffect(() => {
+        handleLogin()
+    }, [handleLogin]);
+
+    console.log(authState.logging)
 
     if (authState.logging)
         return (<></>)
@@ -55,4 +64,5 @@ export default function DashboardLayout({
             </div>
         </div>
     )
+
 }

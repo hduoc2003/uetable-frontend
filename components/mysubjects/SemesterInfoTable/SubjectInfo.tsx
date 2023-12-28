@@ -4,15 +4,18 @@ import ExclamationIcon from '@/components/common/(Icons)/ExclamationIcon'
 import OpenNewTabButton from '@/components/common/(MyButton)/OpenNewTabButton'
 import { SaveButton } from '@/components/common/(MyButton)/SaveButton'
 import DecorBox from '@/components/common/DecorBox'
+import { selectNotRegisteredSubjects } from '@/redux/allsubjects/allSubjectsSelector'
 import { selectRootSemester } from '@/redux/semester/semesterSelector'
 import { RegisteredSubject } from '@/types/subject'
 import { allSemesterMode } from '@/utils/semester'
+import strNormalize from '@/utils/strNormalize'
 import { get4Grade, getFinalScore, getLetterGrade } from '@/utils/subjects'
-import { Divider, Form, Input, Modal, Popover, Space, Typography } from 'antd'
-import { isUndefined } from 'lodash'
-import React, { useEffect, useState } from 'react'
+import { AutoComplete, Divider, Form, Input, Modal, Popover, Space, Typography } from 'antd'
+import _, { isUndefined } from 'lodash'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { twMerge } from 'tailwind-merge'
+import { useDebouncedCallback } from 'use-debounce'
 
 const { Title, Text } = Typography;
 
@@ -46,14 +49,13 @@ export default function SubjectInfo({
     onCancel: () => void
 }) {
     return (
-
         <Modal
             title={
                 <div className='flex items-center'>
                     <Title level={3} className='flex-1 !mb-0'>
                         <Space size={'middle'}>
                             <DecorBox />
-                            {subjectInfo?.name}
+                            {subjectInfo?.name || 'Thêm môn học'}
                         </Space>
                     </Title>
                     {subjectInfo?.code &&
@@ -84,8 +86,9 @@ function Content({
     subjectInfo?: RegisteredSubject,
     onSave: (newCompletedSubject: RegisteredSubject) => void
 }) {
-    const {currentId} = useSelector(selectRootSemester);
-    const [form] = Form.useForm();
+    const { currentId } = useSelector(selectRootSemester);
+    const [form] = Form.useForm<FormValue>();
+    const allSubjects = useSelector(selectNotRegisteredSubjects);
     const initialValues: FormValue | undefined = isUndefined(subjectInfo) ? undefined : {
         id: subjectInfo.id,
         code: subjectInfo?.code,
@@ -102,9 +105,8 @@ function Content({
         otherTermW: '' + (subjectInfo?.score.otherTerm?.weight ?? 0)
     }
     const handleSubmit = (value: FormValue) => {
-        console.log(typeof value.finalTermScore)
         onSave({
-            id: subjectInfo?.id as string,
+            id: value.id,
             code: value.code.trim(),
             name: value.name,
             credits: +value.credits,
@@ -128,6 +130,13 @@ function Content({
         })
     }
 
+    const handleChangeCode = useDebouncedCallback((code: string) => {
+        const subject = _.find(allSubjects, (subject) => subject.code === code);
+        form.setFieldValue('name', subject?.name ?? '');
+        form.setFieldValue('credits', subject?.credits ?? 0)
+        form.setFieldValue('id', subject?.id ?? '')
+    }, 300);
+
     return (
         <Form<FormValue>
             // key={1}
@@ -138,10 +147,11 @@ function Content({
             className='flex flex-col'
         >
             <Divider className='border' />
+            <Form.Item name={'id'} hidden/>
             <table>
                 <tbody>
                     <tr key={0} className='group/r1'>
-                        <FieldBlock formNames={['id']} title='Học phần' labels={['Mã học phần']} disable={subjectInfo?.code !== ''} contents={[subjectInfo?.code]} type='first' className='group-hover/r1:bg-[#F5F6F8]' />
+                        <FieldBlock formNames={['code']} onChangeCode={handleChangeCode} isNewSubject={subjectInfo?.code === ''} title='Học phần' labels={['Mã học phần']} disable={subjectInfo?.code !== ''} contents={[subjectInfo?.code]} type='first' className='group-hover/r1:bg-[#F5F6F8]' />
                         <FieldBlock labels={['Tên học phần']} contents={[subjectInfo?.name]} disable className='group-hover/r1:bg-[#F5F6F8]' formNames={['name']} />
                         <FieldBlock labels={['Số tín chỉ']} contents={[subjectInfo?.credits]} disable type='last' className='group-hover/r1:bg-[#F5F6F8]' formNames={['credits']} />
                     </tr>
@@ -194,7 +204,9 @@ function FieldBlock({
     type = 'mid',
     title = 'hiden',
     colSpan = 1,
-    className: _className
+    className: _className,
+    onChangeCode,
+    isNewSubject = false
 }: {
     formNames: (keyof FormValue)[]
     contents?: (string | number | undefined)[]
@@ -204,9 +216,18 @@ function FieldBlock({
     title?: React.ReactNode
     colSpan?: number
     className?: string
+    onChangeCode?: (code: string) => void
+    isNewSubject?: boolean
 }) {
-    const {currentId} = useSelector(selectRootSemester);
-
+    const { currentId } = useSelector(selectRootSemester);
+    const allSubjects = useSelector(selectNotRegisteredSubjects);
+    console.log(allSubjects)
+    const options = useMemo<{value: string; label: string}[]>(() => {
+        return allSubjects.map((subject, idx) => ({
+            value: subject.code,
+            label: `${subject.code} - ${subject.name}`
+        }))
+    }, [allSubjects]);
     let className = `border-2 border-gray-300 p-5 mb-6`;
     if (type !== 'last')
         className += ' pr-0 border-r-0'
@@ -229,13 +250,35 @@ function FieldBlock({
                                     <Form.Item<FormValue>
                                         name={formNames[idx]}
                                         className='mb-0'
+                                        rules={[{ required: true, message: '' }]}
                                     >
-                                        <Input
-                                            disabled={disable || allSemesterMode(currentId)}
-                                            size='large'
-                                            className='font-medium'
-                                            htmlSize={(content + '').length}
-                                        />
+                                        {
+                                            formNames[idx] === 'code'  && isNewSubject ?
+                                            <AutoComplete
+                                                disabled={disable}
+                                                placeholder='Nhập tên hoặc mã môn học'
+                                                size='large'
+                                                options={options}
+                                                style={{width: 200}}
+                                                filterOption={(inputValue, option) => {
+                                                    if (isUndefined(option))
+                                                        return true;
+                                                    return strNormalize(option.label).includes(strNormalize(inputValue))
+                                                }}
+                                                popupMatchSelectWidth={false}
+                                                // onChange={(value) => {
+                                                //     console.log(value)
+                                                // }}
+                                                onChange={onChangeCode}
+                                            />
+                                            :
+                                            <Input
+                                                disabled={disable || allSemesterMode(currentId)}
+                                                size='large'
+                                                className='font-medium'
+                                                htmlSize={(content + '').length}
+                                            />
+                                        }
                                     </Form.Item>
                                     {/* <EditableText defaultValue={content as string} normalText={content}/> */}
                                 </div>

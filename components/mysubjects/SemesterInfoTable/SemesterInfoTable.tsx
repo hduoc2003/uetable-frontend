@@ -11,13 +11,15 @@ import SubjectInfo from './SubjectInfo'
 import SelectedIcon from '@/components/common/(Icons)/SelectedIcon'
 import DangerButton from '@/components/common/(MyButton)/DangerButton'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectRootSemester, selectSemesterById } from '@/redux/semester/semesterSelector'
+import { selectRootSemester, selectSemesterById, selectTotalGPA } from '@/redux/semester/semesterSelector'
 import { RootState, useThunkDispatch } from '@/redux/store'
 import { allSemesterMode } from '@/utils/semester'
 import { crudSubjectThunk } from '@/redux/semester/actions/crudSubject'
 import search from '@/utils/search'
 import genId from '@/utils/genId'
 import { get4Grade, getFinalScore, getLetterGrade } from '@/utils/subjects'
+import { SubjectAllAPI } from '@/api/subjectAPI'
+import { allSubjectsActions } from '@/redux/allsubjects/allSubjectsSlice'
 
 const { Title, Text } = Typography;
 
@@ -27,7 +29,7 @@ interface SemesterInfoProps {
 }
 
 interface TableStat {
-    id: keyof Pick<SemesterInfo, 'semesterGPA' | 'yearGPA' | 'sumOfCredits'>
+    id: (keyof Pick<SemesterInfo, 'semesterGPA' | 'yearGPA' | 'sumOfCredits'>) | 'totalGPA';
     isStatRow: true
 }
 
@@ -57,7 +59,8 @@ export default function SemesterInfoTable({
 }: SemesterInfoProps) {
     const dispatch = useDispatch();
     const thunkDispatch = useThunkDispatch();
-    const { currentId, pending } = useSelector(selectRootSemester)
+    const { currentId, pending } = useSelector(selectRootSemester);
+    const totalGPA: number = useSelector(selectTotalGPA)
     const { semesterInfo } = useSelector((state: RootState) => selectSemesterById(state, currentId))
 
     const [dataSource, setDataSource] = useState<TableDataSourceType[]>([])
@@ -67,7 +70,6 @@ export default function SemesterInfoTable({
     const [loading, setLoading] = useState(_loading);
     const [selectedSubjects, setSelectedSubjects] = useState<React.Key[]>([])
 
-    console.log(dataSource.length)
 
     useEffect(() => {
         let filtered = search<RegisteredSubject>(searchingSubject, semesterInfo.subjects, ['id', 'name']);
@@ -78,13 +80,14 @@ export default function SemesterInfoTable({
                 ...filtered,
                 { id: 'sumOfCredits', isStatRow: true },
                 { id: 'semesterGPA', isStatRow: true },
-                { id: 'yearGPA', isStatRow: true }
+                { id: 'yearGPA', isStatRow: true },
+                { id: 'totalGPA', isStatRow: true}
             ]);
         else
             setDataSource([
                 ...filtered,
                 { id: 'sumOfCredits', isStatRow: true },
-                { id: 'yearGPA', isStatRow: true }
+                { id: 'totalGPA', isStatRow: true }
             ]);
         setColumns([
             getOrderCol('order'),
@@ -93,10 +96,17 @@ export default function SemesterInfoTable({
             getSubjectCreditsCol('subject-credits'),
             getSubject4GradeCol('4-grade'),
             getSubjectFinalScoreCol('final-score'),
-            getSubjectLetterGradeCol('letter-grade', semesterInfo),
+            getSubjectLetterGradeCol('letter-grade', semesterInfo, totalGPA),
             // getOtherScoreCol('others-score')
         ])
-    }, [currentId, searchingSubject, semesterInfo])
+    }, [currentId, searchingSubject, semesterInfo, totalGPA])
+
+    useEffect(() => {
+        SubjectAllAPI.getAllSubjects()
+        .then((data) => {
+            dispatch(allSubjectsActions.initData(data))
+        })
+    }, [dispatch]);
 
     return (
         <div>
@@ -180,7 +190,7 @@ export default function SemesterInfoTable({
                     onSave={(newSubject) => {
                         setOpenSubjectInfo(false);
                         thunkDispatch(crudSubjectThunk({
-                            type: newSubject.code === '' ? 'add' : 'update',
+                            type: editingSubject?.code === '' ? 'add' : 'update',
                             subject: newSubject
                         }))
                     }}
@@ -293,6 +303,9 @@ function getOrderCol(key: ColKey): ColumnType<TableDataSourceType> {
                         break;
                     case 'yearGPA':
                         title = 'GPA năm học'
+                        break;
+                    case 'totalGPA':
+                        title = 'GPA tổng';
                         break;
                 }
             } else {
@@ -426,7 +439,7 @@ function getSubjectFinalScoreCol(
     }
 }
 
-function getSubjectLetterGradeCol(key: ColKey, semesterInfo: SemesterInfo): ColumnType<TableDataSourceType> {
+function getSubjectLetterGradeCol(key: ColKey, semesterInfo: SemesterInfo, totalGPA: number): ColumnType<TableDataSourceType> {
     return {
         key,
         title: <CellContent>Điểm chữ</CellContent>,
@@ -435,7 +448,9 @@ function getSubjectLetterGradeCol(key: ColKey, semesterInfo: SemesterInfo): Colu
             return ({
                 children: statRow ?
                     <Typography.Title level={5} className='!mb-0'>
-                        {semesterInfo[data.id]?.toFixed(data.id === 'sumOfCredits' ? 0 : 2)}
+                        {
+                            (data.id === 'totalGPA' ? totalGPA : semesterInfo[data.id])?.toFixed(data.id === 'sumOfCredits' ? 0 : 2)
+                        }
                     </Typography.Title>
                     :
                     <div className='inline-block'><LetterGradeTag grade={getLetterGrade(data)} /></div>,

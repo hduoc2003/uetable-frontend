@@ -1,13 +1,41 @@
-import { RegisteredSubject, SubjectAll, SubjectClass } from "@/types/subject";
+import { RegisteredSubject, Subject, SubjectAll, SubjectClass } from "@/types/subject";
 import { mockAllSubjects, mockSubjectClasses } from "./mocks/subject";
 import { delay } from "@/utils/delay";
 import _ from "lodash";
+import Fetcher from "./Fetcher";
 
 export function getSubjectClasses(): SubjectClass[] {
   return mockSubjectClasses;
 }
 
 export class SubjectAllAPI {
+  static async getAllSubjects(): Promise<Subject[]> {
+      try {
+        const res = await Fetcher.get<any, {
+          Id: string;
+          Name: string;
+          Code: string;
+          Credit: number;
+        }[]>('/subject/getSubjectByCode', {
+          params: {
+            code: ''
+          }
+        });
+
+        const data: Subject[] = res.map((subject) => ({
+          id: subject.Id,
+          code: subject.Code,
+          name: subject.Name,
+          credits: subject.Credit,
+          type: 'all',
+        }))
+        return data;
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
+  }
+
   static async getSomeSubjects(
     sortBy: "stared" | "rating" | "last-access",
     from: number,

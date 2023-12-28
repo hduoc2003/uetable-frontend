@@ -11,7 +11,7 @@ import { IoMdDoneAll } from 'react-icons/io'
 
 export default function MyButtonWrapper(props: MyButtonProps) {
     const {displayChildrenWhenLoading = true } = props;
-    let className = 'p-1 h-fit w-fit text-fs-inherit border-0 group hover:!border-contrast hover:!text-contrast';
+    let className = 'p-1 h-fit w-fit  border-0 group hover:!border-contrast hover:!text-contrast';
     const [loading, setLoading] = useState<boolean>(props.loading as boolean ?? false);
     const handleEndloading = useCallback(() => {
         setFinished(true);

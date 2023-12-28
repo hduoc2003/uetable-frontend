@@ -104,19 +104,19 @@ export default function Documents({ subjectId }: Props) {
   }
 
   function handleShareDoc(docId: string) {
-    mutate((currentDocGroups): typeof currentDocGroups => {
-      return _.map(currentDocGroups, (group): typeof group => {
-        return {
-          'category': group.category,
-          'files': _.map(group.files, (doc): typeof doc => {
-            return doc.id === docId ? {
-              ...doc,
-              shared: !doc.shared
-            } : doc
-          })
-        }
-      })
-    }, { revalidate: false })
+    // mutate((currentDocGroups): typeof currentDocGroups => {
+    //   return _.map(currentDocGroups, (group): typeof group => {
+    //     return {
+    //       'category': group.category,
+    //       'files': _.map(group.files, (doc): typeof doc => {
+    //         return doc.id === docId ? {
+    //           ...doc,
+    //           shared: !doc.shared
+    //         } : doc
+    //       })
+    //     }
+    //   })
+    // }, { revalidate: false })
   }
 }
 
@@ -145,7 +145,7 @@ function DocList({
 }
 
 function DocInfo({
-  info: { ext, name, id, link, shared },
+  info: { ext, name, id, link },
   onDeleteDoc, onShareDoc
 }: {
   info: MySubjectDocument,
@@ -173,7 +173,7 @@ function DocInfo({
         <MyButtonWrapper className="opacity-0 group-hover/doc:opacity-100 transition-opacity duration-300">
           <EyeIcon solidOnHover size={20} />
         </MyButtonWrapper>
-        <Tooltip title={shared ? 'Dừng chia sẻ' : 'Đánh dấu tệp là công khai'} trigger={['hover']}>
+        {/* <Tooltip title={shared ? 'Dừng chia sẻ' : 'Đánh dấu tệp là công khai'} trigger={['hover']}>
           <MyButtonWrapper
             displayChildrenWhenLoading={false}
             onClick={async () => {
@@ -186,7 +186,7 @@ function DocInfo({
           >
             <ShareIcon solidOnHover solid={shared} />
           </MyButtonWrapper>
-        </Tooltip>
+        </Tooltip> */}
         <MyButtonWrapper
           className=" opacity-0 group-hover/doc:opacity-100 transition-opacity duration-300"
           displayChildrenWhenLoading={false}

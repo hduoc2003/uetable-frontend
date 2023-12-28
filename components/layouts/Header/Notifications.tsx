@@ -21,7 +21,7 @@ const { Text, Paragraph, Title } = Typography;
 export default function Notifications() {
 
     const { data: notiList, isLoading } = useSWR<UserNoti[]>('get noti', NotiAPI.getAllNoti, {
-        refreshInterval: undefined
+        refreshInterval: 1000
     });
     const [notiCount, setNotiCount] = useState(0);
     const [solidNoti, setSolidNoti] = useState(false);

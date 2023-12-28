@@ -17,7 +17,6 @@ export interface UserUploadFile {
 }
 
 export interface MySubjectDocument {
-    shared: boolean;
     id: string;
     link: string;
     name: string;
