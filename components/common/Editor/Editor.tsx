@@ -53,7 +53,7 @@ export default function Editor({
             </div>
         )
     return (
-        <div className='w-full flex flex-col gap-4'>
+        <div className='w-full flex flex-col gap-4 h-[300px]'>
             <ReactQuill
                 theme="snow"
                 modules={modules}
@@ -61,7 +61,6 @@ export default function Editor({
                 onChange={(value) => text.current = value}
                 placeholder="Nhập dữ liệu"
                 value={content}
-            // className='w-[500px] h-[500px]'
             />
             <Space className='ml-auto'>
                 <DangerButton onClick={() => setEditing(false)}>Huỷ thay đổi</DangerButton>

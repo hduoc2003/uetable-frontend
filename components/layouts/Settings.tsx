@@ -9,7 +9,7 @@ const contentt = function loadSetting(profile: () => void, signOut: () => void, 
                 <div className=" mr-5">
                     <UserOutlined/>
                 </div>
-                Trang cá nhân
+                Hồ sơ
             </button>
             { role == 'admin' &&
             <button className="w-full text-lg font-semibold flex rounded-lg hover:bg-gray-100 p-2">
@@ -29,6 +29,6 @@ const contentt = function loadSetting(profile: () => void, signOut: () => void, 
             </button>
         </div>
     );
-} 
+}
 
 export {contentt}

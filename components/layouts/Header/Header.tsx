@@ -27,7 +27,6 @@ interface TabProps {
 
 
 export default function Header() {
-  const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
   const [avtStrokeColor, setAvtStrokeColor] = useState<string>(THEME.PRIMARY_COLOR);
   const authState = useSelector(authSelector);
   const dispatch = useDispatch();
@@ -48,7 +47,9 @@ export default function Header() {
     if (authState?.signedIn) {
       Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
       .then((response) => {
-          setAvtURL(response.avatar);
+        dispatch(authActions.updateAuthState({
+          avtLink: response.avatar
+        }))
       });
     }
 
@@ -56,7 +57,7 @@ export default function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [authState?.signedIn, authState?.username]);
+  }, [authState?.signedIn, authState?.username, dispatch]);
   // console.log(value)
 
   const handleSignOut = () => {
@@ -104,7 +105,7 @@ export default function Header() {
               >
                 <div className="relative flex">
                   <Popover content={contentt(handleProfile, handleSignOut, cookies.get('role'))} trigger="click" arrow={true} placement="bottom" className="bg-white">
-                    <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={avtURL} size={40}></Avatar>
+                    <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={authState.avtLink} size={40}></Avatar>
                     <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" strokeWidth="2" style={{ stroke: avtStrokeColor }}></circle></svg>
                   </Popover>
                 </div>

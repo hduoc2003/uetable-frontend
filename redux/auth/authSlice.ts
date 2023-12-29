@@ -7,6 +7,7 @@ export interface AuthState {
     role?: "admin" | "user",
     username?: string,
     name?: string,
+    avtLink?: string
 }
 
 const initialState: AuthState = {
