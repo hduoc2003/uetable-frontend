@@ -26,7 +26,7 @@ interface Props {
 
 export default function Documents({ subjectId }: Props) {
   const { data: docGroups, isLoading, mutate } = useSWR([fetchId, subjectId], ([_, subjectId]) => {
-    console.log('refetch');
+    // console.log('refetch');
     return DocumentAPI.getMySubjectDocs(subjectId)
   });
   const [searchValue, setSearchValue] = useState('');

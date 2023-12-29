@@ -3,7 +3,7 @@ import { SaveButton } from '../(MyButton)/SaveButton';
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { ColorPicker, Table } from 'antd';
 import { TableRef, type ColumnsType } from 'antd/es/table';
-import ScheduleCell from "./ScheduleCell";
+import ScheduleCellContent from "./ScheduleCell";
 // import { exportComponentAsPNG } from 'react-component-export-image';
 
 
@@ -255,7 +255,7 @@ export default function Schedule({
                                     children:
                                         <div className='flex h-full w-full'>
                                             <div className='w-[2px] h-full' />
-                                            <ScheduleCell
+                                            <ScheduleCellContent
                                                 subjectClass={subject}
                                                 onMouseEnter={() => setHoverSubject(i)}
                                                 onMouseLeave={() => setHoverSubject(-1)}

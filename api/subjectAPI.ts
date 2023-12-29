@@ -3,6 +3,7 @@ import { mockAllSubjects, mockSubjectClasses } from "./mocks/subject";
 import { delay } from "@/utils/delay";
 import _ from "lodash";
 import Fetcher from "./Fetcher";
+import { toast } from "react-toastify";
 
 export function getSubjectClasses(): SubjectClass[] {
   return mockSubjectClasses;
@@ -42,23 +43,50 @@ export class SubjectAllAPI {
     to: number,
     searchValue: string
   ): Promise<SubjectAll[]> {
+    // console.log({from, to})
+    // try {
+    //     let res = await Fetcher.post<any, SubjectAll[]>('/subject/getPartSubject', {
+    //       sortBy,
+    //       from,
+    //       to,
+    //       searchValue
+    //     });
+    //     console.log(res)
+    //     return res;
+    // } catch (error) {
+    //   console.log(error);
+    //   toast.error('Fetch môn học thất bại')
+    //   throw error
+    // }
     // console.log(sortBy)
     await delay(1000);
     // console.log(from, to)
     // console.log({from, to})
-    return Math.random() < 0.5 ? mockAllSubjects : [];
+    return Math.random() < 1 ? mockAllSubjects : [];
   }
 
   static async starSubject(subjectId: string, star: boolean) {
     await delay(1500);
   }
 
-  static async getRelatedSubject(subjectId: string, from: number, to: number): Promise<SubjectAll[]> {
+  static async getRelatedSubject(subSubjectCode: string, limit: number): Promise<SubjectAll[]> {
     await delay(2000);
     return mockAllSubjects;
   }
 
   static async getSubjectById(subjectId: string): Promise<SubjectAll> {
+    try {
+      let res = await Fetcher.get<any, SubjectAll>('/subject/getSubjectInfo', {
+        params: {
+          subjectId
+        }
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      toast.error('Fetch thông tin môn học thất bại');
+      throw error
+    }
     await delay(2000);
     let data: SubjectAll = {
       id: '1',
@@ -93,6 +121,19 @@ export class SubjectAllAPI {
 
 export class RegisteredSubjectAPI {
   static async getSubjectById(subjectId: string): Promise<RegisteredSubject> {
+    try {
+      let res = Fetcher.get<any, RegisteredSubject>('/subject/getRegisteredSubjectInfo', {
+        params: {
+          subjectId
+        }
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      // toast.error(error.toString())
+      throw error;
+    }
+
     await delay(2000);
     return {
       id: '1',

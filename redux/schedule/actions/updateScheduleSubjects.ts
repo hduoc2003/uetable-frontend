@@ -20,7 +20,7 @@ export const updateScheduleSubjects = (state: ScheduleState, {
 
     if (!isUndefined(newProps.highlightColor)) {
         subjectClassData.forEach((subjectClass, i) => {
-            if (i !== index && subjectClass.id === subjectClassData[index].id) {
+            if (i !== index && subjectClass.code === subjectClassData[index].code) {
                 subjectClassData[i].highlightColor = newProps.highlightColor as string
             }
         })

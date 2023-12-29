@@ -46,7 +46,7 @@ export default function SubjectInfo({
         <Space direction="vertical" className="pl-5" size={'large'}>
             <TitleWithBox
                 title={<Link href={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", {
-                    subjectId: subject?.code ?? ''
+                    subjectId: subject?.id ?? ''
                 })}
             >
                 Thông tin

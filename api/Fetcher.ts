@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "universal-cookie";
 import { isUndefined } from "lodash";
 
@@ -20,8 +20,14 @@ Fetcher.interceptors.request.use((config) => {
 
 Fetcher.interceptors.response.use((response) => {
     return response.data;
-}, (error) => {
-    return Promise.reject(error);
+}, (error: AxiosError) => {
+    if (error.response)
+        return Promise.reject({
+            status: error.response.status,
+            data: error.response.data
+        })
+    return Promise.reject(error.request ? error.request : error.message)
+    // return Promise.reject(error);
 });
 
 export default Fetcher;

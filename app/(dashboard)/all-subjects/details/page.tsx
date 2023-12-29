@@ -19,8 +19,10 @@ import { Divider, Skeleton, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import Fetcher from '@/api/Fetcher'
+import genId from "@/utils/genId";
 
 const { Text, Title } = Typography;
+const fetchKey = genId()
 
 export type AllSubjectsDetailsPageProps = PageProps<{
   subjectId: string
@@ -31,7 +33,10 @@ export default function AllSubjectsDetailsPage({
     subjectId
   }
 }: AllSubjectsDetailsPageProps) {
-  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
+  const { data: subject, isLoading } = useSWR([fetchKey, subjectId], ([_, subjectId]) => {
+    // console.log('refetch');
+    return SubjectAllAPI.getSubjectById(subjectId)
+  });
 
   return (
     <Main title={'Thông tin học phần'}>
@@ -43,13 +48,12 @@ export default function AllSubjectsDetailsPage({
           <Divider />
           <div className="flex flex-col">
             <TitleWithBox title={'Bình luận'} boxContent={4} size="middle" />
-            {subjectId}
-            <div style={{ marginTop: '40px' }}>
+            {/* <div style={{ marginTop: '40px' }}>
               <CommentInfo className="comments__item" />
               <CommentInfo className="comments__answer" />
               <CommentInfo className="comments__item" />
               <CommentInfo className="comments__item" />
-            </div>
+            </div> */}
           </div>
         </div>
         <Divider type="vertical" className="h-auto" />

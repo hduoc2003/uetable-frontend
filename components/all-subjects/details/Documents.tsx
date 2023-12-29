@@ -8,9 +8,13 @@ import { SubjectDocumentsPageProps } from "../documents/page";
 import Preview from "@/components/common/Preview/Preview";
 import MultiCarousel from "@/components/common/MultiCarousel";
 import MyButtonWrapper from "@/components/common/(MyButton)/MyButtonWrapper";
+import useSWR from "swr";
+import { DocumentAPI } from "@/api/DocumentAPI";
+import { DocumentClass } from "@/types/document";
+import genId from "@/utils/genId";
 
 const { Text } = Typography;
-
+const fetchKey = genId();
 interface Props {
     subjectId: string
 }
@@ -19,6 +23,10 @@ export default function Documents({
     subjectId
 }: Props) {
     // const { ref, rect: { width } } = useElementRect<HTMLDivElement>();
+    const {data: documents, isLoading} = useSWR([fetchKey, subjectId],
+        ([_, subjectId]) => DocumentAPI.getTopDocumentsOfSubject(subjectId, 5)
+    )
+
     return (
         // <Space direction="vertical" size={'large'} className="w-full" ref={ref}>
         <Space direction="vertical" size={'large'} className="w-full" >
@@ -31,9 +39,19 @@ export default function Documents({
                 size='middle'
             />
             <MultiCarousel width={'58vw'}>
-                {Array(6).fill(null).map((_, i) => {
+                {(documents ?? Array<null>(5).fill(null)).map((doc, i) => {
                     return (
-                        <Preview key={i} imgHeight={130} imgSrc={"https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg"} url={""} title={""} />
+                        <Preview
+                            key={doc?.id ?? i}
+                            imgHeight={130}
+                            imgSrc={"https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg"}
+                            url={""}
+                            title={doc?.name ?? ''}
+                            info={
+                                <Text type='secondary' strong>{`${doc?.download} lượt tải, ${doc?.like} lượt thích`}</Text>
+                            }
+                            loading={isLoading}
+                        />
                     )
                 })}
                 {

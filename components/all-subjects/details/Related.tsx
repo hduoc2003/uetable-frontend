@@ -16,7 +16,7 @@ import { LuPlusCircle } from "react-icons/lu";
 import Link from "next/link";
 
 const { Text } = Typography;
-
+const fetchKey = genId()
 interface Props {
     subjectId: string
 }
@@ -24,7 +24,7 @@ interface Props {
 export default function RelatedSubject({
     subjectId
 }: Props) {
-    const { data: relatedSubjects, isLoading } = useSWR([subjectId], ([subjectId]) => SubjectAllAPI.getRelatedSubject(subjectId, 1, 6))
+    const { data: relatedSubjects, isLoading } = useSWR([fetchKey, subjectId], ([_, subjectId]) => SubjectAllAPI.getRelatedSubject(subjectId, 6))
     return (
         <Space size={'large'} direction="vertical" className="w-full">
             <TitleWithBox title={<Link href={"/all-subjects"}>Môn học liên quan</Link>} />

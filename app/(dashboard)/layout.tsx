@@ -23,7 +23,6 @@ export default function DashboardLayout({
     const dispatch = useDispatch();
     const router = useRouter();
     const handleLogin = useCallback(() => {
-        console.log('vcl')
         Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'))
             .then((response) => {
                 dispatch(authActions.updateAuthState({
@@ -37,14 +36,13 @@ export default function DashboardLayout({
                 // .then((res) => console.log(res))
                 // .catch((err) => console.log(err))
             }).catch((error) => {
-                // router.push('/');
-                console.log(error)
+                router.push('/');
                 dispatch(authActions.updateAuthState({
                     signedIn: false,
                     logging: false
                 }));
             });
-    }, [dispatch])
+    }, [dispatch, router])
 
     useEffect(() => {
         handleLogin()
