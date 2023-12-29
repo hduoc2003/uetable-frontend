@@ -248,10 +248,6 @@ export default function Profile() {
                               <p>{document.like}</p>
                               <LikeOutlined />
                             </div>
-                            <div className="flex">
-                              <p>{document.download}</p>
-                              <DownloadOutlined />
-                            </div>
                           </div>
                         </div>
                       </div>
