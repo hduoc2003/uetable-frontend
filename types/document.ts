@@ -8,6 +8,8 @@ export interface DocumentClass {
     download: string;
     category: string;
     link: string;
+    subjectName: string;
+    createdAt: string;
 }
 
 export interface UserUploadFile {
@@ -17,7 +19,6 @@ export interface UserUploadFile {
 }
 
 export interface MySubjectDocument {
-    shared: boolean;
     id: string;
     link: string;
     name: string;

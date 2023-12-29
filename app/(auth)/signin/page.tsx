@@ -13,6 +13,7 @@ interface SignInResponse {
   message: string,
   authToken: string,
   studentid: string,
+  role: string,
 }
 
 interface UserInfoResponse {
@@ -86,6 +87,9 @@ export default function SignIn() {
         expires: expiresDate,
       });
       cookies.set('password', inputPasswordValue, {
+        expires: expiresDate,
+      });
+      cookies.set('role', response.role, {
         expires: expiresDate,
       });
       handleSignIn();

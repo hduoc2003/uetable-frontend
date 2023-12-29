@@ -17,12 +17,12 @@ import { getURL } from "@/utils/navigation";
 import { AllSubjectsDetailsPageProps } from "@/app/(dashboard)/all-subjects/details/page";
 
 // type SubjectInfoKey = 'id' | 'credits' | 'gpa' | 'lecturers';
-const subjectInfo = ['id', 'name', 'credits', 'letter-grade', 'lecturers', 'midterm', 'final-term', 'other-term', '10-score'] as
-    ['id', 'name', 'credits', 'letter-grade', 'lecturers', 'midterm', 'final-term', 'other-term', '10-score'];
+const subjectInfo = ['code', 'name', 'credits', 'letter-grade', 'lecturers', 'midterm', 'final-term', 'other-term', '10-score'] as
+    ['code', 'name', 'credits', 'letter-grade', 'lecturers', 'midterm', 'final-term', 'other-term', '10-score'];
 type SubjectInfoKey = typeof subjectInfo[number]
 
 const labels: Record<SubjectInfoKey, string> = {
-    'id': 'Mã học phần',
+    'code': 'Mã học phần',
     name: "Tên môn học",
     credits: "Số tín chỉ",
     "letter-grade": "Điểm hệ chữ",
@@ -46,7 +46,7 @@ export default function SubjectInfo({
         <Space direction="vertical" className="pl-5" size={'large'}>
             <TitleWithBox
                 title={<Link href={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", {
-                    subjectId: subject?.code ?? ''
+                    subjectId: subject?.id ?? ''
                 })}
             >
                 Thông tin
@@ -87,7 +87,7 @@ function Info({
                 {
                     (() => {
                         switch (type) {
-                            case 'id':
+                            case 'code':
                             case 'name':
                             case 'credits':
                                 return subject?.[type]

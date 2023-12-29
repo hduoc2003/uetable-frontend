@@ -26,7 +26,7 @@ export default function SubjectPreview(props: Props) {
     const [stared, setStared] = useState(subject?.stared)
     const grade: LetterGrade = getLetterGrade(subject);
     const params: AllSubjectsDetailsPageProps['searchParams'] = {
-        subjectId: subject?.code ?? ''
+        subjectId: subject?.id ?? ''
     }
 
     return (

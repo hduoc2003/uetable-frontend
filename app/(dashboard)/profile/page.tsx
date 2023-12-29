@@ -12,7 +12,12 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 import { useRouter } from 'next/navigation';
 import { DocumentClass } from '@/types/document';
-const { Paragraph } = Typography;
+import MyButtonWrapper from '@/components/common/(MyButton)/MyButtonWrapper';
+import EditableText from '@/components/common/EditableText';
+import { useDispatch } from 'react-redux';
+import { authActions } from '@/redux/auth/authSlice';
+import Editor from '@/components/common/Editor/Editor';
+const { Paragraph, Text } = Typography;
 
 const cookies = new Cookies();
 export default function Profile() {
@@ -36,6 +41,7 @@ export default function Profile() {
 
   const searchParams = useSearchParams();
   const studentid = searchParams.get('studentid');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (studentid != currentStudentId) setOther(true);
@@ -51,7 +57,7 @@ export default function Profile() {
           router.push('/signin');
         }
         else if (error.response.status == 404) {
-
+          router.push('/');
         }
       });
 
@@ -60,6 +66,13 @@ export default function Profile() {
         "studentId": studentid,
       }
     }).then((response) => {
+      let data = response;
+      for (let i = 0; i < data.length; i++) {
+        let time = data[i].createdAt.split('-');
+        let date = time[2].split('T');
+        data[i].createdAt = date[0] + '/' + time[1] + '/' + time[0];
+
+      }
       setDocData(response);
     }).catch((error) => {
 
@@ -76,7 +89,7 @@ export default function Profile() {
     }
     if (bio) {
       hasBiogrpahy(true);
-      setPercentage(p => p+20);
+      setPercentage(p => p + 20);
     } else {
       hasBiogrpahy(false);
     }
@@ -98,13 +111,16 @@ export default function Profile() {
   };
 
   const handleFinishEditName = (newName: string) => {
+    dispatch(authActions.updateAuthState({
+      name: newName
+    }))
     setName(newName);
     Fetcher.put('/users/', {
       "name": newName,
       "avatar": imageURL,
       "birth": birth,
     }).then((response) => {
-      
+
     }).catch((error) => {
 
     });
@@ -128,7 +144,7 @@ export default function Profile() {
     Fetcher.post('/users/changeBio', {
       "bio": newBio,
     }).then((response) => {
-      
+
     }).catch((error) => {
 
     });
@@ -157,7 +173,7 @@ export default function Profile() {
             'Content-Type': 'multipart/form-data',
           }
         }).then((response) => {
-          
+
         }).catch((error) => {
 
         });
@@ -174,7 +190,7 @@ export default function Profile() {
       <div className="flex">
         <div className="m-4 bg-white border rounded-2xl shadow-lg w-full">
           {other ?
-            <div className="flex p-12 gap-[100px]">
+            <div className="flex p-12 gap-[150px]">
               <div>
                 <Avatar src={imageURL} className='' alt="Profile Pic" size={100}></Avatar>
               </div>
@@ -192,12 +208,10 @@ export default function Profile() {
               </div>
             </div>
             :
-            <div className="flex">
-              <div className='p-12'>
-                <Avatar src={imageURL} className='' alt="Profile Pic" size={100}></Avatar>
-              </div>
-              <div className="flex flex-col my-10 mr-10">
-                <div className="flex mt-8">
+            <div className="flex p-10 gap-6 items-center">
+              <Avatar src={imageURL} className='' alt="Profile Pic" size={100} />
+              <div className="flex flex-col gap-3">
+                <div className="flex">
                   <input type="file" accept="image/*" onChange={handleFileChange} className="w-full text-sm text-slate-500
                   file:mr-4 file:py-2 file:px-4
                   file:rounded-full file:border-0
@@ -205,9 +219,12 @@ export default function Profile() {
                   file:bg-primary file:text-white
                   hover:file:bg-dark-primary
                 "/>
-                  <button className="text-sm border py-2 px-4 rounded-full font-semibold hover:shadow-lg" onClick={changeImage}>Upload</button>
+                <MyButtonWrapper onClick={changeImage} className='border-2 px-4 py-[6px] rounded-full'>
+                  <Text strong>Tải lên</Text>
+                </MyButtonWrapper>
+                  {/* <button className="text-sm border py-2 px-4 rounded-full font-semibold hover:shadow-lg" onClick={changeImage}>Upload</button> */}
                 </div>
-                <text className="text-lg py-4">Upload ảnh đại diện mới bằng JPG hoặc PNG</text>
+                <Text type='secondary'>Upload ảnh đại diện mới bằng JPG hoặc PNG</Text>
               </div>
             </div>
           }
@@ -218,13 +235,17 @@ export default function Profile() {
                   <text className="font-bold text-2xl">Thông tin cá nhân</text>
                 </div>
                 <div className="flex gap-[120px] px-6 pb-6">
-                  <div className="flex-col">
+                  <div className="flex flex-col gap-3">
                     <label className="font-light text-gray-500">Họ và tên</label>
-                    <Paragraph className="font-semibold text-lg pt-3" editable={{ onChange: (newValue) => { handleFinishEditName(newValue) } }}>{name}</Paragraph>
+                    <EditableText
+                      defaultValue={name}
+                      normalText={<Text strong className='text-lg'>{name}</Text>}
+                      onComplete={handleFinishEditName}
+                    />
+                    {/* <Paragraph className="font-semibold text-lg pt-3" editable={{ onChange: (newValue) => { handleFinishEditName(newValue) } }}>{name}</Paragraph> */}
                   </div>
-                  <div className="flex-col">
+                  <div className="flex flex-col gap-3">
                     <label className="font-light text-gray-500">Ngày sinh</label>
-                    <p className='p-1'></p>
                     <DatePicker className='font-semibold text-lg' onChange={handleFinishEditBirth} value={dayjs(birth, 'YYYY-MM-DD')} />
                   </div>
                   <div className="flex-col">
@@ -234,27 +255,46 @@ export default function Profile() {
                 </div>
               </div>
             }
-            <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
-              <div className="flex p-6 justify-between">
-                <div className="font-bold text-2xl">Bio</div>
-              </div>
-              {other ?
-                <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3">{bio}</Paragraph>
-                :
-                <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => { handleFinishEditBio(newValue) } }}>{bio}</Paragraph>
-              }
-            </div>
-            <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 p-6">
+            {
+              other ? (
+                bio && (
+                  <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
+                    <div className="flex p-6 justify-between">
+                      <div className="font-bold text-2xl">Bio</div>
+                    </div>
+                    <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3">{bio}</Paragraph>
+                  </div>
+                )
+              ) : (
+                <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
+                  <div className="flex p-6 justify-between">
+                    <div className="font-bold text-2xl">Bio</div>
+                  </div>
+                  {/* <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => { handleFinishEditBio(newValue) } }}>{bio}</Paragraph> */}
+                  <Editor content={bio} onSave={handleFinishEditBio}/>
+                </div>
+              )
+            }
+
+            <div className="w-full bg-white border rounded-2xl hover:shadow p-6">
               <div className="font-bold text-2xl mb-4">Tài liệu</div>
               <div>
                 {docData.map((document) => {
                   return (
                     <>
-                      <div className="border hover:bg-gray-100 hover:shadow bg-white p-6 m-4 flex">
-                        <Image src={document.link} height={100} width={100} alt="Document Image" className='mr-5' />
-                        <div className="flex flex-col gap-3">
+                      <div className="border hover:bg-gray-100 hover:shadow bg-white p-6 m-4 flex cursor-pointer" onClick={() => {
+                        router.push('/all-subjects/documents/details?documentId=' + document.id);
+                      }}>
+                        {
+                          document.link.slice(-3) == "pdf" ?
+                            <Image src="https://i.imgur.com/WccjHlP.png" height={100} width={100} alt="Document Image" className='mr-5' />
+                            :
+                            <Image src="https://i.imgur.com/sYktWfS.png" height={100} width={100} alt="Document Image" className='mr-5' />
+                        }
+                        <div className="flex flex-col gap-2">
                           <p className='text-blue-400 text-2xl'>{document.name}</p>
-                          <p className="text-">Môn học: {document.category}</p>
+                          <p className="">Môn học: {document.subjectName}</p>
+                          <p className='text-sm'>Upload bởi: {name}</p>
                           <div className="flex gap-10">
                             <div className="flex">
                               <p>{document.like}</p>
@@ -264,6 +304,7 @@ export default function Profile() {
                               <p>{document.download}</p>
                               <DownloadOutlined />
                             </div>
+                            <p>{document.createdAt}</p>
                           </div>
                         </div>
                       </div>
@@ -274,74 +315,76 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="m-4 bg-white border rounded-2xl shadow-lg flex flex-col p-6 gap-3 max-h-full">
-          <text className="font-bold text-xl">Hoàn thành profile</text>
-          <Progress type="circle" percent={percentage} strokeColor="#1dc14e" strokeWidth={10} size={200} />
-          {
-            setUpAccount ?
-              <div className="flex gap-2">
-                <span style={{color: 'green'}}>
-                  <CheckOutlined/>
-                </span>
-                <p className='font-medium text-sm'>Kích hoạt tài khoản</p>
-                <p className='font-medium text-gray-400 text-sm'>20%</p>
-              </div>
-              :
-              <div className="flex gap-2">
-                <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Kích hoạt tài khoản</p>
-                <p className='text-green-400 font-semibold text-sm'>20%</p>
-              </div>
-          }
-          {
-            changedImage ?
-              <div className="flex gap-2">
-                <span style={{color: 'green'}}>
-                  <CheckOutlined/>
-                </span>
-                <p className='font-medium text-sm'>Cập nhật ảnh đại diện</p>
-                <p className='font-medium text-gray-400 text-sm'>30%</p>
-              </div>
-              :
-              <div className="flex gap-2">
-                <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Cập nhật ảnh đại diện</p>
-                <p className='text-green-400 font-semibold text-sm'>30%</p>
-              </div>
-          }
-          {
-            personalInfo ?
-              <div className="flex gap-2">
-                <span style={{color: 'green'}}>
-                  <CheckOutlined/>
-                </span>
-                <p className='font-medium text-sm'>Thông tin cá nhân</p>
-                <p className='font-medium text-gray-400 text-sm'>30%</p>
-              </div>
-              :
-              <div className="flex gap-2">
-                <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Thông tin cá nhân</p>
-                <p className='text-green-400 font-semibold text-sm'>30%</p>
-              </div>
-          }
-          {
-            biography ?
-              <div className="flex gap-2">
-                <span style={{color: 'green'}}>
-                  <CheckOutlined/>
-                </span>
-                <p className='font-medium text-sm'>Cập nhật Bio</p>
-                <p className='font-medium text-gray-400 text-sm'>20%</p>
-              </div>
-              :
-              <div className="flex gap-2">
-                <CloseOutlined />
-                <p className='font-medium text-gray-400 text-sm'>Cập nhật Bio</p>
-                <p className='text-green-400 font-semibold text-sm'>20%</p>
-              </div>
-          }
-        </div>
+        {!other &&
+          <div className="m-4 bg-white border rounded-2xl shadow-lg flex flex-col p-6 gap-3 h-max-full">
+            <text className="font-bold text-xl">Hoàn thành profile</text>
+            <Progress type="circle" percent={percentage} strokeColor="#1dc14e" strokeWidth={10} size={200} />
+            {
+              setUpAccount ?
+                <div className="flex gap-2">
+                  <span style={{ color: 'green' }}>
+                    <CheckOutlined />
+                  </span>
+                  <p className='font-medium text-sm'>Kích hoạt tài khoản</p>
+                  <p className='font-medium text-gray-400 text-sm'>20%</p>
+                </div>
+                :
+                <div className="flex gap-2">
+                  <CloseOutlined />
+                  <p className='font-medium text-gray-400 text-sm'>Kích hoạt tài khoản</p>
+                  <p className='text-green-400 font-semibold text-sm'>20%</p>
+                </div>
+            }
+            {
+              changedImage ?
+                <div className="flex gap-2">
+                  <span style={{ color: 'green' }}>
+                    <CheckOutlined />
+                  </span>
+                  <p className='font-medium text-sm'>Cập nhật ảnh đại diện</p>
+                  <p className='font-medium text-gray-400 text-sm'>30%</p>
+                </div>
+                :
+                <div className="flex gap-2">
+                  <CloseOutlined />
+                  <p className='font-medium text-gray-400 text-sm'>Cập nhật ảnh đại diện</p>
+                  <p className='text-green-400 font-semibold text-sm'>30%</p>
+                </div>
+            }
+            {
+              personalInfo ?
+                <div className="flex gap-2">
+                  <span style={{ color: 'green' }}>
+                    <CheckOutlined />
+                  </span>
+                  <p className='font-medium text-sm'>Thông tin cá nhân</p>
+                  <p className='font-medium text-gray-400 text-sm'>30%</p>
+                </div>
+                :
+                <div className="flex gap-2">
+                  <CloseOutlined />
+                  <p className='font-medium text-gray-400 text-sm'>Thông tin cá nhân</p>
+                  <p className='text-green-400 font-semibold text-sm'>30%</p>
+                </div>
+            }
+            {
+              biography ?
+                <div className="flex gap-2">
+                  <span style={{ color: 'green' }}>
+                    <CheckOutlined />
+                  </span>
+                  <p className='font-medium text-sm'>Cập nhật Bio</p>
+                  <p className='font-medium text-gray-400 text-sm'>20%</p>
+                </div>
+                :
+                <div className="flex gap-2">
+                  <CloseOutlined />
+                  <p className='font-medium text-gray-400 text-sm'>Cập nhật Bio</p>
+                  <p className='text-green-400 font-semibold text-sm'>20%</p>
+                </div>
+            }
+          </div>
+        }
       </div>
     </main>
   );

@@ -6,7 +6,8 @@ import _ from 'lodash';
 import { allSemesterMode } from '@/utils/semester';
 
 export const selectRootSemester = (state: RootState) => state.semester;
-export const selectAllSemester = (state: RootState) => state.semester.semesterInfo;
+export const selectAllSemester = (state: RootState) => state.semester.semesterInfo.info;
+export const selectTotalGPA = (state: RootState) => state.semester.semesterInfo.totalGPA;
 
 export const selectSemesterById = createSelector([
     selectRootSemester,
@@ -30,7 +31,6 @@ export const selectSemesterById = createSelector([
                 'title': 'Tất cả học kì',
                 sumOfCredits,
                 subjects,
-                'yearGPA': semesterState.totalGPA
             }
         }
     }

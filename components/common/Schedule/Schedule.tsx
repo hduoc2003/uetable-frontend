@@ -3,8 +3,9 @@ import { SaveButton } from '../(MyButton)/SaveButton';
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { ColorPicker, Table } from 'antd';
 import { TableRef, type ColumnsType } from 'antd/es/table';
-import ScheduleCell from "./ScheduleCell";
-import html2canvas from 'html2canvas';
+import ScheduleCellContent from "./ScheduleCell";
+// import { exportComponentAsPNG } from 'react-component-export-image';
+
 
 // @ts-ignore
 import { useDispatch, useSelector } from "react-redux";
@@ -184,23 +185,7 @@ export default function Schedule({
     );
 
     async function handleDownload() {
-        const element = tableRef.current;
-        console.log('before')
-        const canvas = await html2canvas(element);
-        console.log('after')
-        const data = canvas.toDataURL('image/jpg');
-        const link = document.createElement('a');
-
-        if (typeof link.download === 'string') {
-          link.href = data;
-          link.download = 'image.jpg';
-
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } else {
-          window.open(data);
-        }
+        exportComponentAsPNG(tableRef)
     }
     function isDivider(data: TableData) {
         if (scheduleStyle.hasDivider)
@@ -270,7 +255,7 @@ export default function Schedule({
                                     children:
                                         <div className='flex h-full w-full'>
                                             <div className='w-[2px] h-full' />
-                                            <ScheduleCell
+                                            <ScheduleCellContent
                                                 subjectClass={subject}
                                                 onMouseEnter={() => setHoverSubject(i)}
                                                 onMouseLeave={() => setHoverSubject(-1)}

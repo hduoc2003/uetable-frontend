@@ -54,15 +54,15 @@ export default function SubjectClassInfo({
             <Text
               copyable={{
                 icon: [<CopyButton key={0}/>, <MyButtonWrapper key={1}><SuccessIcon/></MyButtonWrapper>],
-                text: subjectClass.id,
-                tooltips: ['Sao chép', subjectClass.id]
+                text: subjectClass.code,
+                tooltips: ['Sao chép', subjectClass.code]
               }}
               className="!flex flex-1 items-center"
               style={{
                 fontSize: 'inherit'
               }}
             >
-              <span className="flex-1">{subjectClass.id}</span>
+              <span className="flex-1">{subjectClass.code}</span>
             </Text>
           }
         />

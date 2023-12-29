@@ -1,4 +1,5 @@
 import { Avatar } from 'antd';
+import { UserHandleDTO } from './user';
 export interface Noticlass {
     id : number
     content : string
@@ -10,4 +11,13 @@ export interface Noticlass {
     avatarImg : string
     time : Date
     dotClassname : string
+}
+
+export interface UserNoti {
+    id: number;
+    createdAt: Date;
+    content: string;
+    seen: boolean;
+    link: string;
+    reply: UserHandleDTO
 }

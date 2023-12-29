@@ -28,6 +28,7 @@ export default function ScheduleCellContent({
     onMouseLeave,
     onColorChange
 }: ScheduleCellProps) {
+    console.log(subjectClass)
     const [hover, setHover] = useState(false);
     return (
         <Popover
@@ -54,7 +55,7 @@ export default function ScheduleCellContent({
                 }}
             >
                 <Link href={getURL<RegisteredSubjectDetailsPageProps['searchParams']>('/mysubjects/registered/details', {
-                    subjectId: subjectClass.id.split(' ')[0]
+                    subjectId: subjectClass.id
                 })}>
                     <Title level={5} className='!mb-1'>{subjectClass.name}</Title>
                     <Text className='text-xs text-royal-gray font-medium'>

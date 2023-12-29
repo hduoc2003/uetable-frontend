@@ -20,8 +20,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import Fetcher from '@/api/Fetcher'
 import Comment  from "@/components/common/Comment/Comment"
+import genId from "@/utils/genId";
 
 const { Text, Title } = Typography;
+const fetchKey = genId()
 
 export type AllSubjectsDetailsPageProps = PageProps<{
   subjectId: string
@@ -32,7 +34,10 @@ export default function AllSubjectsDetailsPage({
     subjectId
   }
 }: AllSubjectsDetailsPageProps) {
-  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
+  const { data: subject, isLoading } = useSWR([fetchKey, subjectId], ([_, subjectId]) => {
+    // console.log('refetch');
+    return SubjectAllAPI.getSubjectById(subjectId)
+  });
 
   return (
     <Main title={'Thông tin học phần'}>

@@ -14,20 +14,30 @@ export interface SemesterState {
     fetched: boolean
     pending: boolean
     editing: boolean
-    totalGPA: number
     currentId: string
-    semesterInfo: SemesterInfo[]
-    dumpSemesterInfo: SemesterInfo[]
+    semesterInfo: {
+        info: SemesterInfo[]
+        totalGPA: number
+    }
+    dumpSemesterInfo: {
+        info: SemesterInfo[]
+        totalGPA: number
+    }
 }
 
 const initialState: SemesterState = {
     fetched: false,
     pending: false,
     editing: false,
-    totalGPA: 0,
     currentId: fakeSemesterInfo.id,
-    semesterInfo: [fakeSemesterInfo],
-    dumpSemesterInfo: [fakeSemesterInfo]
+    semesterInfo: {
+        info: [fakeSemesterInfo],
+        totalGPA: 0
+    },
+    dumpSemesterInfo: {
+        info: [fakeSemesterInfo],
+        totalGPA: 0
+    }
 }
 
 export const {reducer: semesterReducer, actions: semesterActions} = createSlice({

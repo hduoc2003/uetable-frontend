@@ -1,5 +1,6 @@
 export interface SubjectClass {
-  id: string; /// mã môn học
+  id: string; /// id của lớp môn học chung, có thể trùng nhau giữa thực hành và lý thuyết
+  code: string; /// mã môn học
   lessonStart: number; /// tiết học bắt đầu
   lessonEnd: number; /// tiết học kết thúc
   group: string; // nhóm
