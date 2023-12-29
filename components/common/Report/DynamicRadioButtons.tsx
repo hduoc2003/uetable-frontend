@@ -16,7 +16,7 @@ export default function DynamicRadioButtons ({
     <div style={{maxWidth: '400px'}}>
       {/* <h3>Select an option:</h3> */}
       {options.map((option : any) => (
-        <label className="radio">
+        <label className="radio" key={option.value}>
           
           <input id={option.value} className="radio__input" type="radio" name="report_types" value={option.value} checked={selectedOption === option.value} onChange={handleOptionChange}/>
           <span className="radio__inner">

@@ -1,18 +1,33 @@
+// export interface SubjectClass {
+//   id: string; /// id của lớp môn học chung, có thể trùng nhau giữa thực hành và lý thuyết
+//   code: string; /// mã môn học
+//   lessonStart: number; /// tiết học bắt đầu
+//   lessonEnd: number; /// tiết học kết thúc
+//   group: string; // nhóm
+//   name: string; // tên môn học
+//   place: string; // giảng đường
+//   credits: number; // tín chỉ
+//   teacherName: string; // tên giảng viên
+//   weekDay: number; // ngày học trong tuần, Thứ 2 là 2, CN là 8
+//   numberOfStudents: number; // sĩ số
+//   highlightColor: string;
+//   description?: string;
+// }
+
 export interface SubjectClass {
-  id: string; /// id của lớp môn học chung, có thể trùng nhau giữa thực hành và lý thuyết
-  code: string; /// mã môn học
-  lessonStart: number; /// tiết học bắt đầu
-  lessonEnd: number; /// tiết học kết thúc
-  group: string; // nhóm
-  name: string; // tên môn học
-  place: string; // giảng đường
-  credits: number; // tín chỉ
-  teacherName: string; // tên giảng viên
-  weekDay: number; // ngày học trong tuần, Thứ 2 là 2, CN là 8
-  numberOfStudents: number; // sĩ số
-  highlightColor: string;
-  description?: string;
+    code: string,
+    lessonStart: number,
+    lessonEnd: number,
+    group: string,
+    name: string,
+    place: string,
+    credits: number,
+    teacherName: string,
+    weekDay: number,
+    numberOfStudents: number,
+    highlightColor: string,
 }
+
 
 export interface Subject {
   id: string; // id của môn học lưu trong Db khác với mã học phần, đcm VanhG

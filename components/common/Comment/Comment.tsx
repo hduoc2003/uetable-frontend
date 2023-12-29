@@ -12,14 +12,15 @@ import { authSelector } from "@/redux/auth/authSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { UserInfoResponse } from "@/api/userAPI";
 import { Avatar, Badge, Divider, Select, Popover } from "antd";
-    
+import { ToastContainer } from "react-toastify";
+import ReplyIcon from "../(Icons)/ReplyIcon";
 
 
 export default function Comment({
     pageId,
     pageType,
     offset = 0,
-    limit = 4,
+    limit = 5,
 }: any) {
     // const {
     //     data: commentData,
@@ -29,9 +30,13 @@ export default function Comment({
     const authState = useSelector(authSelector);
     const [data, setData] = useState<CommentInfoType[]>();
     const [newState, setNewState] = useState(0);
+    const [isLoadMore, setIsLoadMore] = useState(-1);
     const [cnt, setCnt] = useState(0);
     const [isSending, setIsSending] = useState(-1);
+    const [offsetNow, setOffsetNow] = useState(0);
+    const [cntMore, setCntMore] = useState(0);
     const [inputReply, setReply] = useState("");
+    const [cntAdd, setCntAdd] = useState(0);
     const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
 
     useEffect(() => {
@@ -57,7 +62,8 @@ export default function Comment({
             // router.reload();
             // setReply('')
             // setIsSending(1)
-            setNewState(newState + 1)
+            setNewState(response.CommentId)
+            setCntAdd(cntAdd + 1)
           }
           console.log(response)
         }).catch((error) => {
@@ -84,15 +90,57 @@ export default function Comment({
     useEffect(() => {
         const uri = `/page/comment/${pageType}/${pageId}/${offset}/${limit}`
         Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
-            let newData = response;
+            let newData = data ? [...data] : []
+            for (let i = 0; i < response.length; i++) {
+                newData?.push(response[i])
+            }
+            // newData?.append(response);
+            console.log("new data", newData)
+            setData(newData ? [...newData] : [])
+            setReply('')
+            setIsSending(1)
+        }).catch((error) => {
+
+        });
+    },[])
+
+    useEffect(() => {
+        setIsLoadMore(0)
+        const uri = `/page/comment/${pageType}/${pageId}/${offsetNow + cntAdd}/${limit}`
+        Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
+            let newData = data ? [...data] : []
+            for (let i = 0; i < response.length; i++) {
+                newData?.push(response[i])
+            }
+            // newData?.append(response);
+            console.log("new data", newData)
+            setCntMore(cnt - offsetNow - limit - cntAdd)
+            setData(newData ? [...newData] : [])
+            setReply('')
+            setIsSending(1)
+            setIsLoadMore(1)
+        }).catch((error) => {
+
+        });
+    }, [offsetNow]);
+
+    useEffect(() => {
+        const uri = `/comment/${newState}`
+        Fetcher.get<any, CommentInfoType>(uri).then((response) => {
+            let newData = data ? [...data] : []
+            newData?.unshift(response);
             console.log(newData)
-            setData([...newData])
+            setData(newData ? [...newData] : [])
             setReply('')
             setIsSending(1)
         }).catch((error) => {
 
         });
     }, [newState, offset, limit]);
+
+    const seeMoreComment = () => {
+        setOffsetNow(offsetNow + limit)
+    }
     // console.log(commentData)
 
     return (
@@ -129,6 +177,26 @@ export default function Comment({
                     </div>
                 </div>
                 <CommentList comments={data ?? []} />
+                {
+                    (cnt - offsetNow - limit - cntAdd) > 0 && (
+                    <div className="flex justify-center mt-8">
+                        <button className="button message__button button-stroke" onClick={seeMoreComment}>
+                            {/* <ReplyIcon size='20px' className='icon'/> */}
+                            Xem thêm {cnt - offsetNow - limit - cntAdd} phản hồi
+                            <div className={isLoadMore===0?"flex items-center ml-2": "hidden flex items-center ml-2"}>
+                                <ClipLoader
+                                color="#2A85FF"
+                                size={12}
+                                cssOverride={{
+                                    'borderWidth': '3px'
+                                }}
+                                />
+                            </div>
+                        </button>
+                        </div>
+                    )
+                }
+                
             </div>
         </div>
     )

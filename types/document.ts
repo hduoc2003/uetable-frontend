@@ -1,15 +1,14 @@
 import { UploadFile } from "antd";
 
 export interface DocumentClass {
-    id: string;
-    name: string;
-    like: string;
-    comment: string;
-    download: string;
-    category: string;
-    link: string;
-    subjectName: string;
-    createdAt: string;
+    id: string,
+    name: string,
+    author: string,
+    like: string,
+    comment: string,
+    download: string,
+    subject: string,
+    image: string,
 }
 
 export interface UserUploadFile {
