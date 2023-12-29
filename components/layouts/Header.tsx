@@ -78,17 +78,16 @@ export default function Header() {
 
   return (
     <header
-      className="sticky top-0 z-[1000] pb-layout-el pr-body-pd bg-underground pt-body-pd"
+      className="sticky top-0 z-[1000] bg-underground"
       style={{
-        paddingLeft: scroll ? 0 : THEME.LAYOUT_ELEMENT_SPACE,
         transition: 'padding-left 0.3s ease-in-out'
       }}
     >
       <div
-        className="flex items-center h-[80px] bg-secondary shadow px-8  rounded-layout-el"
+        className="flex items-center h-[80px] bg-secondary shadow px-8"
         style={{
-          borderTopLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
-          borderBottomLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
+          // borderTopLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
+          // borderBottomLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
           transition: 'border-radius 0.3s ease-in-out'
         }}
       >

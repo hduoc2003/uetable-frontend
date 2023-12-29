@@ -6,6 +6,8 @@ import React, { useState } from 'react'
 import DynamicRadioButtons from './DynamicRadioButtons'
 import './report.css'
 import TextArea from 'antd/es/input/TextArea'
+import Fetcher from '@/api/Fetcher';
+import { ClipLoader } from 'react-spinners';
 
 const { Title, Text } = Typography;
 
@@ -69,11 +71,13 @@ function Content({
     // const {currentId} = useSelector(selectRootSemester);
     const [form] = Form.useForm();
     const [selectedOption, setSelectedOption] = useState(null);
+    const [isSending, setIsSending] = useState(-1);
     const handleOptionSelect = (e: any) => {
         setSelectedOption(e)
     }
     const handleSubmit = (value: FormValue) => {
-        console.log(value)
+        // console.log(value)
+        setIsSending(0)
         onSave({
             type: value.type,
             content: value.content,
@@ -115,9 +119,22 @@ function Content({
                         // htmlSize={(content + '').length}
                     />
             </Form.Item>
-            <SaveButton style={{marginTop: '8px'}} className='self-end' onClick={form.submit}>
-                Gửi
-            </SaveButton>
+            <div className='flex flex-cols items-center mt-4'>
+                {/* <div className='flex '> */}
+                    <SaveButton style={{marginRight: "8px"}} className='self-end' onClick={form.submit}>
+                        Gửi báo cáo
+                    </SaveButton>
+                {/* </div> */}
+                <div className={isSending===0?"flex items-center": "hidden flex items-center"}>
+                    <ClipLoader
+                    color="#2A85FF"
+                    size={24}
+                    cssOverride={{
+                        'borderWidth': '4px'
+                    }}
+                    />
+                </div>
+            </div>
         </Form>
 
     )

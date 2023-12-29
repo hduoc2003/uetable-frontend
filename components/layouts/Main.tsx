@@ -25,7 +25,6 @@ export default function Main({
                 bg-secondary
                 rounded-layout-el
                 p-8
-                overflow-auto
                 min-h-[calc(100vh-109px)]
                 shadow
             `,

@@ -48,16 +48,15 @@ export default function NavBar() {
         <div
             className="
                 sticky left-0 top-0
-                ml-body-pd pt-body-pd
                 bg-underground
                 flex flex-col
                 h-screen
             "
         >
             <div
-                className='bg-secondary h-full shadow min-w-fit rounded-layout-el'
+                className='bg-secondary h-full shadow min-w-fit'
                 style={{
-                    borderTopRightRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
+                    // borderTopRightRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
                     transition: 'border-radius 0.3s ease-in-out'
                 }}
             >
