@@ -1,7 +1,7 @@
 import { LetterGrade, RegisteredSubject, Subject, SubjectAll } from "@/types/subject";
 import { isUndefined } from "lodash";
 
-export function getFinalScore(subject: RegisteredSubject | undefined) {
+export function getFinalScore(subject: Pick<RegisteredSubject, 'score'> | undefined) {
     if (isUndefined(subject))
         return 0;
     let score = 0;
@@ -26,7 +26,7 @@ export function getFinalScore(subject: RegisteredSubject | undefined) {
 }
 
 
-export function get4Grade(subject: RegisteredSubject | undefined): number {
+export function get4Grade(subject: Pick<RegisteredSubject, 'score'> | undefined): number {
     let finalScore = getFinalScore(subject);
     if (finalScore < 4) return 0;
     if (finalScore < 5) return 1;

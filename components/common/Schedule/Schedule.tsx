@@ -163,7 +163,7 @@ export default function Schedule({
                                     }))
                                 }}
                             >
-                                Lưu
+                                Lưu lại
                             </SaveButton>
                         </>
                     }
@@ -256,6 +256,7 @@ export default function Schedule({
                                         <div className='flex h-full w-full'>
                                             <div className='w-[2px] h-full' />
                                             <ScheduleCellContent
+                                                onlyViewMode={onlyViewMode}
                                                 subjectClass={subject}
                                                 onMouseEnter={() => setHoverSubject(i)}
                                                 onMouseLeave={() => setHoverSubject(-1)}

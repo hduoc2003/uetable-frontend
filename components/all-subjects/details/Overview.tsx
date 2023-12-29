@@ -7,7 +7,7 @@ import { CellContent, LetterGradeTag } from '@/components/mysubjects/SemesterInf
 import { SubjectAll } from '@/types/subject';
 import genId from '@/utils/genId';
 import search from '@/utils/search';
-import { getLetterGrade } from '@/utils/subjects';
+import { get4Grade, getFinalScore, getLetterGrade, isRegisteredSubject } from '@/utils/subjects';
 import { Drawer, List, Skeleton, Space, Table, Typography } from 'antd'
 import { isUndefined } from 'lodash';
 import React, { useState } from 'react'
@@ -106,7 +106,7 @@ function Info({
                             case 'gpa':
                                 return (
                                     <span>
-                                        Điểm trung bình: {subject?.GPA ?? <Text type='secondary'>Đang cập nhật</Text>}
+                                        GPA: {isRegisteredSubject(subject) ? getFinalScore(subject) : <Text type='secondary'>Đang cập nhật</Text>}
                                     </span>
                                 )
                             case 'lecturers':

@@ -12,7 +12,7 @@ import { authSelector } from "@/redux/auth/authSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { UserInfoResponse } from "@/api/userAPI";
 import { Avatar, Badge, Divider, Select, Popover } from "antd";
-    
+
 
 
 export default function Comment({
@@ -25,7 +25,7 @@ export default function Comment({
     //     data: commentData,
     //     isLoading
     //   } = useSWR(CommentAPI.getCommentByPage(pageId, pageType, 0, 10));
-    
+
     const authState = useSelector(authSelector);
     const [data, setData] = useState<CommentInfoType[]>();
     const [newState, setNewState] = useState(0);
@@ -36,7 +36,7 @@ export default function Comment({
 
     useEffect(() => {
         if (authState?.signedIn) {
-          Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
+          Fetcher.get<any, UserInfoResponse>('/users/' + authState?.studentId)
           .then((response) => {
               setAvtURL(response.avatar);
           });
@@ -45,7 +45,7 @@ export default function Comment({
 
     async function onSubmit() {
         setIsSending(0)
-    
+
         Fetcher.post<any, any>('/comment/', {
           "content": inputReply,
           "pageType": pageType,
@@ -104,7 +104,7 @@ export default function Comment({
                 <div className="editor__label"> Để lại một bình luận?
                   </div>
                 <div className="answer_main">
-                
+
                     <div className="answer__avatar" style={{width:'48px', height: '48px'}}>
                         <Avatar className="" src={avtURL} size={48}></Avatar>
                     </div>

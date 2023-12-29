@@ -142,11 +142,12 @@ export class SubjectAllAPI {
 export class RegisteredSubjectAPI {
   static async getSubjectById(subjectId: string): Promise<RegisteredSubject> {
     try {
-      let res = Fetcher.get<any, RegisteredSubject>('/subject/getRegisteredSubjectInfo', {
+      let res = await Fetcher.get<any, RegisteredSubject>('/subject/getRegisteredSubjectInfo', {
         params: {
           subjectId
         }
       });
+      // console.log(res)
       return res;
     } catch (error) {
       console.log(error);

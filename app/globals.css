@@ -90,6 +90,6 @@ body {
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  /* display: none; */
+  display: none;
   /* visibility: hidden !important; */
 }

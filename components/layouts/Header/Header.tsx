@@ -45,7 +45,7 @@ export default function Header() {
       }
     };
     if (authState?.signedIn) {
-      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
+      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.studentId)
       .then((response) => {
         dispatch(authActions.updateAuthState({
           avtLink: response.avatar
@@ -57,7 +57,7 @@ export default function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [authState?.signedIn, authState?.username, dispatch]);
+  }, [authState?.signedIn, authState?.studentId, dispatch]);
   // console.log(value)
 
   const handleSignOut = () => {
@@ -66,7 +66,7 @@ export default function Header() {
       signedIn: false,
       logging: false,
       name: '',
-      username: '',
+      studentId: '',
     }));
     router.push('/');
   }
@@ -111,7 +111,7 @@ export default function Header() {
               </button>
               <div className="ml-3">
                 <div className="font-semibold ">Xin chào,</div>
-                <div className="text-xs font-semibold">{`${authState.username} ${authState.name}`}</div>
+                <div className="text-xs font-semibold">{`${authState.studentId} ${authState.name}`}</div>
               </div>
             </div>
             :

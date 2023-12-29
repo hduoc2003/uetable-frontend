@@ -1,9 +1,10 @@
 import { EventInfo } from "@/types/event";
 import Fetcher from "./Fetcher";
 import { OkResponse } from "@/types/response";
+import { toast } from "react-toastify";
 
 interface EventResponse {
-    id: string;
+    eventId: number;
     name: string;
     timeStart: string; // date format
     timeEnd: string; // date format
@@ -19,7 +20,7 @@ export class EventAPI {
             // console.log(response)
             let data: EventInfo[] = response.map((event): EventInfo  => ({
                 justCreated: false,
-                id: event.id,
+                id: event.eventId + '',
                 name: event.name,
                 timeStart: new Date(event.timeStart),
                 timeEnd: new Date(event.timeEnd),
@@ -34,16 +35,17 @@ export class EventAPI {
         }
     }
 
-    static async createEvent(eventInfo: EventInfo): Promise<OkResponse> {
+    static async createEvent(eventInfo: EventInfo): Promise<{eventId: string}> {
         try {
-            await Fetcher.post<any, any, EventInfo>(`/event/createEvent`, eventInfo)
+            const res = await Fetcher.post<any, {eventId: number}, EventInfo>(`/event/createEvent`, eventInfo)
+            console.log(res)
             return {
-                ok: true
+                eventId: res.eventId + ''
             }
         } catch (error) {
-            return {
-                ok: false
-            }
+            console.log(error);
+            toast.error('Tạo sự kiện thất bại')
+            throw error
         }
     }
 
@@ -63,11 +65,14 @@ export class EventAPI {
 
     static async updateEvent(eventInfo: EventInfo): Promise<OkResponse> {
         try {
+            // console.log(eventInfo.timeStart.toLocaleString())
+            console.log(eventInfo)
             await Fetcher.put<any, any, EventInfo>(`/event/updateEventById/${eventInfo.id}`, eventInfo)
             return {
                 ok: true
             }
         } catch (error) {
+            console.log(error)
             return {
                 ok: false
             }

@@ -42,7 +42,7 @@ export function CommentInfo({
     timestamp,
     hasLiked,
     hasDisLiked,
-    editable = false, 
+    editable = false,
 }: any) {
   // console.log(Id, pageId, pageType, author, content, parent, usersLiked, usersDisLiked, timestamp, hasLiked, hasDisLiked, editable)
   const authState = useSelector(authSelector);
@@ -66,7 +66,7 @@ export function CommentInfo({
   const [newState, setNewState] = useState(0);
   useEffect(() => {
     if (authState?.signedIn) {
-      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
+      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.studentId)
       .then((response) => {
           setAvtURL(response.avatar);
       });
@@ -131,7 +131,7 @@ export function CommentInfo({
       }).catch((error) => {
 
       });
-  }, [newState]); 
+  }, [newState]);
 
 
   const toggleNav = () => setOpenNav(!isOpenNav);
@@ -172,7 +172,7 @@ export function CommentInfo({
   }, [isSending]);
 
 
-  const className=parent===0?'comments__item': 'comments__answer' 
+  const className=parent===0?'comments__item': 'comments__answer'
   const date = new Date(timestamp);
   const now = Date.now();
   const diff = now - timestamp;
@@ -206,10 +206,10 @@ export function CommentInfo({
         {/* <img src={author.avatar} alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
       </div>
       <div className='comment__details' style={{flex: '0 0 calc(100% - 48px)', width: 'calc(100% - 48px)', paddingLeft: '16px'}}>
-        <div className={'flex'} style={{alignItems: 'center'}}> 
+        <div className={'flex'} style={{alignItems: 'center'}}>
           <div style={{marginRight: 'auto', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
             <Text strong style={{fontSize: '18px'}}>
-            {author.name} 
+            {author.name}
             </Text>
           </div>
           <div style={{marginLeft: '8px', whiteSpace: 'nowrap', fontSize: '12px', fontWeight: '500', color: '#9A9FA5'}}>
@@ -305,7 +305,7 @@ export function CommentInfo({
       // key={editingSubject.current?.id ?? ''}
       reportInfo = {
         {
-          pageId: Id, 
+          pageId: Id,
           pageType: "C"
         }
       }

@@ -19,6 +19,7 @@ interface ScheduleCellProps {
     onMouseLeave?: () => void
     onColorChange: SubjectClassInfoProps['onColorChange']
     className?: string
+    onlyViewMode: boolean
 }
 
 export default function ScheduleCellContent({
@@ -26,9 +27,9 @@ export default function ScheduleCellContent({
     className,
     onMouseEnter,
     onMouseLeave,
-    onColorChange
+    onColorChange,
+    onlyViewMode
 }: ScheduleCellProps) {
-    console.log(subjectClass)
     const [hover, setHover] = useState(false);
     return (
         <Popover
@@ -36,6 +37,7 @@ export default function ScheduleCellContent({
                 <SubjectClassInfo
                     subjectClass={subjectClass}
                     onColorChange={onColorChange}
+                    onlyViewMode={onlyViewMode}
                 />
             }
             placement='top'

@@ -39,7 +39,7 @@ export default function RelatedSubject({
                     return (
                         <div className="mb-5">
                             <Preview
-                                imgSrc={subject?.imgLink ?? 'https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg'}
+                                imgSrc={subject?.imgLink}
                                 url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.code ?? '' })}
                                 title={subject?.name ?? ''}
                                 loading={isLoading || isUndefined(subjectCode)}

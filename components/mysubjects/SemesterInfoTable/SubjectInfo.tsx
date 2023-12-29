@@ -61,7 +61,7 @@ export default function SubjectInfo({
                     {subjectInfo?.code &&
                         <OpenNewTabButton<MySubjectsPageProps['searchParams']>
                             content={subjectInfo?.code}
-                            url='/mysubjects'
+                            url='/mysubjects/registered/details'
                             searchParams={{ 'subjectId': subjectInfo?.id ?? 'vcl' }}
                         />
                     }
