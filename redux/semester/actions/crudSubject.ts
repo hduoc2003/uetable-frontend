@@ -12,6 +12,7 @@ interface Payload {
   yearGPA?: number;
   semesterGPA?: number;
   semesterIdx: number;
+  totalGPA: number;
 }
 
 interface ThunkPayload {
@@ -39,13 +40,13 @@ export const crudSubjectThunk = createAsyncThunk<Payload, ThunkPayload>(
         subject.semesterId
       ))
       subjects = [...subjects]
-      const { subjectIdx } = selectRegisteredSubjectById(thunkAPI.getState(), subject.semesterId, subject.code)
 
       switch (type) {
         case 'add':
           subjects.push(subject);
           break;
         case 'update':
+          const { subjectIdx } = selectRegisteredSubjectById(thunkAPI.getState(), subject.semesterId, subject.code)
           subjects[subjectIdx] = subject
           break;
       }
@@ -62,14 +63,15 @@ export const crudSubjectThunk = createAsyncThunk<Payload, ThunkPayload>(
 );
 
 export function crudSubject(state: SemesterState, { payload }: PayloadAction<Payload>) {
-  const { semesterIdx, sumOfCredits, yearGPA, semesterGPA, subjects } = payload;
+  const { semesterIdx, sumOfCredits, yearGPA, semesterGPA, subjects, totalGPA } = payload;
 
-  state.semesterInfo[semesterIdx] = {
-    ...state.semesterInfo[semesterIdx],
+  state.semesterInfo.info[semesterIdx] = {
+    ...state.semesterInfo.info[semesterIdx],
     sumOfCredits,
     yearGPA,
     semesterGPA,
     subjects,
   }
+  state.semesterInfo.totalGPA = totalGPA;
   state.editing = true;
 }

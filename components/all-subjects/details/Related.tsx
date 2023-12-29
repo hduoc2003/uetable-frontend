@@ -9,22 +9,27 @@ import TitleWithBox from "@/components/common/TitleWithBox";
 import genId from "@/utils/genId";
 import { getURL } from "@/utils/navigation";
 import { List, Space, Typography } from "antd";
-import _ from "lodash";
+import _, { isUndefined } from "lodash";
 import useSWR from "swr";
 import { CiCirclePlus } from "react-icons/ci";
 import { LuPlusCircle } from "react-icons/lu";
 import Link from "next/link";
 
 const { Text } = Typography;
-
+const fetchKey = genId()
 interface Props {
-    subjectId: string
+    subjectCode: string | undefined
 }
 
 export default function RelatedSubject({
-    subjectId
+    subjectCode
 }: Props) {
-    const { data: relatedSubjects, isLoading } = useSWR([subjectId], ([subjectId]) => SubjectAllAPI.getRelatedSubject(subjectId, 1, 6))
+    const { data: relatedSubjects, isLoading } = useSWR([fetchKey, subjectCode],
+        ([_, subjectCode]) => {
+            if (isUndefined(subjectCode))
+                return;
+            return SubjectAllAPI.getRelatedSubject(subjectCode, 6);
+        })
     return (
         <Space size={'large'} direction="vertical" className="w-full">
             <TitleWithBox title={<Link href={"/all-subjects"}>Môn học liên quan</Link>} />
@@ -37,7 +42,7 @@ export default function RelatedSubject({
                                 imgSrc={subject?.imgLink ?? 'https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg'}
                                 url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.code ?? '' })}
                                 title={subject?.name ?? ''}
-                                loading={isLoading}
+                                loading={isLoading || isUndefined(subjectCode)}
                                 imgHeight={180}
                             />
                         </div>

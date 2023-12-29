@@ -3,11 +3,14 @@ import { mockAllSemesterInfo } from "./mocks/semester";
 import { RegisteredSubject } from "@/types/subject";
 import Fetcher from "./Fetcher";
 import { delay } from "@/utils/delay";
+import { OkResponse } from "@/types/response";
 
 interface Data1 {
     totalGPA: number
     semesterInfo: SemesterInfo[]
 }
+
+type Data2 = Pick<SemesterInfo, 'sumOfCredits' | 'yearGPA' | 'semesterGPA'> & {totalGPA: number}
 export class SemesterAPI {
     static async getAllSemesterInfo(): Promise<Data1> {
         // return {
@@ -33,37 +36,36 @@ export class SemesterAPI {
 
     }
 
-    static async updateSemester(semesterInfo: SemesterInfo): Promise<{
-        totalGPA: number
-    }> {
-        console.log('haha')
+    static async updateSemester(semesterInfo: SemesterInfo): Promise<OkResponse> {
         try {
-            let res = await Fetcher.post('/score/updateSemesterCourseList', {
+            let res = await Fetcher.post<any, OkResponse, any>('/score/updateSemesterCourseList', {
                 semesterId: semesterInfo.id,
                 subjects: semesterInfo.subjects
             });
             console.log(res);
-            // return res;
+            return {
+                ok: true
+            }
         } catch (error) {
-            console.log(error)
-        }
-        // await delay(2000)
-        return {
-            totalGPA: 100
+            console.log(error);
+            return {
+                ok: false
+            }
+            throw error
         }
     }
 
-    static async getStat(subjects: SemesterInfo['subjects']): Promise<Pick<SemesterInfo, 'sumOfCredits' | 'yearGPA' | 'semesterGPA'>> {
+    static async getStat(subjects: SemesterInfo['subjects']): Promise<Data2> {
         try {
-            let res = await Fetcher.get('/score/getTempGPA')
+            let res: Data2 = await Fetcher.post('/score/getTempGPA', {
+                id: subjects[0].semesterId,
+                subjects
+            });
+            console.log(res)
+            return res;
         } catch (error) {
-
-        }
-        await delay(1000);
-        return {
-            sumOfCredits: 5,
-            yearGPA: Math.random(),
-            semesterGPA: 4
+            console.log(error)
+            throw error
         }
     }
 

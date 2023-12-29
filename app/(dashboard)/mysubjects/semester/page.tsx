@@ -35,8 +35,8 @@ export default function SemesterPage() {
 
   useEffect(() => {
     if (semesterData) {
-      dispatch(semesterActions.updateAllSemester(semesterData.semesterInfo))
-      dispatch(semesterActions.updateRootSemester({
+      dispatch(semesterActions.updateAllSemester({
+        info: semesterData.semesterInfo,
         totalGPA: semesterData.totalGPA
       }))
     }
@@ -85,7 +85,7 @@ function Something({
       <Select
         value={currentId}
         // defaultValue={currentId}
-        className="h-full"
+        className="h-full min-w-[200px]"
         options={
           [
             {
@@ -95,15 +95,7 @@ function Something({
             ...allSemesterInfo.map((info, idx) => ({
               value: info.id,
               label: <strong>{info.title}</strong>
-            })),
-            {
-              value: 'add-semester',
-              label:
-                <Space>
-                  <AddIcon />
-                  <span>Tạo học kì mới</span>
-                </Space>
-            }
+            }))
           ]
         }
         onChange={handleChangeSemesterId}

@@ -1,9 +1,12 @@
-import CommentInfo from "./CommentInfo"
+import { CommentInfo } from "./CommentInfo"
+import { CommentInfoType } from "@/types/comment";
 
-export function CommentList({ comments }: { comments: any[] }) {
+
+export function CommentList({ comments }: { comments: CommentInfoType[] }) {
+  // console.log("commentLIST", comments)
   return comments.map(comment => (
-    // <div key={comment.id} className="comment-stack" style={marginTop}>
+    <div key={comment.Id} className="comments__item">
       <CommentInfo {...comment} />
-    // </div>
+    </div>
   )) 
 }

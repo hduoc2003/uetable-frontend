@@ -2,7 +2,7 @@ import { RegisteredSubject, SubjectAll, SubjectClass } from "@/types/subject";
 
 export const mockSubjectClasses: SubjectClass[] = [
   {
-    id: "INT3209 1",
+    code: "INT3209 1",
     lessonStart: 1,
     lessonEnd: 3,
     group: "CL",
@@ -15,7 +15,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#EFEF98",
   },
   {
-    id: "INT3401 4",
+    code: "INT3401 4",
     lessonStart: 7,
     lessonEnd: 9,
     group: "CL",
@@ -29,7 +29,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     description: "Thầy dạy hay vcl",
   },
   {
-    id: "INT3306 3",
+    code: "INT3306 3",
     lessonStart: 10,
     lessonEnd: 11,
     group: "CL",
@@ -42,7 +42,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#CC66FF",
   },
   {
-    id: "PES1075 4",
+    code: "PES1075 4",
     lessonStart: 3,
     lessonEnd: 4,
     group: "CL",
@@ -55,7 +55,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#F7CECE",
   },
   {
-    id: "INT3403 1",
+    code: "INT3403 1",
     lessonStart: 11,
     lessonEnd: 12,
     group: "1",
@@ -68,7 +68,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#8BEFB8",
   },
   {
-    id: "PHI1002 2",
+    code: "PHI1002 2",
     lessonStart: 3,
     lessonEnd: 4,
     group: "CL",
@@ -81,7 +81,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#9BC2E6",
   },
   {
-    id: "INT3403 1",
+    code: "INT3403 1",
     lessonStart: 7,
     lessonEnd: 8,
     group: "CL",
@@ -94,7 +94,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#8BEFB8",
   },
   {
-    id: "INT3306 3",
+    code: "INT3306 3",
     lessonStart: 9,
     lessonEnd: 10,
     group: "1",
@@ -107,7 +107,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#CC66FF",
   },
   {
-    id: "MAT1101 4",
+    code: "MAT1101 4",
     lessonStart: 7,
     lessonEnd: 9,
     group: "CL",
@@ -120,7 +120,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#BAAB7E",
   },
   {
-    id: "INT3111 1",
+    code: "INT3111 1",
     lessonStart: 1,
     lessonEnd: 3,
     group: "CL",
@@ -133,7 +133,7 @@ export const mockSubjectClasses: SubjectClass[] = [
     highlightColor: "#F2EBE6",
   },
   {
-    id: "INT3514 2",
+    code: "INT3514 2",
     lessonStart: 5,
     lessonEnd: 6,
     group: "CL",

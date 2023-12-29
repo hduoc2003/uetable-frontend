@@ -31,7 +31,7 @@ export default function PreviewList<DataType>({
     dataKey,
     fetchMore,
     filter,
-    dataPerFetch = 3,
+    dataPerFetch = 6,
     cols
 }: Props<DataType>) {
     const _cols: (typeof cols) = _.mapValues({ ...{ xs: 1, md: 2, lg: 3, xxl: 4 }, ...cols }, (x) => 24 / x);
@@ -55,7 +55,7 @@ export default function PreviewList<DataType>({
     return (
             <InfiniteScroll
                 dataLength={data.length}
-                hasMore={!true}
+                hasMore={!stopFetching}
                 loader={<Spin className='mt-5'/>}
                 next={() => {setFetchFrom(fetchFrom + dataPerFetch)}}
                 endMessage={<Text type='secondary' strong className='self-center mt-5 text-xl'>{`${data.length}/${data.length}`}</Text>}

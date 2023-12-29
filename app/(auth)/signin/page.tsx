@@ -7,12 +7,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authSelector } from '@/redux/auth/authSelector'
 import { authActions } from '@/redux/auth/authSlice'
 import { useRouter } from 'next/navigation'
-import Cookies from 'universal-cookie';
+import { cookies } from '@/app/(dashboard)/layout'
 
 interface SignInResponse {
   message: string,
   authToken: string,
   studentid: string,
+  role: string,
 }
 
 interface UserInfoResponse {
@@ -24,7 +25,6 @@ interface UserInfoResponse {
 }
 
 export default function SignIn() {
-  const cookies = new Cookies();
   const dispatch = useDispatch();
   const authState = useSelector(authSelector);
   const [inputValue, setInputValue] = useState('');
@@ -89,10 +89,12 @@ export default function SignIn() {
       cookies.set('password', inputPasswordValue, {
         expires: expiresDate,
       });
+      cookies.set('role', response.role, {
+        expires: expiresDate,
+      });
       handleSignIn();
     }).catch((error) => {
-      console.log(error);
-      setLogInError(error.response.data.error);
+      setLogInError("Tài khoản hoặc mật khẩu không đúng.");
     });
   }
 

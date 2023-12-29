@@ -22,7 +22,6 @@ export default function RegisteredSubjectDetailsPage({
     }
 }: RegisteredSubjectDetailsPageProps) {
     const { data: subject, isLoading } = useSWR([fetchId, subjectId], ([_, subjectId]) => RegisteredSubjectAPI.getSubjectById(subjectId));
-    console.log(subject)
     return (
         <Main title='Môn học của tôi'>
             <div className="flex">

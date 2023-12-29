@@ -2,12 +2,12 @@
 
 import { SubjectAllAPI } from "@/api/subjectAPI";
 import { CommentAPI } from "@/api/commentAPI";
-import { CommentType } from "@/types/comment";
+// import { CommentType } from "@/types/comment";
 import Documents from "@/components/all-subjects/details/Documents";
 import Overview from "@/components/all-subjects/details/Overview";
 import RelatedSubject from "@/components/all-subjects/details/Related";
 import Taskbar from "@/components/all-subjects/details/TaskBar";
-import CommentInfo from "@/components/common/Comment/CommentInfo";
+// import CommentInfo from "@/components/common/Comment/CommentInfo";
 import DecorBox from "@/components/common/DecorBox";
 import Tag from "@/components/common/Tag";
 import TitleWithBox from "@/components/common/TitleWithBox";
@@ -19,8 +19,11 @@ import { Divider, Skeleton, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import Fetcher from '@/api/Fetcher'
+import Comment  from "@/components/common/Comment/Comment"
+import genId from "@/utils/genId";
 
 const { Text, Title } = Typography;
+const fetchKey = genId()
 
 export type AllSubjectsDetailsPageProps = PageProps<{
   subjectId: string
@@ -31,7 +34,10 @@ export default function AllSubjectsDetailsPage({
     subjectId
   }
 }: AllSubjectsDetailsPageProps) {
-  const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
+  const { data: subject, isLoading } = useSWR([fetchKey, subjectId], ([_, subjectId]) => {
+    // console.log('refetch');
+    return SubjectAllAPI.getSubjectById(subjectId)
+  });
 
   return (
     <Main title={'Thông tin học phần'}>
@@ -41,20 +47,11 @@ export default function AllSubjectsDetailsPage({
           <Divider />
           <Documents subjectId={subjectId} />
           <Divider />
-          <div className="flex flex-col">
-            <TitleWithBox title={'Bình luận'} boxContent={4} size="middle" />
-            {subjectId}
-            <div style={{ marginTop: '40px' }}>
-              <CommentInfo className="comments__item" />
-              <CommentInfo className="comments__answer" />
-              <CommentInfo className="comments__item" />
-              <CommentInfo className="comments__item" />
-            </div>
-          </div>
+          <Comment pageId={subjectId} pageType='S'/>
         </div>
         <Divider type="vertical" className="h-auto" />
         <div className="w-1/4 pl-5">
-          <RelatedSubject subjectId={subjectId} />
+          <RelatedSubject subjectCode={subject?.code} />
         </div>
       </div>
     </Main>

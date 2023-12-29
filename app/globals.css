@@ -57,13 +57,13 @@ body {
   border-color: black !important;
 } */
 
-.ant-select-selector, .ant-picker, .ant-color-picker-trigger {
+.ant-select-selector:not(:has(input[aria-invalid="true"])), .ant-picker, .ant-color-picker-trigger {
   box-shadow: inset 0 0 0 2px #EFEFEF;
   border-width: 0px !important;
   border-radius: 6px !important;
 }
 
-.ant-select-selector:hover, .ant-picker:hover, .ant-color-picker-trigger:hover {
+.ant-select-selector:not(:has(input[aria-invalid="true"])):hover, .ant-picker:hover, .ant-color-picker-trigger:hover {
   box-shadow: inset 0 0 0 2px #9A9FA5;
   border-color: #9A9FA5 !important;
 }
@@ -87,4 +87,9 @@ body {
 .editable-text.ant-input:focus {
   outline: 0;
   box-shadow: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  /* display: none; */
+  /* visibility: hidden !important; */
 }

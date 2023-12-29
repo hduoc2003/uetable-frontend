@@ -74,35 +74,30 @@ export const mockMySubectDocGroups: MySubectDocGroup[] = [
     category: "Đề thi học kì 1",
     files: [
       {
-        shared: true,
         name: "@@@@",
         ext: "PDF2",
         id: "1",
         link: "",
       },
       {
-        shared: false,
         name: "@@@@",
         ext: "PDF",
         id: "2",
         link: "",
       },
       {
-        shared: true,
         name: "@@@@",
         ext: "ZIP",
         id: "3",
         link: "",
       },
       {
-        shared: true,
         name: "@@@@",
         ext: "RAR",
         id: "4",
         link: "",
       },
       {
-        shared: false,
         name: "@@@@",
         ext: "DOCX",
         id: "5",
@@ -114,7 +109,6 @@ export const mockMySubectDocGroups: MySubectDocGroup[] = [
     category: "Đề thi giữa kì",
     files: [
       {
-        shared: true,
         name: "đcm",
         ext: "DOCX",
         id: genId(),

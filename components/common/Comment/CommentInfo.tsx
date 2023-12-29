@@ -19,6 +19,10 @@ import DisLikeIcon from '../(Icons)/DisLikeIcon';
 import DisLikedIcon from '../(Icons)/DisLikedIcon';
 import { set } from 'lodash';
 import ReportForm from '../Report/Report';
+import { ClipLoader } from 'react-spinners';
+import { Avatar, Badge, Divider, Select, Popover } from "antd";
+import { authSelector } from "@/redux/auth/authSelector";
+import { UserInfoResponse } from "@/api/userAPI";
 
 interface Props {
     className?: string;
@@ -26,7 +30,7 @@ interface Props {
     children?: React.ReactNode;
 }
 
-export default function CommentInfo({
+export function CommentInfo({
     Id,
     pageId,
     pageType,
@@ -40,11 +44,16 @@ export default function CommentInfo({
     hasDisLiked,
     editable = false, 
 }: any) {
+  // console.log(Id, pageId, pageType, author, content, parent, usersLiked, usersDisLiked, timestamp, hasLiked, hasDisLiked, editable)
+  const authState = useSelector(authSelector);
+  const [likeCnt, setLikeCnt] = useState(usersLiked)
+  const [disLikeCnt, setDisLikeCnt] = useState(usersDisLiked)
   const [isOpen, setOpen] = useState(false);
   const [openReportForm, setOpenReportForm] = useState(false);
   const [isOpenNav, setOpenNav] = useState(false);
   const inputReference = useRef(null);
   const [isSending, setIsSending] = useState(-1);
+  const [isLiking, setIsLiking] = useState(-1)
   const dispatch = useDispatch();
   const [inputReply, setReply] = useState("@" + author.name + " ");
   const [isSubmit, setSubmit] = React.useState(false);
@@ -53,13 +62,86 @@ export default function CommentInfo({
   const [isLike, setLike] = useState(hasLiked);
   const [isDisLike, setDisLike] = useState(hasDisLiked);
   const cookies = new Cookies();
+  const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
+  const [newState, setNewState] = useState(0);
+  useEffect(() => {
+    if (authState?.signedIn) {
+      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
+      .then((response) => {
+          setAvtURL(response.avatar);
+      });
+    }
+    // setLikeCnt(usersLiked)
+    // setLike(hasLiked)
+  }, []);
 
   const toggleReportForm = () => setOpenReportForm(!openReportForm);
   const toggleMenu = () => setOpen(!isOpen);
   const toggleSubmit = () => setSubmit(!isSubmit);
-  const toggleLike = () => {setLike(!isLike); setDisLike(false);}
+  const likeReq = (score: any) => {
+    // console.log(score)
+    setIsLiking(0)
+    Fetcher.post<any, any>('page/like/', {
+      "pageId": Id,
+      "pageType": 'C',
+      "score": score
+    }).then((response : any) => {
+      if (response.message === 'Successfully like!') {
+        // router.reload();
+        // setReply('')
+        // setIsSending(1)
+        setIsLiking(1)
+        setNewState(newState + 1)
+      }
+      // console.log(response)
+    }).catch((error) => {
+      // console.log(error)
+    })
+  }
+  const toggleLike = () => {
+    // console.log(isLike)
+    if (isLike) {
+      likeReq(0)
+    } else {
+      likeReq(1)
+    }
+    // setLike(!isLike);
+    // setDisLike(false);
+  }
+
+  useEffect(() => {
+      console.log(Id, newState)
+      const uri = `page/like/C/${Id}/`
+      Fetcher.get<any, any>(uri).then((response) => {
+          // let newData = response.count;
+          console.log(response)
+          setLikeCnt(response.likes)
+          setDisLikeCnt(response.dislikes)
+          if (response.userLike === -1) {
+            setLike(false)
+            setDisLike(true)
+          } else if (response.userLike === 1) {
+            setLike(true)
+            setDisLike(false)
+          } else {
+            setLike(false)
+            setDisLike(false)
+          }
+
+      }).catch((error) => {
+
+      });
+  }, [newState]); 
+
+
   const toggleNav = () => setOpenNav(!isOpenNav);
-  const toggleDisLike = () => {setDisLike(!isDisLike); setLike(false);}
+  const toggleDisLike = () => {
+    if (isDisLike) {
+      likeReq(0)
+    } else {
+      likeReq(-1)
+    }
+  }
 
   async function onSubmit() {
     setIsSending(0)
@@ -71,10 +153,13 @@ export default function CommentInfo({
       "parentId": Id,
       "preCommentId": 0
     }).then((response : any) => {
-      console.log(response)
-      setIsSending(1)
+      if (response.message === "Comment successfully created") {
+        // router.reload();
+        setIsSending(1)
+      }
+      // console.log(response)
     }).catch((error) => {
-      console.log(error)
+      // console.log(error)
     })
   }
 
@@ -93,15 +178,15 @@ export default function CommentInfo({
   const diff = now - timestamp;
   let commentDate = '';
   if (diff < 60) {
-    commentDate = 'Just now'
+    commentDate = 'Vừa xong'
   } else if (diff < 1000 * 60) {
-    commentDate = `${Math.floor(diff / 1000)} seconds ago`
+    commentDate = `${Math.floor(diff / 1000)} giây trước`
   } else if (diff < 1000 * 60 * 60) {
-    commentDate = `${Math.floor(diff / (1000 * 60))} minutes ago`
+    commentDate = `${Math.floor(diff / (1000 * 60))} phút trước`
   } else if (diff < 1000 * 60 * 60 * 24) {
-    commentDate = `${Math.floor(diff / (1000 * 60 * 60))} hours ago`
+    commentDate = `${Math.floor(diff / (1000 * 60 * 60))} giờ trước`
   } else if (diff < 1000 * 60 * 60 * 24 * 365) {
-    commentDate = `${Math.floor(diff / (1000 * 60 * 60 * 24))} days ago`
+    commentDate = `${Math.floor(diff / (1000 * 60 * 60 * 24))} ngày trước`
   } else if (diff < 1000 * 60 * 60 * 24 * 365) {
     commentDate = date.toLocaleDateString('en-GB', {
       day: 'numeric',
@@ -117,7 +202,8 @@ export default function CommentInfo({
   return (
     <div className={twMerge("flex", className)}>
       <div className='comment__avatar' style={{width:'48px', height: '48px'}}>
-        <img src={author.avatar} alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img>
+        <Avatar className="" src={author.avatar} size={48}></Avatar>
+        {/* <img src={author.avatar} alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
       </div>
       <div className='comment__details' style={{flex: '0 0 calc(100% - 48px)', width: 'calc(100% - 48px)', paddingLeft: '16px'}}>
         <div className={'flex'} style={{alignItems: 'center'}}> 
@@ -166,31 +252,50 @@ export default function CommentInfo({
           <button className="comments__favorite" onClick={toggleLike}>
            {!isLike && (<LikeIcon size='20px' solidOnHover className='icon'/>)}
            {isLike && (<LikedIcon size='20px' solidOnHover solid className='icon' color='blue'/>)}
-           {usersLiked}
+           {likeCnt}
           </button>
           <button className="comments__favorite" onClick={toggleDisLike}>
            {!isDisLike && (<DisLikeIcon size='20px' solidOnHover className='icon'/>)}
            {isDisLike && (<DisLikedIcon size='20px' solidOnHover solid className='icon' color='red'/>)}
-           {usersDisLiked}
+           {disLikeCnt}
           </button>
           <button className="comments__reply" onClick={toggleMenu}>
               <ReplyIcon size='20px' className='icon'/>
               Reply
           </button>
+          <div className={isLiking===0?"flex items-center": "hidden flex items-center"}>
+            <ClipLoader
+            color="#2A85FF"
+            size={12}
+            cssOverride={{
+                'borderWidth': '3px'
+            }}
+            />
+          </div>
         </div>
         {isOpen && (
         <div className="answer">
           <div className="answer__avatar" style={{width:'48px', height: '48px'}}>
-          <img src='https://ui8-core.herokuapp.com/img/content/avatar-2.jpg' alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img>
+            <Avatar className="" src={avtURL} size={48}></Avatar>
+          {/* <img src='https://ui8-core.herokuapp.com/img/content/avatar-2.jpg' alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
           </div>
           <div className="answer__details">
             <div className="answer__message">
               <textarea id='reply__textarea' className="answer__textarea" name="answer" placeholder="Leave something to reply" value={inputReply}  onChange={e => {setReply(e.target.value); setTextareaHeight(`0px`); setTextareaHeight(`${e.target.scrollHeight}px`)}} style={{height: textareaHeight}}>
               </textarea>
             </div>
-          <div className="answer__btns">
-            <button className={inputReply===""?"button button-small answer__button disabled": "button button-small answer__button"} onClick={onSubmit}>Reply</button>
+            <div className="answer__btns">
+              <button className={inputReply===""?"button button-small answer__button disabled": "button button-small answer__button"} onClick={onSubmit}>Reply</button>
               <button className="button-stroke button-small answer__button" onClick={toggleMenu}>Cancel</button>
+              <div className={isSending===0?"flex items-center": "hidden flex items-center"}>
+                <ClipLoader
+                  color="#2A85FF"
+                  size={24}
+                  cssOverride={{
+                    'borderWidth': '4px'
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>)}
@@ -205,7 +310,18 @@ export default function CommentInfo({
         }
       }
       onSave= {(newSubject) => {
-        setOpenReportForm(false);
+        // console.log(newSubject)
+        Fetcher.post('/report/', {
+          "content": newSubject?.content,
+          "pageType": newSubject?.pageType,
+          "pageId": newSubject?.pageId,
+          "type": newSubject?.type,
+        }).then((response) => {
+          console.log(response)
+          setOpenReportForm(false);
+        }).catch((error) => {
+          console.log(error)
+        });
       }}
       open={openReportForm}
       onCancel={() => setOpenReportForm(false)}

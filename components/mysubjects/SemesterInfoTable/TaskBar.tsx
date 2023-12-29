@@ -52,9 +52,9 @@ export default function TaskBar({
                         <AddIcon solidOnHover size={24} />
                         {/* color="rgb(74 222 128)" */}
                     </MyButtonWrapper>
-                    <div className="group-hover/table:visible group-hover/table:opacity-100 transition-opacity duration-500 opacity-0">
+                    {/* <div className="group-hover/table:visible group-hover/table:opacity-100 transition-opacity duration-500 opacity-0">
                         <DeleteTable />
-                    </div>
+                    </div> */}
                     {delayEditing &&
                         <>
                             <DangerButton className="ml-auto" onClick={() => dispatch(semesterActions.discardChanges())}>
