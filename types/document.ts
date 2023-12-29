@@ -1,5 +1,20 @@
 import { UploadFile } from "antd";
 
+export interface DocumentInfo {
+    id: any,
+    name: any,
+    createdAt: Date,
+    like: any,
+    download: any,
+    category: any,
+    link: any,
+    userName: any,
+    subject: any,
+    subjectId: any,
+    studentId : any,
+    type: string,
+}
+
 export interface DocumentClass {
     id: string;
     name: string;
