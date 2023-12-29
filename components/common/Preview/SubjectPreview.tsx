@@ -32,7 +32,7 @@ export default function SubjectPreview(props: Props) {
     return (
         <Preview
             imgHeight={imgHeight}
-            imgSrc={subject?.imgLink ?? 'https://c4.wallpaperflare.com/wallpaper/615/587/589/video-game-league-of-legends-akali-league-of-legends-hd-wallpaper-preview.jpg'}
+            imgSrc={subject?.imgLink}
             url="/all-subjects/details"
             params={params}
             star={

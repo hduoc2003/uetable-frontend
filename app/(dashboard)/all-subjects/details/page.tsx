@@ -51,7 +51,7 @@ export default function AllSubjectsDetailsPage({
         </div>
         <Divider type="vertical" className="h-auto" />
         <div className="w-1/4 pl-5">
-          <RelatedSubject subjectId={subjectId} />
+          <RelatedSubject subjectCode={subject?.code} />
         </div>
       </div>
     </Main>

@@ -60,7 +60,7 @@ export default function SignIn() {
         dispatch(authActions.updateAuthState({
           signedIn: true,
           logging: false,
-          username: inputValue,
+          studentId: inputValue,
           name: response.name,
         }));
         router.push('/');

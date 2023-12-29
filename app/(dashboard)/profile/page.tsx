@@ -14,9 +14,10 @@ import { useRouter } from 'next/navigation';
 import { DocumentClass } from '@/types/document';
 import MyButtonWrapper from '@/components/common/(MyButton)/MyButtonWrapper';
 import EditableText from '@/components/common/EditableText';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '@/redux/auth/authSlice';
 import Editor from '@/components/common/Editor/Editor';
+import { authSelector } from '@/redux/auth/authSelector';
 const { Paragraph, Text } = Typography;
 
 const cookies = new Cookies();
@@ -36,18 +37,20 @@ export default function Profile() {
   const [percentage, setPercentage] = useState(20);
   const currentStudentId = cookies.get('studentid');
 
-  const [imageURL, setImageURL] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const searchParams = useSearchParams();
   const studentid = searchParams.get('studentid');
   const dispatch = useDispatch();
+  const {avtLink} = useSelector(authSelector)
 
   useEffect(() => {
     if (studentid != currentStudentId) setOther(true);
     Fetcher.get<any, UserInfoResponse>('/users/' + studentid)
       .then((response) => {
-        setImageURL(response.avatar);
+        dispatch(authActions.updateAuthState({
+          avtLink: response.avatar
+        }))
         setMSSV(response.studentId);
         setName(response.name);
         setBirth(response.date);
@@ -77,11 +80,11 @@ export default function Profile() {
     }).catch((error) => {
 
     })
-  }, [studentid, currentStudentId, other, router]);
+  }, [studentid, currentStudentId, other, router, dispatch]);
 
   useEffect(() => {
     setPercentage(20);
-    if (imageURL) {
+    if (avtLink) {
       hasChangedImage(true);
       setPercentage(p => p + 30);
     } else {
@@ -99,7 +102,7 @@ export default function Profile() {
     } else {
       finishedPersonalInfo(false);
     }
-  }, [bio, name, imageURL, birth, mssv])
+  }, [bio, name, avtLink, birth, mssv])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] as File | undefined;
@@ -117,7 +120,7 @@ export default function Profile() {
     setName(newName);
     Fetcher.put('/users/', {
       "name": newName,
-      "avatar": imageURL,
+      "avatar": avtLink,
       "birth": birth,
     }).then((response) => {
 
@@ -130,7 +133,7 @@ export default function Profile() {
     setBirth(dateString);
     Fetcher.put('/users/', {
       "name": name,
-      "avatar": imageURL,
+      "avatar": avtLink,
       "birth": dateString,
     }).then((response) => {
 
@@ -161,7 +164,9 @@ export default function Profile() {
         reader.onload = (e) => {
           if (e.target) {
             const dataURL = e.target.result as string;
-            setImageURL(dataURL);
+            dispatch(authActions.updateAuthState({
+              avtLink: dataURL
+            }))
             hasChangedImage(true);
           }
         };
@@ -185,14 +190,14 @@ export default function Profile() {
   };
 
   return (
-    <main className="bg-slate-100 p-6">
-      <div className="text-3xl text-black font-bold ml-5">Profile</div>
+    <main className=''>
+      <div className="text-3xl text-black font-bold ml-5">Hồ sơ</div>
       <div className="flex">
-        <div className="m-4 bg-white border rounded-2xl shadow-lg w-full">
+        <div className="m-4 bg-white border rounded-2xl shadow w-full">
           {other ?
             <div className="flex p-12 gap-[150px]">
               <div>
-                <Avatar src={imageURL} className='' alt="Profile Pic" size={100}></Avatar>
+                <Avatar src={avtLink} className='' alt="Profile Pic" size={100}></Avatar>
               </div>
               <div className='flex-col'>
                 <label className="font-light text-gray-500">Họ và tên</label>
@@ -209,7 +214,7 @@ export default function Profile() {
             </div>
             :
             <div className="flex p-10 gap-6 items-center">
-              <Avatar src={imageURL} className='' alt="Profile Pic" size={100} />
+              <Avatar src={avtLink} className='' alt="Profile Pic" size={100} />
               <div className="flex flex-col gap-3">
                 <div className="flex">
                   <input type="file" accept="image/*" onChange={handleFileChange} className="w-full text-sm text-slate-500
@@ -260,18 +265,30 @@ export default function Profile() {
                 bio && (
                   <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
                     <div className="flex p-6 justify-between">
-                      <div className="font-bold text-2xl">Bio</div>
+                      <div className="font-bold text-2xl">Giới thiệu</div>
                     </div>
                     <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3">{bio}</Paragraph>
                   </div>
                 )
               ) : (
-                <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10">
-                  <div className="flex p-6 justify-between">
-                    <div className="font-bold text-2xl">Bio</div>
-                  </div>
+                <div className="w-full bg-white border rounded-2xl hover:shadow hover:bg-gray-100 m-10 p-5 flex flex-col gap-5">
+                  {/* <div className="flex p-6 justify-between"> */}
+                    <div className="font-bold text-2xl">Giới thiệu</div>
+                  {/* </div> */}
                   {/* <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => { handleFinishEditBio(newValue) } }}>{bio}</Paragraph> */}
-                  <Editor content={bio} onSave={handleFinishEditBio}/>
+                  {/* <Editor content={bio} onSave={handleFinishEditBio}/> */}
+                  <EditableText
+                    defaultValue={bio}
+                    normalText={
+                      bio ?
+                      <Text className='text-lg'>{bio}</Text>
+                      :
+                      <Text type='secondary' italic>Chưa cập nhật thông tin</Text>
+                    }
+                    type='textarea'
+                    onComplete={handleFinishEditBio}
+                    className='w-full'
+                  />
                 </div>
               )
             }
@@ -316,9 +333,9 @@ export default function Profile() {
           </div>
         </div>
         {!other &&
-          <div className="m-4 bg-white border rounded-2xl shadow-lg flex flex-col p-6 gap-3 h-max-full">
+          <div className="m-4 bg-white border rounded-2xl shadow flex flex-col p-6 gap-3 h-max-full">
             <text className="font-bold text-xl">Hoàn thành profile</text>
-            <Progress type="circle" percent={percentage} strokeColor="#1dc14e" strokeWidth={10} size={200} />
+            <Progress type="circle" percent={percentage} strokeColor="#1dc14e" strokeWidth={10} size={200} className='mb-5'/>
             {
               setUpAccount ?
                 <div className="flex gap-2">
@@ -326,13 +343,13 @@ export default function Profile() {
                     <CheckOutlined />
                   </span>
                   <p className='font-medium text-sm'>Kích hoạt tài khoản</p>
-                  <p className='font-medium text-gray-400 text-sm'>20%</p>
+                  {/* <p className='font-medium text-gray-400 text-sm'>20%</p> */}
                 </div>
                 :
                 <div className="flex gap-2">
                   <CloseOutlined />
                   <p className='font-medium text-gray-400 text-sm'>Kích hoạt tài khoản</p>
-                  <p className='text-green-400 font-semibold text-sm'>20%</p>
+                  {/* <p className='text-green-400 font-semibold text-sm'>20%</p> */}
                 </div>
             }
             {
@@ -342,13 +359,13 @@ export default function Profile() {
                     <CheckOutlined />
                   </span>
                   <p className='font-medium text-sm'>Cập nhật ảnh đại diện</p>
-                  <p className='font-medium text-gray-400 text-sm'>30%</p>
+                  {/* <p className='font-medium text-gray-400 text-sm'>30%</p> */}
                 </div>
                 :
                 <div className="flex gap-2">
                   <CloseOutlined />
                   <p className='font-medium text-gray-400 text-sm'>Cập nhật ảnh đại diện</p>
-                  <p className='text-green-400 font-semibold text-sm'>30%</p>
+                  {/* <p className='text-green-400 font-semibold text-sm'>30%</p> */}
                 </div>
             }
             {
@@ -358,13 +375,13 @@ export default function Profile() {
                     <CheckOutlined />
                   </span>
                   <p className='font-medium text-sm'>Thông tin cá nhân</p>
-                  <p className='font-medium text-gray-400 text-sm'>30%</p>
+                  {/* <p className='font-medium text-gray-400 text-sm'>30%</p> */}
                 </div>
                 :
                 <div className="flex gap-2">
                   <CloseOutlined />
                   <p className='font-medium text-gray-400 text-sm'>Thông tin cá nhân</p>
-                  <p className='text-green-400 font-semibold text-sm'>30%</p>
+                  {/* <p className='text-green-400 font-semibold text-sm'>30%</p> */}
                 </div>
             }
             {
@@ -374,13 +391,13 @@ export default function Profile() {
                     <CheckOutlined />
                   </span>
                   <p className='font-medium text-sm'>Cập nhật Bio</p>
-                  <p className='font-medium text-gray-400 text-sm'>20%</p>
+                  {/* <p className='font-medium text-gray-400 text-sm'>20%</p> */}
                 </div>
                 :
                 <div className="flex gap-2">
                   <CloseOutlined />
                   <p className='font-medium text-gray-400 text-sm'>Cập nhật Bio</p>
-                  <p className='text-green-400 font-semibold text-sm'>20%</p>
+                  {/* <p className='text-green-400 font-semibold text-sm'>20%</p> */}
                 </div>
             }
           </div>

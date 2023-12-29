@@ -7,8 +7,8 @@ import MyButtonWrapper from './MyButtonWrapper'
 
 export default function DangerButton(props : MyButtonProps) {
     return (
-        <MyButtonWrapper {...props} danger className={twMerge('group hover:bg-danger border px-2 hover:!border-danger', props.className)}>
-            <div className='group-hover:text-secondary'>{props.children}</div>
+        <MyButtonWrapper {...props} className={twMerge('group hover:bg-danger border-2 px-2 hover:!border-danger', props.className)}>
+            <div className='text-danger group-hover:text-secondary font-semibold'>{props.children}</div>
         </MyButtonWrapper>
     )
 }

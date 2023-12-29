@@ -1,20 +1,14 @@
 'use client';
 
 import { SubjectAllAPI } from "@/api/subjectAPI";
-import HeartIcon from "@/components/common/(Icons)/HeartIcon";
-import IconWrapper from "@/components/common/(Icons)/IconWrapper";
 import DecorBox from "@/components/common/DecorBox";
 import PreviewList from "@/components/common/Preview/PreviewList";
 import SubjectPreview from "@/components/common/Preview/SubjectPreview";
 import SearchBar from "@/components/common/SearchBar/SearchBar";
 import Main from "@/components/layouts/Main";
 import { SubjectAll } from "@/types/subject";
-import genId from "@/utils/genId";
-import search from "@/utils/search";
-import { Col, Row, Select, Skeleton, Space } from "antd";
-import { isUndefined } from "lodash";
-import { Key, ReactNode, useEffect, useState } from "react";
-import useSWR from "swr";
+import { Select } from "antd";
+import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 type SortType = Parameters<typeof SubjectAllAPI.getSomeSubjects>[0];

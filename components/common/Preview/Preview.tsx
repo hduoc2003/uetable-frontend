@@ -1,20 +1,25 @@
 'use client';
 
 import { getURL, openNewTab } from "@/utils/navigation";
-import { Skeleton, Space, Typography } from "antd";
+import { Skeleton, Typography } from "antd";
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import { UrlObject } from 'url';
-import InfoIcon from "../(Icons)/InfoIcon";
 import { isUndefined } from "lodash";
 import { SearchParams } from "@/types/PageProps";
+import randomInteger from "random-int";
+// import { getAllAssests } from "@/utils/assets";
 
 const {Text, Title} = Typography;
 
+// console.log(getAllAssests('/images/preview'))
+
+function getRandomImage(): string {
+    return `/images/preview/${randomInteger(7)}.png`
+}
 export interface PreviewProps {
-    imgSrc: string | StaticImport;
+    imgSrc?: string | StaticImport;
     imgAlt?: string;
     imgHeight?: number | string;
     star?: React.ReactNode;
@@ -57,7 +62,7 @@ export default function Preview({
     return (
         <div className='group/preview cursor-pointer flex flex-col gap-3 w-full h-fit relative animate__animated animate__fadeIn' onClick={onClick}>
             <div className='relative overflow-hidden' style={{height: imgHeight}}>
-                <Image src={imgSrc} alt={imgAlt ?? url} className='rounded-[12px]' fill/>
+                <PreviewImage imgSrc={imgSrc} imgAlt={imgAlt} url={url}/>
                 <div className='absolute top-0 left-0 group-hover/preview:bg-[rgba(17,19,21,0.8)] w-full h-full transition-all duration-300 rounded-[15px]'/>
                 <div
                     className={`z-20 absolute top-4 right-4 ${stared ? '' : 'hidden opacity-0 group-hover/preview:block group-hover/preview:opacity-100 transition-opacity duration-300'}`}
@@ -75,3 +80,9 @@ export default function Preview({
         </div>
     )
 }
+
+const PreviewImage = React.memo(function PreviewImage({
+    imgSrc, imgAlt, url
+}: Pick<PreviewProps, 'imgSrc' | 'imgAlt' | 'url'>) {
+    return <Image src={imgSrc || getRandomImage()} alt={imgAlt ?? url} className='rounded-[12px]' fill objectFit='cover'/>
+})

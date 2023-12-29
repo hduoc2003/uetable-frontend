@@ -16,6 +16,8 @@ import genId from "@/utils/genId";
 import search from "@/utils/search";
 import _, { isUndefined } from "lodash";
 import { toast } from 'react-toastify';
+import { useSelector } from "react-redux";
+import { authSelector } from "@/redux/auth/authSelector";
 
 const { Text, Paragraph } = Typography;
 
@@ -25,9 +27,10 @@ interface Props {
 }
 
 export default function Documents({ subjectId }: Props) {
-  const { data: docGroups, isLoading, mutate } = useSWR([fetchId, subjectId], ([_, subjectId]) => {
+  const {studentId} = useSelector(authSelector)
+  const { data: docGroups, isLoading, mutate } = useSWR([fetchId, subjectId, studentId], ([_, subjectId, studentId]) => {
     // console.log('refetch');
-    return DocumentAPI.getMySubjectDocs(subjectId)
+    return DocumentAPI.getMySubjectDocs(subjectId, studentId)
   });
   const [searchValue, setSearchValue] = useState('');
   const [group, setGroup] = useState<"category" | "extension">("category");
@@ -61,7 +64,7 @@ export default function Documents({ subjectId }: Props) {
     <Space direction='vertical' className="w-full" size={'middle'}>
       <Taskbar onSearch={handleSearch} onGroup={handleGroup} />
       <Skeleton active round loading={isLoading}>
-        {
+        {docGroups && docGroups.length > 0 ?
           <Collapse
             items={(filteredDocs).map((doc) => {
               return {
@@ -78,6 +81,8 @@ export default function Documents({ subjectId }: Props) {
             ]}
           // accordion
           />
+          :
+          <Text italic type='secondary'>Bạn chưa tải tài liệu lên</Text>
         }
       </Skeleton>
     </Space>

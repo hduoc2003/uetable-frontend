@@ -27,7 +27,7 @@ const _key = (key: AllKey) => key;
 
 export default function NavMenu({
     expand
-} : {
+}: {
     expand: boolean
 }) {
     const router = useRouter();
@@ -47,18 +47,18 @@ export default function NavMenu({
                 }
             }}
         >
-            {/* <div ref={r}> */}
-            <Menu
-                mode='inline'
-                onSelect={(info) => setselectedKey(info.key as AllKey)}
-                items={menuItems}
-                {...(expand ? {} : {expandIcon: null})}
-                onClick={(e) => {
-                    console.log(e.keyPath)
-                    router.push('/' + _.join(_.reverse(e.keyPath), '/'))
-                }}
-            />
-            {/* </div> */}
+            <div className='overflow-y-auto no-scrollbar'>
+                <Menu
+                    mode='inline'
+                    onSelect={(info) => setselectedKey(info.key as AllKey)}
+                    items={menuItems}
+                    {...(expand ? {} : { expandIcon: null })}
+                    onClick={(e) => {
+                        // console.log(e.keyPath)
+                        router.push('/' + _.join(_.reverse(e.keyPath), '/'))
+                    }}
+                />
+            </div>
         </ConfigProvider>
     )
 }
@@ -135,17 +135,17 @@ function getMenuItems(
         getGroupMenuItem('general', 'Chung', [
             getNormalMenuItem('', selectedKey, getLabel(''), false, HomeIcon),
             getSubMenuItem('schedule', getLabel('schedule'), ScheduleIcon,
-            [
-                getNormalMenuItem('subject-class', selectedKey, getLabel('subject-class'), true),
-                getNormalMenuItem('calendar', selectedKey, getLabel('calendar'), true),
-                getNormalMenuItem('exam', selectedKey, getLabel('exam'), true)
-            ]),
+                [
+                    getNormalMenuItem('subject-class', selectedKey, getLabel('subject-class'), true),
+                    getNormalMenuItem('calendar', selectedKey, getLabel('calendar'), true),
+                    getNormalMenuItem('exam', selectedKey, getLabel('exam'), true)
+                ]),
             getSubMenuItem('mysubjects', getLabel('mysubjects'), MySubjectIcon,
-            [
-                getNormalMenuItem('semester', selectedKey, getLabel('semester'), true),
-                getNormalMenuItem('registered', selectedKey, getLabel('registered'), true),
-                getNormalMenuItem('curriculum', selectedKey, getLabel('curriculum'), true)
-            ]),
+                [
+                    getNormalMenuItem('semester', selectedKey, getLabel('semester'), true),
+                    getNormalMenuItem('registered', selectedKey, getLabel('registered'), true),
+                    getNormalMenuItem('curriculum', selectedKey, getLabel('curriculum'), true)
+                ]),
             getNormalMenuItem('all-subjects', selectedKey, getLabel('all-subjects'), false, AllSubjectsIcon)
         ]),
         getGroupMenuItem('explore', 'Khám phá', [
@@ -164,7 +164,7 @@ function getNormalMenuItem(
     key: AllKey,
     selectedKey: AllKey | undefined,
     label: string,
-    inSubmenu:boolean,
+    inSubmenu: boolean,
     Icon?: (props: IconProps) => React.JSX.Element,
 ): MenuItemType {
     let selected = (key === selectedKey);
@@ -195,7 +195,7 @@ function getSubMenuItem(
         key,
         label:
             <div className='flex gap-3 group'>
-                <Icon className={iconClassName(false)}/>
+                <Icon className={iconClassName(false)} />
                 <NavLabel>{label}</NavLabel>
             </div>
         ,
@@ -203,7 +203,7 @@ function getSubMenuItem(
             ...item,
             label:
                 <div className='flex'>
-                    <Image src={NavCurve} alt='hehe' className='absolute left-0 top-[7px]'/>
+                    <Image src={NavCurve} alt='hehe' className='absolute left-0 top-[7px]' />
                     <span className="ml-[14px] flex-1 rounded-[8px] pr-2" style={item.style}>{item.label}</span>
                 </div>,
             style: {

@@ -17,7 +17,8 @@ export class SubjectAllAPI {
           Name: string;
           Code: string;
           Credit: number;
-        }[]>('/subject/getSubjectByCode', {
+        }[]
+        >('/subject/getSubjectByCode', {
           params: {
             code: ''
           }
@@ -69,7 +70,26 @@ export class SubjectAllAPI {
     await delay(1500);
   }
 
-  static async getRelatedSubject(subSubjectCode: string, limit: number): Promise<SubjectAll[]> {
+  static async getRelatedSubject(subjectCode: string, limit: number): Promise<SubjectAll[]> {
+    try {
+      const idList = await Fetcher.get<any, {Id: string}[]>('/subject/getSubjectByCode', {
+        params: {
+          code: subjectCode.slice(0, 3),
+          limit
+        }
+      })
+      // console.log(subjectCode.slice(0, 3))
+      const subjects = await Promise.allSettled<SubjectAll>(idList.map(({Id}) => {
+        return this.getSubjectById(Id)
+      }))
+      const notErrorSubjects = subjects.filter((subject) => subject.status === 'fulfilled')
+                                        .map((subject) => (subject as PromiseFulfilledResult<SubjectAll>).value)
+      return notErrorSubjects;
+    } catch (error) {
+      console.log(error);
+      toast.error('Fetch môn học liên quan thất bại')
+      return []
+    }
     await delay(2000);
     return mockAllSubjects;
   }
@@ -122,11 +142,12 @@ export class SubjectAllAPI {
 export class RegisteredSubjectAPI {
   static async getSubjectById(subjectId: string): Promise<RegisteredSubject> {
     try {
-      let res = Fetcher.get<any, RegisteredSubject>('/subject/getRegisteredSubjectInfo', {
+      let res = await Fetcher.get<any, RegisteredSubject>('/subject/getRegisteredSubjectInfo', {
         params: {
           subjectId
         }
       });
+      // console.log(res)
       return res;
     } catch (error) {
       console.log(error);

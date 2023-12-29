@@ -31,18 +31,18 @@ export default function NavBar() {
 
     useEffect(() => {
         const handleScroll = () => {
-          if (window.scrollY > 0) {
-            setScroll(true);
-          } else {
-            setScroll(false);
-          }
+            if (window.scrollY > 0) {
+                setScroll(true);
+            } else {
+                setScroll(false);
+            }
         };
 
         window.addEventListener("scroll", handleScroll);
         return () => {
-          window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("scroll", handleScroll);
         };
-      }, []);
+    }, []);
 
     return (
         <div
@@ -54,7 +54,7 @@ export default function NavBar() {
             "
         >
             <div
-                className='bg-secondary h-full shadow min-w-fit'
+                className='bg-secondary h-full shadow min-w-fit flex flex-col gap-[30px]'
                 style={{
                     // borderTopRightRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
                     transition: 'border-radius 0.3s ease-in-out'
@@ -76,14 +76,7 @@ export default function NavBar() {
                         </Link>
                     }
                 </div>
-                <div
-                    className='mt-[30px] flex-1'
-                    // onMouseEnter={() => { if (!expand) setTimeout(() => setExpand(true), 500) }}
-                    // onMouseLeave={() => { setExpand(!clickToExpand) }}
-                >
-                    {/* <Menu mode='inline' items={NavsItems} expandIcon={null}></Menu> */}
-                    <NavMenu expand={expand} />
-                </div>
+                <NavMenu expand={expand} />
             </div>
         </div>
     )

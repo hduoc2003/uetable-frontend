@@ -45,6 +45,7 @@ export default function CalendarPage() {
     const eventsInput = useMemo<EventInput[]>(() => {
         if (isUndefined(events))
             return []
+        // console.log(events[0].timeStart.toLocaleString(), events[0].timeEnd.toLocaleString())
         return events?.map((event) => ({
             id: event.id,
             start: event.timeStart,
@@ -52,7 +53,7 @@ export default function CalendarPage() {
             title: event.name
         }))
     }, [events])
-    console.log(eventsInput)
+    // console.log(eventsInput)
     return (
         <Main title='Lịch làm việc'>
             <div className='flex flex-col'>
@@ -126,25 +127,25 @@ export default function CalendarPage() {
             'location': '',
             'info': ''
         };
-        mutateEvents((oldEvents): EventInfo[] => {
-            return [...oldEvents ?? [], newEvent]
-        }, {
-            revalidate: false
-        })
-        // EventAPI.createEvent(())
+        console.log('first')
         EventAPI.createEvent(newEvent)
-            .then(({ ok }) => {
-                if (!ok)
-                    toast.error('Cập nhật sự kiện thất bại')
+            .then(({ eventId }) => {
+                newEvent.id = eventId;
+                mutateEvents((oldEvents): EventInfo[] => {
+                    return [...oldEvents ?? [], newEvent]
+                }, {
+                    revalidate: false
+                })
             })
     }
 
     function getEventById(id: string): EventInfo | undefined {
+        // console.log({id});
+        // console.log({events})
         return _.find(events, (event) => event.id === id)
     }
 
     function updateEvent(newEvent: EventInfo) {
-        console.log(newEvent)
         mutateEvents(events?.map((event) => (event.id === newEvent.id ? newEvent : event)), {
             revalidate: false
         })
@@ -213,9 +214,9 @@ function EventContent({
     const [editting, setEditting] = useState<boolean>(__event?.justCreated ?? false);
     useEffect(() => setNewEvent(__event), [__event]);
 
+    // console.log(__event)
     if (isUndefined(newEvent) || isUndefined(__event))
         return <></>
-
     return (
         <>
             <div className='w-full h-full rounded-md pl-2' onClick={() => setEditting(true)}

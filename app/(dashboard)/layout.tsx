@@ -29,7 +29,7 @@ export default function DashboardLayout({
                     signedIn: true,
                     logging: false,
                     name: response.name,
-                    username: cookies.get('studentid'),
+                    studentId: cookies.get('studentid'),
                 }));
                 console.log(response)
                 // Fetcher.get('http://127.0.0.1:8000/api/schedule/autoCreateEventClass')
@@ -47,8 +47,6 @@ export default function DashboardLayout({
     useEffect(() => {
         handleLogin()
     }, [handleLogin]);
-
-    console.log(authState.logging)
 
     if (authState.logging)
         return (<></>)

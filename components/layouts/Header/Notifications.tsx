@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { IoEllipsisHorizontal } from "react-icons/io5";
+import { toast } from "react-toastify";
 import useSWR from "swr";
 
 const { Text, Paragraph, Title } = Typography;
@@ -70,10 +71,6 @@ function NotiList({
         }
         return []
     }, [filterOption, notiList])
-    if (notiList?.length === 0)
-        return (
-            <Text type='secondary' italic>Bạn không có thông báo nào</Text>
-        )
 
     return (
         <Space
@@ -86,9 +83,17 @@ function NotiList({
                     placement='bottomRight'
                     content={
                         <button
-                            onClick={() => {
+                            onClick={(e) => {
+                                e.preventDefault();
+                                NotiAPI.markAllAsRead()
+                                .then(({ok}) => {
+                                    if (!ok)
+                                        toast.error('Update thông báo thất bại')
+                                })
+                                .catch((err) => {
+                                    toast.error('Update thông báo thất bại')
+                                })
                                 setOpenOptions(false);
-                                NotiAPI.markAllAsRead();
                             }}
                         >
                             <Space className="rounded-lg p-2 hover:bg-gray-200">
@@ -114,34 +119,39 @@ function NotiList({
                 }))}
                 onChange={(option) => setFilterOption(option as FilterKey)}
             />
-            <List bordered={false}>
-                {
-                    filteredNoti?.map((noti) => {
-                        return (
-                            <List.Item key={noti.id}>
-                                <button
-                                    onClick={() => {
-                                        router.replace(noti.link);
-                                        if (!noti.seen)
-                                            NotiAPI.seenNoti(noti.id)
-                                    }}
-                                    className="text-start"
-                                >
-                                    <Space className="hover:bg-gray-200 rounded-lg p-2">
-                                        <Space align='start'>
-                                            <Avatar src={noti.reply.avatar} alt={noti.reply.name} size={50} />
-                                            <span >
-                                                <Text>{noti.content}</Text> <br />
-                                                <Text type='secondary' className="text-[0.85rem]">{shortTime(noti.createdAt)}</Text>
-                                            </span>
-                                        </Space>
-                                        <div className={`w-3 h-3 rounded-full bg-[#55CA36] ${noti.seen ? 'invisible' : 'visible'}`} />
-                                    </Space>
-                                </button>
-                            </List.Item>)
-                    })
-                }
-            </List>
+            {
+                notiList?.length === 0 ?
+                    <div className="mt-5"><Text type='secondary' italic>Bạn không có thông báo nào</Text></div>
+                    :
+                    <List bordered={false}>
+                        {
+                            filteredNoti?.map((noti) => {
+                                return (
+                                    <List.Item key={noti.id}>
+                                        <button
+                                            onClick={() => {
+                                                router.replace(noti.link);
+                                                if (!noti.seen)
+                                                    NotiAPI.seenNoti(noti.id, 'single')
+                                            }}
+                                            className="text-start"
+                                        >
+                                            <Space className="hover:bg-gray-200 rounded-lg p-2">
+                                                <Space align='start'>
+                                                    <Avatar src={noti.reply.avatar} alt={noti.reply.name} size={50} />
+                                                    <span >
+                                                        <Text>{noti.content}</Text> <br />
+                                                        <Text type='secondary' className="text-[0.85rem]">{shortTime(noti.createdAt)}</Text>
+                                                    </span>
+                                                </Space>
+                                                <div className={`w-3 h-3 rounded-full bg-[#55CA36] ${noti.seen ? 'invisible' : 'visible'}`} />
+                                            </Space>
+                                        </button>
+                                    </List.Item>)
+                            })
+                        }
+                    </List>
+            }
         </Space>
     )
 }

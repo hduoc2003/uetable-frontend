@@ -23,7 +23,7 @@ export default function Documents({
     subjectId
 }: Props) {
     // const { ref, rect: { width } } = useElementRect<HTMLDivElement>();
-    const {data: documents, isLoading} = useSWR([fetchKey, subjectId],
+    const { data: documents, isLoading } = useSWR([fetchKey, subjectId],
         ([_, subjectId]) => DocumentAPI.getTopDocumentsOfSubject(subjectId, 5)
     )
 
@@ -38,31 +38,36 @@ export default function Documents({
                 }
                 size='middle'
             />
-            <MultiCarousel width={'58vw'}>
-                {(documents ?? Array<null>(5).fill(null)).map((doc, i) => {
-                    return (
-                        <Preview
-                            key={doc?.id ?? i}
-                            imgHeight={130}
-                            imgSrc={"https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg"}
-                            url={""}
-                            title={doc?.name ?? ''}
-                            info={
-                                <Text type='secondary' strong>{`${doc?.download} lượt tải, ${doc?.like} lượt thích`}</Text>
-                            }
-                            loading={isLoading}
-                        />
-                    )
-                })}
-                {
-                    <Link href={''}>
-                        <MyButtonWrapper className="w-full rounded-xl border-2 h-[130px] flex items-center justify-center gap-3">
-                            <Text className="text-xl font-semibold">Xem thêm</Text>
-                            {/* <AngleRightIcon /> */}
-                        </MyButtonWrapper>
-                    </Link>
-                }
-            </MultiCarousel>
+            {
+                documents && documents.length > 0 ?
+                    <MultiCarousel width={'58vw'}>
+                        {(documents ?? Array<null>(5).fill(null)).map((doc, i) => {
+                            return (
+                                <Preview
+                                    key={doc?.id ?? i}
+                                    imgHeight={130}
+                                    // imgSrc={"https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg"}
+                                    url={""}
+                                    title={doc?.name ?? ''}
+                                    info={
+                                        <Text type='secondary' strong>{`${doc?.download} lượt tải, ${doc?.like} lượt thích`}</Text>
+                                    }
+                                    loading={isLoading}
+                                />
+                            )
+                        })}
+                        {
+                            <Link href={''}>
+                                <MyButtonWrapper className="w-full rounded-xl border-2 h-[130px] flex items-center justify-center gap-3">
+                                    <Text className="text-xl font-semibold">Xem thêm</Text>
+                                    {/* <AngleRightIcon /> */}
+                                </MyButtonWrapper>
+                            </Link>
+                        }
+                    </MultiCarousel>
+                    :
+                    <Text type="secondary" italic>Đang cập nhật tài liệu</Text>
+            }
         </Space>
     );
 }

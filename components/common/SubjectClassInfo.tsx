@@ -21,12 +21,14 @@ export interface SubjectClassInfoProps {
   subjectClass: SubjectClass
   editable?: boolean
   onColorChange?: ColorPickerProps['onChange']
+  onlyViewMode: boolean
 }
 
 export default function SubjectClassInfo({
   subjectClass,
   onColorChange,
-  editable = false
+  editable = false,
+  onlyViewMode
 }: SubjectClassInfoProps) {
 
   return (
@@ -34,7 +36,7 @@ export default function SubjectClassInfo({
       <Title
         editable={editable ? true : undefined}
         copyable={{
-          icon: [<CopyButton key={0}/>, <MyButtonWrapper key={1}><SuccessIcon/></MyButtonWrapper>],
+          icon: [<CopyButton key={0} />, <MyButtonWrapper key={1}><SuccessIcon /></MyButtonWrapper>],
           text: subjectClass.name,
           tooltips: ['Sao chép', subjectClass.name]
         }}
@@ -48,12 +50,12 @@ export default function SubjectClassInfo({
       </div> */}
       <Space direction="vertical" className="w-full px-4" size={'small'}>
         <InfoBlock
-          icon={<SubjectIdIcon/>}
+          icon={<SubjectIdIcon />}
           title='Mã lớp'
           content={
             <Text
               copyable={{
-                icon: [<CopyButton key={0}/>, <MyButtonWrapper key={1}><SuccessIcon/></MyButtonWrapper>],
+                icon: [<CopyButton key={0} />, <MyButtonWrapper key={1}><SuccessIcon /></MyButtonWrapper>],
                 text: subjectClass.code,
                 tooltips: ['Sao chép', subjectClass.code]
               }}
@@ -66,15 +68,15 @@ export default function SubjectClassInfo({
             </Text>
           }
         />
-        <InfoBlock icon={<SubjectGroupIcon/>} title='Nhóm' content={subjectClass.group} />
-        <InfoBlock icon={<SubjectTeacherNameIcon/>} title='Giảng viên' content={subjectClass.teacherName} />
+        <InfoBlock icon={<SubjectGroupIcon />} title='Nhóm' content={subjectClass.group} />
+        <InfoBlock icon={<SubjectTeacherNameIcon />} title='Giảng viên' content={subjectClass.teacherName} />
         <InfoBlock
-          icon={<SubjectPlaceIcon/>}
+          icon={<SubjectPlaceIcon />}
           title='Giảng đường'
           content={
             <Text
               copyable={{
-                icon: [<CopyButton key={0}/>,  <MyButtonWrapper key={1}><SuccessIcon/></MyButtonWrapper>],
+                icon: [<CopyButton key={0} />, <MyButtonWrapper key={1}><SuccessIcon /></MyButtonWrapper>],
                 text: subjectClass.place,
                 tooltips: ['Sao chép', subjectClass.place]
               }}
@@ -87,23 +89,25 @@ export default function SubjectClassInfo({
             </Text>
           }
         />
-        <InfoBlock icon={<SubjectTimeIcon/>} title='Thời gian' content={`${subjectClass.lessonStart + 6}h - ${subjectClass.lessonEnd + 7}h`} />
-        <InfoBlock icon={<SubjectNumberOfStudentsIcon/>} title='Sĩ số' content={subjectClass.numberOfStudents} />
-        <InfoBlock
-          icon={<SubjectColorIcon/>}
-          title='Đổi màu'
-          content={
-            <ColorPicker
-              value={subjectClass.highlightColor}
-              trigger="hover"
-              onChange={onColorChange}
-            />
-          }
-        />
+        <InfoBlock icon={<SubjectTimeIcon />} title='Thời gian' content={`${subjectClass.lessonStart + 6}h - ${subjectClass.lessonEnd + 7}h`} />
+        <InfoBlock icon={<SubjectNumberOfStudentsIcon />} title='Sĩ số' content={subjectClass.numberOfStudents} />
+        {!onlyViewMode &&
+          <InfoBlock
+            icon={<SubjectColorIcon />}
+            title='Đổi màu'
+            content={
+              <ColorPicker
+                value={subjectClass.highlightColor}
+                trigger="hover"
+                onChange={onColorChange}
+              />
+            }
+          />
+        }
       </Space>
       <Divider className="border-table-border m-0"></Divider>
       <Space className="px-4 pb-4 flex items-center">
-        {<SubjectDescriptionIcon/>}
+        {<SubjectDescriptionIcon />}
         <Text type="secondary" italic>{subjectClass.description || 'Không có mô tả'}</Text>
       </Space>
     </Space>

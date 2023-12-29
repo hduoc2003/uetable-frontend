@@ -5,10 +5,10 @@ import { MyButtonProps } from "./MyButtonProps";
 import MyButtonWrapper from "./MyButtonWrapper";
 export function SaveButton(props: MyButtonProps) {
     // let butClassName = `group border !border-green-400 text-green-400 px-3
-    //                     hover:!text-white hover:bg-green-400 hover:!border-green-400 font-bold
+    //                     hover:!text-white hover:bg-green-400 hover:!border-green-400
     //                     `;
-    let butClassName = `group text-white px-4 py-2 bg-blue-400
-        hover:bg-blue-500 font-bold hover:!text-white
+    let butClassName = `group text-white px-3 py-[6px] bg-primary
+        hover:bg-dark-primary font-semibold hover:!text-white
     `;
     butClassName = twMerge(butClassName, props.className)
     return (
