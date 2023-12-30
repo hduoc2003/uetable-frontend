@@ -56,6 +56,7 @@ export default function AllSubjectsPage() {
                     {/* </div> */}
                 </div>
                 <PreviewList<SubjectAll>
+                    key={sortBy + searchValue}
                     render={(subject) => {
                         return (
                             <SubjectPreview

@@ -44,22 +44,22 @@ export class SubjectAllAPI {
     to: number,
     searchValue: string
   ): Promise<SubjectAll[]> {
-    // console.log({from, to})
-    // try {
-    //     let res = await Fetcher.post<any, SubjectAll[]>('/subject/getPartSubject', {
-    //       sortBy,
-    //       from,
-    //       to,
-    //       searchValue
-    //     });
-    //     console.log(res)
-    //     return res;
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error('Fetch môn học thất bại')
-    //   throw error
-    // }
-    // console.log(sortBy)
+    console.log({from, to})
+    try {
+        let res = await Fetcher.post<any, SubjectAll[]>('/subject/getPartSubject', {
+          sortBy,
+          from,
+          to,
+          searchValue
+        });
+        console.log(res)
+        return res;
+    } catch (error) {
+      console.log(error);
+      toast.error('Fetch môn học thất bại')
+      throw error
+    }
+    console.log(sortBy)
     await delay(1000);
     // console.log(from, to)
     // console.log({from, to})

@@ -18,15 +18,17 @@ import _, { isUndefined } from "lodash";
 import { toast } from 'react-toastify';
 import { useSelector } from "react-redux";
 import { authSelector } from "@/redux/auth/authSelector";
+import DocumentImage from "@/components/common/DocumentImage";
 
 const { Text, Paragraph } = Typography;
 
 const fetchId = genId();
 interface Props {
   subjectId: string
+  subjectName: string
 }
 
-export default function Documents({ subjectId }: Props) {
+export default function Documents({ subjectId, subjectName }: Props) {
   const {studentId} = useSelector(authSelector)
   const { data: docGroups, isLoading, mutate } = useSWR([fetchId, subjectId, studentId], ([_, subjectId, studentId]) => {
     // console.log('refetch');
@@ -62,7 +64,13 @@ export default function Documents({ subjectId }: Props) {
   }, [docGroups, group, searchValue])
   return (
     <Space direction='vertical' className="w-full" size={'middle'}>
-      <Taskbar onSearch={handleSearch} onGroup={handleGroup} />
+      <Taskbar
+        onSearch={handleSearch}
+        onGroup={handleGroup}
+        subjectId={subjectId}
+        subjectName={subjectName}
+        categories={docGroups?.map((group) => group.category) ?? []}
+      />
       <Skeleton active round loading={isLoading}>
         {docGroups && docGroups.length > 0 ?
           <Collapse
@@ -157,17 +165,9 @@ function DocInfo({
   onDeleteDoc: (docId: string) => void,
   onShareDoc: (docId: string) => void
 }) {
-  const [imgSrc, setImgSrc] = useState(`/images/icons/${ext}.png`);
   return (
     <div className="flex gap-2 items-center w-full group/doc">
-      <Image
-        src={imgSrc}
-        alt={ext}
-        width={5000}
-        height={5000}
-        className="!w-[40px]"
-        onError={(e) => setImgSrc('/images/icons/documents.png')}
-      />
+      <DocumentImage ext={ext}/>
       <Link className=" flex-1 " href={link}>
         <Paragraph strong className="!mb-0 text-current text-xs">
           {ext} <br />
@@ -178,20 +178,6 @@ function DocInfo({
         <MyButtonWrapper className="opacity-0 group-hover/doc:opacity-100 transition-opacity duration-300">
           <EyeIcon solidOnHover size={20} />
         </MyButtonWrapper>
-        {/* <Tooltip title={shared ? 'Dừng chia sẻ' : 'Đánh dấu tệp là công khai'} trigger={['hover']}>
-          <MyButtonWrapper
-            displayChildrenWhenLoading={false}
-            onClick={async () => {
-              const { ok } = await DocumentAPI.toggleShare(id);
-              if (!ok)
-                toast.error(shared ? 'Huỷ chia sẻ thất bại' : 'Chia sẻ thất bại')
-              else
-                onShareDoc(id);
-            }}
-          >
-            <ShareIcon solidOnHover solid={shared} />
-          </MyButtonWrapper>
-        </Tooltip> */}
         <MyButtonWrapper
           className=" opacity-0 group-hover/doc:opacity-100 transition-opacity duration-300"
           displayChildrenWhenLoading={false}

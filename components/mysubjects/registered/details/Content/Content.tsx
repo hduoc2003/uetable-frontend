@@ -8,14 +8,16 @@ import Note from "./Note/Note";
 
 interface Props {
   subjectId: string
+  subjectName: string
 }
 
 export default function Content({
-  subjectId
+  subjectId,
+  subjectName
 }: Props) {
   return (
     <div className="pr-5">
-        <Documents subjectId={subjectId}/>
+        <Documents subjectId={subjectId} subjectName={subjectName}/>
         <Divider />
         <Note />
         <Divider />

@@ -1,18 +1,18 @@
 import { UploadFile } from "antd";
 
 export interface DocumentInfo {
-    id: any,
-    name: any,
+    id: number,
+    name: string,
     createdAt: Date,
-    like: any,
-    download: any,
-    category: any,
-    link: any,
-    userName: any,
-    subject: any,
-    subjectId: any,
-    studentId : any,
-    type: string,
+    like: number,
+    download: number,
+    category: string,
+    link: string,
+    userName: string,
+    // subject: any,
+    // subjectId: any,
+    studentId : string,
+    // type: string,
 }
 
 export interface DocumentClass {
@@ -27,9 +27,10 @@ export interface DocumentClass {
 }
 
 export interface UserUploadFile {
-    docGroup: string;
+    category: string;
     files: UploadFile<any>[];
-    description?: string;
+    // description?: string;
+    subjectId: string
 }
 
 export interface MySubjectDocument {
