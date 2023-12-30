@@ -18,12 +18,12 @@ export interface DocumentInfo {
 export interface DocumentClass {
     id: string,
     name: string,
-    author: string,
     like: string,
     comment: string,
     download: string,
-    subject: string,
-    image: string,
+    subjectName: string,
+    link: string,
+    createdAt: string,
 }
 
 export interface UserUploadFile {
