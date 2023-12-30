@@ -11,10 +11,11 @@ import { FaFilePdf } from "react-icons/fa";
 
 export default function DocumentsOfSubject() {
 
+    console.log("running");
+
     const [listfile, setList] = useState<DocumentInfo[]>([]);
     const [subject, setSubject] = useState("Giải Tích 2");
     const [status, setStatus] = useState("Normal");
-    const [view, setView] = useState("list");
     const router = useRouter();
     const months : string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -28,6 +29,7 @@ export default function DocumentsOfSubject() {
             }
         }).then((response) => {
             setSubject(response.name);
+            console.log(response);
         }).catch((error) => {
 
         })
@@ -37,6 +39,7 @@ export default function DocumentsOfSubject() {
             }
         })
         .then((response) => {
+            console.log(subjectId);
             console.log(response);
             setList((response.map(DocInfo => {
                 console.log(DocInfo);
@@ -48,7 +51,7 @@ export default function DocumentsOfSubject() {
                 return DocInfo;
             })));
         }).catch((error) => {
-
+            console.log(error);
         })
     }, [subjectId]);
 
