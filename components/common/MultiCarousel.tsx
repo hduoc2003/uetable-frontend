@@ -50,7 +50,7 @@ export default function MultiCarousel({
                 {
                     React.Children.map(children, (child) => {
                         return (
-                            <div className="mb-6" style={{marginRight: gap/2, marginLeft: gap/2}}>
+                            <div className="mb-10" style={{marginRight: gap/2, marginLeft: gap/2}}>
                                 {child}
                             </div>
                         )

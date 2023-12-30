@@ -21,7 +21,7 @@ const DecorBox = ({
     color = COLORS[randomInteger(COLORS.length - 1)]
   if (children)
     return (
-      <div className={twMerge("h-8 w-8 rounded-md flex items-center justify-center", className)} style={{ backgroundColor: color }}>
+      <div className={twMerge("min-h-8 min-w-8 rounded-md flex items-center justify-center text-center", className)} style={{ backgroundColor: color }}>
         <Text strong className='font-semibold text-xl'>{children}</Text>
       </div>
     )

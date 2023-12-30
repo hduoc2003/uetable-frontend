@@ -22,12 +22,12 @@ export default function RegisteredSubjectDetailsPage({
     }
 }: RegisteredSubjectDetailsPageProps) {
     const { data: subject, isLoading } = useSWR([fetchId, subjectId], ([_, subjectId]) => RegisteredSubjectAPI.getSubjectById(subjectId));
-    console.log(subject)
+    // console.log(subject)
     return (
         <Main title='Môn học của tôi'>
             <div className="flex">
                 <div className="w-3/4">
-                    <Content subjectId={subjectId} />
+                    <Content subjectId={subjectId} subjectName={subject?.name ?? ''}/>
                 </div>
                 <Divider type="vertical" className="h-auto" />
                 <SubjectInfo subject={subject} />
