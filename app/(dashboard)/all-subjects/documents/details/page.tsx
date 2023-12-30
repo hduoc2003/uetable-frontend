@@ -101,7 +101,7 @@ export default function Documentdetail() {
     // setLike(!isLike);
     // setDisLike(false);
     }
-    
+
 
     const searchParams = useSearchParams();
     const documentId = searchParams.get('documentId');
@@ -125,7 +125,7 @@ export default function Documentdetail() {
             })
             .catch(error => {
                 console.log('Lỗi khi gọi API:', error)
-            });      
+            });
             console.log(studentId);
 
             Fetcher.get('/users/' + studentId)
@@ -134,7 +134,7 @@ export default function Documentdetail() {
                 console.log(imageURL);
             }).catch((error) => {
                 console.log(error);
-            }); 
+            });
 
     }, [documentId, numoflike, imageURL, studentId, numoflike]);
 
@@ -150,7 +150,7 @@ export default function Documentdetail() {
     //         setIsliked(true);
     //     }).catch(error => {
     //         console.log(error);
-    //     }) 
+    //     })
     // };
 
     const handleDown = () => {
@@ -180,11 +180,11 @@ export default function Documentdetail() {
               setLike(false)
             //   setDisLike(false)
             }
-  
+
         }).catch((error) => {
-  
+
         });
-    }, [newStateLike]); 
+    }, [newStateLike]);
 
     const date = new Date(time);
     const now = Date.now();
@@ -214,7 +214,7 @@ export default function Documentdetail() {
     }
 
     return (<>
-        <Main title = "Document">
+        <Main title = "Tài liệu">
             <TitleWithBox title={filename} boxContent={typeDoc} size="ultra" />
             {/* <br />
             <div className = {`flex`}>
@@ -233,7 +233,7 @@ export default function Documentdetail() {
                         {author} <span style={{color: '#6F767E'}}> gửi vào lúc </span> { commentDate }
 
                         </Text>
-                        
+
                     </div>
                 {/* </div>
                     { commentDate }
@@ -278,7 +278,7 @@ export default function Documentdetail() {
                         <HeartIcon size={24}  solid={isLike} solidOnHover className="mr-2"/>
                         {likeCnt}
                     </button>
-                    <a href={link} download={filename}>
+                    <a href={link} download={filename} target="_blank">
                         <button className="button product__buy">
 
                             <span className="product__price">
@@ -286,10 +286,10 @@ export default function Documentdetail() {
                             </span>
                             <span className="product__inner">
                                 Download
-                                <span> 
+                                <span>
                                     <DownloadIcon size={24} className="ml-2"/>
                                 </span>
-                            </span> 
+                            </span>
                         </button>
                     </a>
                 </div>
@@ -336,7 +336,7 @@ export default function Documentdetail() {
                     // key={editingSubject.current?.id ?? ''}
                     reportInfo = {
                         {
-                        pageId: documentId, 
+                        pageId: documentId,
                         pageType: "D"
                         }
                     }

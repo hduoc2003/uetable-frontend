@@ -33,15 +33,16 @@ export default function DashboardLayout({
     children: React.ReactNode
 }) {
     const authState = useSelector(authSelector);
-    const [loading, setLoading] = useState(true);
-
+    const pathName = usePathname();
     const dispatch = useDispatch();
     const router = useRouter();
-    const handleLogin = useCallback(() => {
-        setLoading(true)
+    const handleLogin = useCallback((): void => {
+        if (isUndefined(cookies.get('studentid'))) {
+            router.replace('/');
+            return;
+        }
         Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'))
             .then((response) => {
-                setLoading(false)
                 dispatch(authActions.updateAuthState({
                     signedIn: true,
                     logging: false,
@@ -52,8 +53,6 @@ export default function DashboardLayout({
                 // .then((res) => console.log(res))
                 // .catch((err) => console.log(err))
             }).catch((error) => {
-                router.push('/');
-                setLoading(false)
                 dispatch(authActions.updateAuthState({
                     signedIn: false,
                     logging: false
@@ -61,6 +60,8 @@ export default function DashboardLayout({
                 cookies.remove('authToken', {
                     path: '/'
                 });
+                // if (!accessibleRoute(pathName))
+                router.push('/');
             });
     }, [dispatch, router])
 
@@ -68,19 +69,21 @@ export default function DashboardLayout({
         handleLogin()
     }, [handleLogin]);
 
-    const pathName = usePathname();
+    // const pathName = usePathname();
 
-    if (!accessibleRoute(pathName))
-        router.replace('/signin')
+    useEffect(() => {
+        if (!accessibleRoute(pathName))
+            router.replace('/signin')
+    }, [pathName, router])
 
-    if (authState.logging || loading)
+    if (authState.logging)
         return (<></>)
     return (
         <div className='flex'>
             <NavBar />
             <div className='flex-1'>
                 <Header />
-                {children}
+                {accessibleRoute(pathName) && children}
                 <Footer />
             </div>
         </div>

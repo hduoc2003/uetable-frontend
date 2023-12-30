@@ -1,12 +1,8 @@
 "use client";
-import React, { use, useEffect, useMemo, useState } from "react";
-import { FilePdfOutlined, FontColorsOutlined } from "@ant-design/icons";
-import { FaRegFileImage } from "react-icons/fa6";
+import React, { useMemo, useState } from "react";
 import Main from "@/components/layouts/Main";
-import Fetcher from "@/api/Fetcher";
-import { useSearchParams, useRouter } from "next/navigation";
+import { GoPlus } from "react-icons/go";
 import { DocumentInfo } from "@/types/document";
-import { FaFilePdf } from "react-icons/fa";
 import TitleWithBox from "@/components/common/TitleWithBox";
 import { PageProps } from "@/types/PageProps";
 import { ConfigProvider, Space, Table, Typography } from "antd";
@@ -18,7 +14,6 @@ import { ColumnType } from "antd/es/table";
 import { CellContent } from "@/components/mysubjects/SemesterInfoTable/SemesterInfoTable";
 import DocumentImage from "@/components/common/DocumentImage";
 import { getExtOfFile } from "@/utils/getExtOfFile";
-import { shortTime } from "@/types/time";
 import Link from "next/link";
 import { getURL } from "@/utils/navigation";
 import DecorBox from "@/components/common/DecorBox";
@@ -27,6 +22,9 @@ import ClickableText from "@/components/common/ClickableText";
 import SearchBar from "@/components/common/SearchBar/SearchBar";
 import { useDebouncedCallback } from "use-debounce";
 import search from "@/utils/search";
+import UserUpload from "@/components/common/UserUpload";
+import { isUndefined } from "lodash";
+import { FaPlus } from "react-icons/fa6";
 
 
 // export default function DocumentsOfSubject() {
@@ -194,7 +192,7 @@ export default function AllSubjectsDocumentsPage({
         subjectId
     }
 }: AllSubjectsDocumentsPageProps) {
-    const { data: docs, isLoading: loadingDocs } = useSWR([fetchKey, subjectId], ([_, subjectId]) => DocumentAPI.getAllDocumentsOfSubject(subjectId))
+    const { data: docs, isLoading: loadingDocs, mutate: mutateDocs } = useSWR([fetchKey, subjectId], ([_, subjectId]) => DocumentAPI.getAllDocumentsOfSubject(subjectId))
     const { data: subject, isLoading: loadingSubject } = useSWR([fetchKey2, subjectId], ([_, subjectId]) => SubjectAllAPI.getSubjectById(subjectId))
     const [searchValue, setSearchValue] = useState('')
 
@@ -219,13 +217,30 @@ export default function AllSubjectsDocumentsPage({
     return (
         <Main title='Tài liệu môn học'>
             <Space direction='vertical' className="w-full" size={'large'}>
-                <div className="flex gap-5">
+                <div className="flex gap-5 items-center sm:max-lg:flex-col sm:max-lg:items-start">
                     <TitleWithBox title={subject?.name} />
-                    <SearchBar
-                        placeholder="Tìm kiếm tài liệu"
-                        className="h-[40px]"
-                        onChange={(e) => handleSearch(e.target.value)}
-                    />
+                    <div className="flex-1">
+                        <SearchBar
+                            placeholder="Tìm kiếm tài liệu"
+                            className="h-[40px] w-[25vw]"
+                            onChange={(e) => handleSearch(e.target.value)}
+
+                        />
+                    </div>
+                    {
+                        !isUndefined(subject) && !isUndefined(docs) &&
+                        <UserUpload
+                            subjectId={subjectId}
+                            subjectName={subject.name}
+                            categories={docs.map((doc) => doc.category)}
+                            onEndUpload={() => mutateDocs()}
+                        >
+                            <div className="bg-primary hover:bg-dark-primary px-3 py-2 rounded-lg flex gap-2 items-center">
+                                <FaPlus className={'fill-secondary'} size={'1.1em'}/>
+                                <Text strong className="text-secondary text-fs-inherit">Tải lên</Text>
+                            </div>
+                        </UserUpload>
+                    }
                 </div>
                 <ConfigProvider
                     theme={{
@@ -277,8 +292,10 @@ function getNameCol(key: ColKey): ColumnType<DocumentInfo> {
                         documentId: file.id
                     })}>
                         <ClickableText>
-                            <Space className="pr-8 w-full">
-                                <DocumentImage ext={getExtOfFile(file.link).ext} />
+                            <Space className="pr-8 w-full max-w-[30vw]">
+                                <div className="w-[40px]">
+                                    <DocumentImage ext={getExtOfFile(file.link).ext} />
+                                </div>
                                 <p>
                                     <Text strong className="text-inherit">{getExtOfFile(file.link).ext.toLocaleUpperCase()}</Text> <br />
                                     <Text strong className="text-inherit">{file.name}</Text>

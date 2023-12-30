@@ -24,6 +24,12 @@ type StatKey = 'credit' | 'gpa' | 'personal' | 'subject';
 
 export type AllRouteKey = GroupKey | MenuKey | MySubjectsKey | ScheduleKey | StatKey;
 
+const allKeys: AllRouteKey[] = ['', 'schedule', 'mysubjects', 'all-subjects', 'statistic', 'links',
+    'subject-class', 'calendar', 'exam',
+    'semester', 'registered', 'curriculum',
+    'credit', 'gpa', 'personal', 'subject'
+]
+
 const _key = (key: AllRouteKey) => key;
 
 export default function NavMenu({
@@ -50,11 +56,11 @@ export default function NavMenu({
         //     }
         // }
         const n = pathKey.length;
-        if (n === 2 || n === 3) {
-            setselectedKey(pathKey[n - 1] as AllRouteKey)
-        }
-        else if (n > 3)
-            setselectedKey(pathKey[2] as AllRouteKey)
+        for (const key of pathKey.toReversed())
+            if (allKeys.includes(key as AllRouteKey)) {
+                setselectedKey(key as AllRouteKey)
+                break;
+            }
         if (n >= 3)
             setOpenKey((oldPathKey) => [...oldPathKey, pathKey[1] as AllRouteKey])
     }, [pathName, router])
@@ -94,7 +100,8 @@ export default function NavMenu({
                         else
                             router.replace('/signin')
                     }}
-                    defaultSelectedKeys={[selectedKey]}
+                    // defaultSelectedKeys={[selectedKey]}
+                    selectedKeys={[selectedKey]}
                     // defaultOpenKeys={openKey}
                     openKeys={openKey}
                 />

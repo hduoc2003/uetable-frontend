@@ -98,7 +98,7 @@ export default function Header() {
         <div className="flex-1">
           <SearchBar placeholder="Tìm kiếm học phần" className="w-[25vw]"/>
         </div>
-        <LanguaguesSelector />
+        {/* <LanguaguesSelector /> */}
         {
           authState.signedIn ?
             <div className="flex mr-5 items-center">

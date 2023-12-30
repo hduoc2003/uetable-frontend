@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CloseCircleFilled, CloseCircleTwoTone, EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import Fetcher from '@/api/Fetcher'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,6 +8,7 @@ import { authSelector } from '@/redux/auth/authSelector'
 import { authActions } from '@/redux/auth/authSlice'
 import { useRouter } from 'next/navigation'
 import { cookies } from '@/app/(dashboard)/layout'
+import { isUndefined } from 'lodash'
 
 interface SignInResponse {
   message: string,
@@ -53,6 +54,13 @@ export default function SignIn() {
     else
       setType("password");
   }
+
+  useEffect(() => {
+    if (!isUndefined(cookies.get('authToken'))) {
+      router.replace('/');
+      return;
+    }
+  }, [router])
 
   async function handleSignIn() {
     Fetcher.get<any, UserInfoResponse>('/users/' + inputValue)
@@ -102,6 +110,9 @@ export default function SignIn() {
     });
   }
 
+  // console.log(cookies.get('authToken'))
+  // if (!isUndefined(cookies.get('authToken')))
+  //   return <></>
 
   return (
     <main className="h-screen flex">
