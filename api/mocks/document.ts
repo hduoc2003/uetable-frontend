@@ -1,5 +1,37 @@
-import { DocumentClass, MySubectDocGroup } from "@/types/document";
+import { DocumentClass, DocumentInfo, MySubectDocGroup } from "@/types/document";
 import genId from "@/utils/genId";
+
+export const mockDocumentInfo : DocumentInfo[] = [
+  {
+    name : "a Đề thi HK1 2020-2021.pdf",
+    date : "2020-12-25",
+    type : "PDF"
+  },
+  {
+    name : "f Đề thi HK2 2020-2021.pdf",
+    date : "2020-12-25",
+    type : "PNG"
+  },
+  {
+    name : "e Đề thi HK1 2021-2022.pdf",
+    date : "2021-12-25",
+    type : "PDF"
+  },
+  {
+    name : "c Đề thi HK2 2021-2022.pdf",
+    date : "2021-12-25",
+    type : "PDF"
+  },
+  {
+    name : "d Đề thi HK1 2022-2023.pdf",
+    date : "2022-12-25",
+    type : "PNG"
+  },{
+    name : "b Đề thi HK1 2023-2024.pdf",
+    date : "2023-12-25",
+    type : "PDF"
+  }
+]
 
 export const mockDocumentClasses: DocumentClass[] = [
   {
