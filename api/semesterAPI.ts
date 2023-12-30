@@ -26,7 +26,6 @@ export class SemesterAPI {
                     sub.type = 'registered'
                 })
             })
-            console.log(data)
             data.semesterInfo.reverse();
             return data;
         } catch (error) {

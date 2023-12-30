@@ -5,8 +5,6 @@ import { Space } from "antd";
 import Editor from "@/components/common/Editor/Editor";
 import { useState } from "react";
 
-
-
 export default function Note() {
     const [content, setContent] = useState('')
     return (

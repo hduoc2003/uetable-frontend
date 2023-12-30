@@ -63,7 +63,10 @@ export default function SubjectInfo({
                             <Space>
                                 <Text strong>{showMore ? `Chi tiết` : 'Ẩn bớt'}</Text>
                                 <AngleDownIcon
-                                    className={`transform rotate-${showMore ? 0 : 180} transition-[rotate_300ms_ease_in_out] fill-current`}
+                                    className={
+                                        showMore ? 'transform rotate-0 transition-[rotate_300ms_ease_in_out] fill-current'
+                                        : 'transform rotate-180 transition-[rotate_300ms_ease_in_out] fill-current'
+                                    }
                                 />
                             </Space>
                         </MyButtonWrapper>

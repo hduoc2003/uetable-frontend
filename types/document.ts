@@ -24,6 +24,9 @@ export interface DocumentClass {
     download: string,
     subject: string,
     image: string,
+    createdAt: string
+    link: string
+    subjectName: string
 }
 
 export interface UserUploadFile {
@@ -38,6 +41,7 @@ export interface MySubjectDocument {
     link: string;
     name: string;
     ext: string;
+    createdAt: Date
 }
 
 export interface MySubectDocGroup {

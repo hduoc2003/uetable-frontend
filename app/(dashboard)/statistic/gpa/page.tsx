@@ -55,7 +55,7 @@ export default function ScoreColumn() {
 
   return (
     <Main title="Thống kê - Điểm số">
-      <div className="flex gap-5">
+      <div className="flex gap-5  items-center">
         <DecorBox />
         <YearFilter
           allYearInfo={allYearInfo}

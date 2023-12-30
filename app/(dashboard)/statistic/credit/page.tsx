@@ -16,7 +16,7 @@ interface Info {
   title: string,
 }
 
-const initInfo = 
+const initInfo =
 [
   {
     id: 0,
@@ -76,7 +76,7 @@ export default function CreditColumn() {
   return (
     <Main title="Thống kê - Tín chỉ">
       <div className='flex gap-10'>
-        <div className="flex gap-5">
+        <div className="flex gap-5 items-center">
           <DecorBox />
           <SemesterFilter
             allSemesterInfo={allSemesterInfo}
@@ -84,7 +84,7 @@ export default function CreditColumn() {
             selectedSemester={currentSemesterId}
           />
         </div>
-        <div className="flex gap-5">
+        <div className="flex gap-5  items-center">
           <DecorBox />
           <YearFilter
             allYearInfo={allYearInfo}

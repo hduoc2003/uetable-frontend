@@ -23,7 +23,8 @@ interface Props<DataType> {
         md?: number;
         lg?: number;
         xxl?: number;
-    }
+    },
+    howManyFetch?: number
 }
 
 export default function PreviewList<DataType>({
@@ -32,7 +33,8 @@ export default function PreviewList<DataType>({
     fetchMore,
     filter,
     dataPerFetch = 6,
-    cols
+    cols,
+    howManyFetch = 99999999
 }: Props<DataType>) {
     const _cols: (typeof cols) = _.mapValues({ ...{ xs: 1, md: 2, lg: 3, xxl: 4 }, ...cols }, (x) => 24 / x);
     const [data, setData] = useState<(DataType)[]>([])
@@ -45,12 +47,14 @@ export default function PreviewList<DataType>({
 
     useEffect(() => {
         if (!isUndefined(extraData)) {
+            if (--howManyFetch === 0)
+                setStopFetching(true)
             if (extraData.length > 0)
                 setData((data) =>  [...data, ...extraData])
             else
                 setStopFetching(true);
         }
-    }, [extraData])
+    }, [extraData, howManyFetch])
 
     return (
             <InfiniteScroll

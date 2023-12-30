@@ -7,7 +7,7 @@ import { FaDownload } from "react-icons/fa6";
 import { MyButtonProps } from "./MyButtonProps";
 import MyButtonWrapper from "./MyButtonWrapper";
 
-export default function Download(props: MyButtonProps) {
+export default function DownloadButton(props: MyButtonProps) {
   return (
     <MyButtonWrapper {...props}>
       <FaDownload size={'1.5em'} color={THEME.PRIMARY_COLOR}></FaDownload>

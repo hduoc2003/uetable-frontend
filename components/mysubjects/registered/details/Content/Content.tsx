@@ -21,7 +21,7 @@ export default function Content({
         <Divider />
         <Note />
         <Divider />
-        <TitleWithBox title='Mục tiêu'/>
+        {/* <TitleWithBox title='Mục tiêu'/> */}
     </div>
   );
 }

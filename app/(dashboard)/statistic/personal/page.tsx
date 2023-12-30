@@ -4,6 +4,9 @@ import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 import DecorBox from '@/components/common/DecorBox';
 import Fetcher from '@/api/Fetcher';
 import Main from '@/components/layouts/Main';
+import TitleWithBox from '@/components/common/TitleWithBox';
+import { Skeleton, Space } from 'antd';
+import { isUndefined } from 'lodash';
 
 interface stat {
   title: string,
@@ -27,45 +30,46 @@ export default function PersonalColumn() {
   }, [])
   return (
     <Main title="Thống kê - Cá nhân">
-      <div className='flex gap-5'>
-        <DecorBox />
-        <span className="font-semibold text-2xl">Tổng GPA qua từng học kỳ</span>
-      </div>
-      <LineChart
-        width={1100}
-        height={250}
-        data={data}
-        syncId="anyId"
-        margin={{
-          top: 40,
-          left: 20,
-        }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="title" />
-        <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey="totalGPA4" name="GPA" stroke="#8884d8" fill="#8884d8" />
-      </LineChart>
+      <Space direction='vertical' size={'large'} className='w-full'>
+        <TitleWithBox title='Tổng GPA qua từng học kỳ' />
+        <Skeleton round active loading={isUndefined(data)}  className='w-full'>
+          <LineChart
+            width={1100}
+            height={250}
+            data={data}
+            syncId="anyId"
+            margin={{
+              top: 40,
+              left: 20,
+            }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="title" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="totalGPA4" name="GPA" stroke="#8884d8" fill="#8884d8" />
+          </LineChart>
+        </Skeleton>
 
-      <div className='flex gap-5'>
-        <DecorBox />
-        <span className="font-semibold text-2xl">Tín chỉ đăng ký từng học kỳ</span>
-      </div>
-      <LineChart
-        width={1100}
-        height={250}
-        data={data}
-        syncId="anyId"
-        margin={{
-          top: 40,
-          left: 20,
-        }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="title" />
-        <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey="credits" name="Tín chỉ" stroke="#82ca9d" fill="#82ca9d" />
-      </LineChart>
+
+        <TitleWithBox title='Tín chỉ đăng ký từng học kỳ' />
+        <Skeleton round active loading={isUndefined(data)} className='w-full'>
+          <LineChart
+            width={1100}
+            height={250}
+            data={data}
+            syncId="anyId"
+            margin={{
+              top: 40,
+              left: 20,
+            }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="title" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="credits" name="Tín chỉ" stroke="#82ca9d" fill="#82ca9d" />
+          </LineChart>
+        </Skeleton>
+      </Space>
     </Main>
   )
 };

@@ -9,6 +9,7 @@ interface Props {
     size?: 'small' | 'middle' | 'large';
     boxContent?: React.ReactNode;
     className?: string
+    boxClassName?: string
 }
 
 export default function TitleWithBox({
@@ -17,12 +18,13 @@ export default function TitleWithBox({
     titleClassName,
     size = 'large',
     boxContent,
-    className
+    className,
+    boxClassName
 }: Props) {
     const textSize = (size === 'large' ? 'text-2xl' : (size === 'middle' ? 'text-xl' : 'text-lg'))
     return (
         <div className={twMerge("flex gap-4 items-center", className)}>
-            <DecorBox color={color}>
+            <DecorBox color={color} className={boxClassName}>
                 {boxContent}
             </DecorBox>
             <span className={twMerge(`font-semibold ${textSize}`, titleClassName)}>{title}</span>

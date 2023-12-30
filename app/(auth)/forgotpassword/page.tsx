@@ -43,6 +43,7 @@ export default function ForgotPassword() {
             const expiresDate = new Date(Date.now() + 60000);
             cookies.set('forgotpassword', true, {
                 expires: expiresDate,
+                path: '/'
             })
         }).catch((error) => {
             console.log(error.response.data.error);

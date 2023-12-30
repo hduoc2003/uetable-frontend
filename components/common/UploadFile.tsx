@@ -12,7 +12,7 @@ const defaultProps: UploadProps = {
     accept: process.env.ACCEPTABLE_FILE_EXTENSION,
     name: "file",
     multiple: true,
-    action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+    action: `${process.env.API_URL}/document/dumpUpload`,
     onChange(info) {
         const { status } = info.file;
         if (status !== "uploading") {
@@ -46,7 +46,8 @@ export default function UploadFileArea(props: UploadProps) {
                 <Paragraph type='secondary' className='text-left'>
                     <Text strong type='danger'>* </Text>Lưu ý: <br/>
                     - Dung lượng tệp không vượt quá <strong>{process.env.ACCEPTABLE_FILE_SIZE}MB</strong>. <br />
-                    - Đuôi mở rộng được chấp nhận: <strong>{process.env.ACCEPTABLE_FILE_EXTENSION}</strong>.
+                    - Đuôi mở rộng được chấp nhận: <strong>{process.env.ACCEPTABLE_FILE_EXTENSION}</strong>. <br/>
+                    - Tài liệu của bạn sẽ được công khai với mọi người
                 </Paragraph>
             </div>
         </Dragger>

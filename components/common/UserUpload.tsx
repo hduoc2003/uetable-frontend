@@ -18,7 +18,8 @@ import strNormalize from "@/utils/strNormalize";
 interface UserUploadProps {
     subjectId: string,
     subjectName: string,
-    categories: string[]
+    categories: string[],
+    onEndUpload?: () => void
 }
 const { Text } = Typography;
 
@@ -27,7 +28,8 @@ const formItemName = (key: keyof UserUploadFile) => key;
 export default function UserUpload({
     subjectId,
     subjectName,
-    categories
+    categories,
+    onEndUpload
 }: UserUploadProps) {
     const [uploading, setUploading] = useState(false);
     return (
@@ -44,6 +46,7 @@ export default function UserUpload({
                 subjectId={subjectId}
                 subjectName={subjectName}
                 categories={categories}
+                onEndUpload={onEndUpload}
             />
         </>
     );
@@ -54,7 +57,8 @@ function UploadArea({
     uploading,
     onCancel,
     subjectName,
-    categories
+    categories,
+    onEndUpload
 }: {
     uploading: boolean;
     onCancel: () => void
@@ -70,7 +74,7 @@ function UploadArea({
             closeIcon={null}
         >
             <Divider />
-            <FormUpload onCancel={onCancel} subjectId={subjectId} subjectName={subjectName} categories={categories}/>
+            <FormUpload onCancel={onCancel} subjectId={subjectId} subjectName={subjectName} categories={categories} onEndUpload={onEndUpload}/>
         </Modal>
     )
 
@@ -80,7 +84,8 @@ function FormUpload({
     onCancel,
     subjectId,
     subjectName,
-    categories
+    categories,
+    onEndUpload
 }: {
     onCancel: () => void
 } & UserUploadProps) {
@@ -166,7 +171,7 @@ function FormUpload({
                     </Input.TextArea>
                 </Form.Item> */}
                 <Form.Item wrapperCol={{ offset: 4 }}>
-                    <SaveButton onClick={async () => { form.submit(); await delay(1000); }} >
+                    <SaveButton onClick={async () => { form.submit(); await delay(1500); }} >
                         Lưu lại
                     </SaveButton>
                 </Form.Item>
@@ -181,5 +186,7 @@ function FormUpload({
         data.category = category.current
         console.log(data)
         await DocumentAPI.userUploadFiles(data);
+        onEndUpload?.();
+        onCancel();
     }
 }

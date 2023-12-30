@@ -1,5 +1,5 @@
 'use client'
-import { MySubjectsPageProps } from '@/app/(dashboard)/mysubjects/page'
+import { RegisteredSubjectDetailsPageProps } from '@/app/(dashboard)/mysubjects/registered/details/page'
 import ExclamationIcon from '@/components/common/(Icons)/ExclamationIcon'
 import OpenNewTabButton from '@/components/common/(MyButton)/OpenNewTabButton'
 import { SaveButton } from '@/components/common/(MyButton)/SaveButton'
@@ -59,7 +59,7 @@ export default function SubjectInfo({
                         </Space>
                     </Title>
                     {subjectInfo?.code &&
-                        <OpenNewTabButton<MySubjectsPageProps['searchParams']>
+                        <OpenNewTabButton<RegisteredSubjectDetailsPageProps['searchParams']>
                             content={subjectInfo?.code}
                             url='/mysubjects/registered/details'
                             searchParams={{ 'subjectId': subjectInfo?.id ?? 'vcl' }}

@@ -7,7 +7,7 @@ export default function search<Data extends object>(
     keys: (keyof Data)[]
 ): Data[] {
     if (value === '')
-        return data;
+        return [...data];
     value = strNormalize(value);
     return data.filter((datum) => {
         const concat: string = _.join(_.at(datum, keys))

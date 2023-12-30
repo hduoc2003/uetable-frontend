@@ -8,12 +8,13 @@ import { NAVBAR_STYLE } from '@/styles/navBar';
 import { ConfigProvider, Menu } from 'antd'
 import { ItemType, MenuItemGroupType, MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
 import Image from 'next/image';
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import NavCurve from '../../../public/images/curve-nav.svg'
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import LinkIcon from '@/components/common/(Icons)/NavIcons/LinkIcon';
-import { useRouter } from 'next/navigation';
-import _ from 'lodash';
+import { usePathname, useRouter } from 'next/navigation';
+import _, { isUndefined } from 'lodash';
+import { accessibleRoute, cookies } from '@/app/(dashboard)/layout';
 
 type GroupKey = 'general' | 'explore';
 type MenuKey = '' | 'schedule' | 'mysubjects' | 'all-subjects' | 'statistic' | 'links';
@@ -21,19 +22,44 @@ type ScheduleKey = 'subject-class' | 'calendar' | 'exam';
 type MySubjectsKey = 'semester' | 'registered' | 'curriculum';
 type StatKey = 'credit' | 'gpa' | 'personal' | 'subject';
 
-type AllKey = GroupKey | MenuKey | MySubjectsKey | ScheduleKey | StatKey;
+export type AllRouteKey = GroupKey | MenuKey | MySubjectsKey | ScheduleKey | StatKey;
 
-const _key = (key: AllKey) => key;
+const _key = (key: AllRouteKey) => key;
 
 export default function NavMenu({
     expand
 }: {
     expand: boolean
 }) {
+    const pathName = usePathname();
     const router = useRouter();
-    const [selectedKey, setselectedKey] = useState<AllKey>();
+    const [selectedKey, setselectedKey] = useState<AllRouteKey>('');
+    const [openKey, setOpenKey] = useState<AllRouteKey[]>([])
     const menuItems = useMemo(() => getMenuItems(selectedKey, expand), [selectedKey, expand]);
-    const [r] = useAutoAnimate();
+    useEffect(() => {
+        const pathKey = pathName.split('/');
+        // console.log(cookies.get('authToken'))
+        // if (isUndefined(cookies.get('authToken'))) {
+        //     let check: boolean = false
+        //     for (const subKey of pathKey)
+        //         check = check || publicRoutes.includes(subKey as AllKey)
+        //     console.log(pathKey, check)
+        //     if (!check) {
+        //         router.replace('/signin')
+        //         return;
+        //     }
+        // }
+        const n = pathKey.length;
+        if (n === 2 || n === 3) {
+            setselectedKey(pathKey[n - 1] as AllRouteKey)
+        }
+        else if (n > 3)
+            setselectedKey(pathKey[2] as AllRouteKey)
+        if (n >= 3)
+            setOpenKey((oldPathKey) => [...oldPathKey, pathKey[1] as AllRouteKey])
+    }, [pathName, router])
+    // console.log(openKey)
+    // console.log(selectedKey)
     return (
         <ConfigProvider
             theme={{
@@ -50,13 +76,27 @@ export default function NavMenu({
             <div className='overflow-y-auto no-scrollbar'>
                 <Menu
                     mode='inline'
-                    onSelect={(info) => setselectedKey(info.key as AllKey)}
+                    onSelect={(info) => {
+                        // console.log(info)
+                        setselectedKey(info.key as AllRouteKey)
+                    }}
+                    onOpenChange={(info) => {
+                        // console.log(info)
+                        setOpenKey(info as AllRouteKey[])
+                    }}
                     items={menuItems}
                     {...(expand ? {} : { expandIcon: null })}
                     onClick={(e) => {
                         // console.log(e.keyPath)
-                        router.push('/' + _.join(_.reverse(e.keyPath), '/'))
+                        const pathName = '/' + _.join(_.reverse(e.keyPath), '/')
+                        if (accessibleRoute(pathName))
+                            router.replace(pathName)
+                        else
+                            router.replace('/signin')
                     }}
+                    defaultSelectedKeys={[selectedKey]}
+                    // defaultOpenKeys={openKey}
+                    openKeys={openKey}
                 />
             </div>
         </ConfigProvider>
@@ -101,7 +141,7 @@ const iconClassName = (selected: boolean) => {
     return 'group-hover:fill-nav-highlight ' + (selected ? 'fill-nav-highlight' : '');
 }
 
-const labels: Record<AllKey, string> = {
+const labels: Record<AllRouteKey, string> = {
     'general': 'Chung',
     '': 'Trang chủ',
     'schedule': 'Thời khoá biểu',
@@ -124,10 +164,10 @@ const labels: Record<AllKey, string> = {
 
 
 function getMenuItems(
-    selectedKey: AllKey | undefined,
+    selectedKey: AllRouteKey | undefined,
     expand: boolean
 ): ItemType[] {
-    function getLabel(key: AllKey): string {
+    function getLabel(key: AllRouteKey): string {
         return expand ? labels[key] : '';
     }
 
@@ -138,13 +178,13 @@ function getMenuItems(
                 [
                     getNormalMenuItem('subject-class', selectedKey, getLabel('subject-class'), true),
                     getNormalMenuItem('calendar', selectedKey, getLabel('calendar'), true),
-                    getNormalMenuItem('exam', selectedKey, getLabel('exam'), true)
+                    // getNormalMenuItem('exam', selectedKey, getLabel('exam'), true)
                 ]),
             getSubMenuItem('mysubjects', getLabel('mysubjects'), MySubjectIcon,
                 [
                     getNormalMenuItem('semester', selectedKey, getLabel('semester'), true),
                     getNormalMenuItem('registered', selectedKey, getLabel('registered'), true),
-                    getNormalMenuItem('curriculum', selectedKey, getLabel('curriculum'), true)
+                    // getNormalMenuItem('curriculum', selectedKey, getLabel('curriculum'), true)
                 ]),
             getNormalMenuItem('all-subjects', selectedKey, getLabel('all-subjects'), false, AllSubjectsIcon)
         ]),
@@ -161,8 +201,8 @@ function getMenuItems(
 }
 
 function getNormalMenuItem(
-    key: AllKey,
-    selectedKey: AllKey | undefined,
+    key: AllRouteKey,
+    selectedKey: AllRouteKey | undefined,
     label: string,
     inSubmenu: boolean,
     Icon?: (props: IconProps) => React.JSX.Element,
@@ -186,7 +226,7 @@ function getNormalMenuItem(
 }
 
 function getSubMenuItem(
-    key: AllKey,
+    key: AllRouteKey,
     label: React.ReactNode,
     Icon: (props: IconProps) => React.JSX.Element,
     children: MenuItemType[]
@@ -225,7 +265,7 @@ function getSubMenuItem(
 }
 
 function getGroupMenuItem(
-    key: AllKey,
+    key: AllRouteKey,
     label: string,
     children: ItemType[]
 ): MenuItemGroupType {

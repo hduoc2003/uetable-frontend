@@ -19,6 +19,10 @@ import { toast } from 'react-toastify';
 import { useSelector } from "react-redux";
 import { authSelector } from "@/redux/auth/authSelector";
 import DocumentImage from "@/components/common/DocumentImage";
+import { shortTime } from "@/types/time";
+import { getURL, openNewTab } from "@/utils/navigation";
+import DownloadButton from "@/components/common/(MyButton)/Download";
+import { useRouter } from "next/navigation";
 
 const { Text, Paragraph } = Typography;
 
@@ -70,6 +74,7 @@ export default function Documents({ subjectId, subjectName }: Props) {
         subjectId={subjectId}
         subjectName={subjectName}
         categories={docGroups?.map((group) => group.category) ?? []}
+        onEndUpload={() => mutate()}
       />
       <Skeleton active round loading={isLoading}>
         {docGroups && docGroups.length > 0 ?
@@ -158,24 +163,31 @@ function DocList({
 }
 
 function DocInfo({
-  info: { ext, name, id, link },
+  info: { ext, name, id, link, createdAt },
   onDeleteDoc, onShareDoc
 }: {
   info: MySubjectDocument,
   onDeleteDoc: (docId: string) => void,
   onShareDoc: (docId: string) => void
 }) {
+  // const router = useRouter();
   return (
     <div className="flex gap-2 items-center w-full group/doc">
       <DocumentImage ext={ext}/>
-      <Link className=" flex-1 " href={link}>
+      <Link className=" flex-1 " href={getURL('/all-subjects/documents/details', {
+        documentId: id
+      })}>
         <Paragraph strong className="!mb-0 text-current text-xs">
           {ext} <br />
           {name}
         </Paragraph>
       </Link>
-      <div className="flex gap-2">
-        <MyButtonWrapper className="opacity-0 group-hover/doc:opacity-100 transition-opacity duration-300">
+      <div className="flex gap-2 items-center">
+          <DownloadButton
+            className="opacity-0 group-hover/doc:opacity-100 transition-opacity duration-300"
+            onClick={() => openNewTab(link)}
+          />
+        {/* <MyButtonWrapper className="opacity-0 group-hover/doc:opacity-100 transition-opacity duration-300">
           <EyeIcon solidOnHover size={20} />
         </MyButtonWrapper>
         <MyButtonWrapper
@@ -191,7 +203,8 @@ function DocInfo({
           }}
         >
           <BinIcon solidOnHover />
-        </MyButtonWrapper>
+        </MyButtonWrapper> */}
+        <Text type='secondary' strong >{shortTime(createdAt)}</Text>
       </div>
     </div>
   )

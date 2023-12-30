@@ -64,7 +64,7 @@ export default function SubjectPreview(props: Props) {
     function handleStar() {
         setStared(!stared);
         onStar?.(!stared)
-        if (!isUndefined(subject?.code))
-            SubjectAllAPI.starSubject(subject?.code, !stared)
+        if (!isUndefined(subject?.id))
+            SubjectAllAPI.starSubject(subject.id, !stared)
     }
 }

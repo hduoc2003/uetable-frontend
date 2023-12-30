@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { scheduleDataSelector, scheduleSelector } from "@/redux/schedule/scheduleSelector";
 import { scheduleActions } from '@/redux/schedule/scheduleSlice';
 import ScheduleSetting from './ScheduleSetting';
-import Download from '../(MyButton)/Download';
+import DownloadButton from '../(MyButton)/Download';
 import { THEME } from '@/styles/theme';
 import DangerButton from '../(MyButton)/DangerButton';
 import { ScheduleInfo, Weekdays } from '@/types/schedule';
@@ -22,6 +22,7 @@ import { delay } from '@/utils/delay';
 import useSWR from 'swr';
 import { ScheduleAPI } from '@/api/scheduleAPI';
 import { semesterActions } from '@/redux/semester/semesterSlice';
+import { EventAPI } from '@/api/eventAPI';
 
 const numberOfLessons = 12;
 
@@ -139,7 +140,7 @@ export default function Schedule({
                     <TitleWithBox title='Thời khoá biểu' className='flex-1' />
                     {editing &&
                         <>
-                            <DangerButton
+                            {/* <DangerButton
                                 onClick={async () => {
                                     await delay(500);
                                     dispatch(scheduleActions.discardChanges())
@@ -164,12 +165,12 @@ export default function Schedule({
                                 }}
                             >
                                 Lưu lại
-                            </SaveButton>
+                            </SaveButton> */}
                         </>
                     }
 
-                    <Download onClick={handleDownload}></Download>
-                    <ScheduleSetting />
+                    <DownloadButton onClick={handleDownload}></DownloadButton>
+                    {/* <ScheduleSetting /> */}
                 </div>
             }
             <Table
@@ -267,6 +268,10 @@ export default function Schedule({
                                                             highlightColor: color
                                                         }
                                                     }))
+                                                    // EventAPI.updateEvent({
+                                                    //     id: subject.eventId,
+                                                    //     color
+                                                    // })
                                                 }}
                                                 className='flex-1'
                                             />

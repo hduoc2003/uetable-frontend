@@ -145,7 +145,7 @@ export default function Comment({
 
     return (
         <div className="flex flex-col">
-            <TitleWithBox title={'Bình luận'} boxContent={cnt} size="middle" />
+            <TitleWithBox title={'Bình luận'} boxContent={cnt} size="middle" boxClassName="px-2"/>
             {/* <button onClick={() => setNew(4)}>Click me</button> */}
             <div style={{ marginTop: '40px', padding: '4px' }} >
                 {/* <Editor />  */}
@@ -196,7 +196,7 @@ export default function Comment({
                         </div>
                     )
                 }
-                
+
             </div>
         </div>
     )

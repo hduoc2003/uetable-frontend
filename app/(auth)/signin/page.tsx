@@ -82,15 +82,19 @@ export default function SignIn() {
       expiresDate.setDate(expiresDate.getDate() + 999999);
       cookies.set('authToken', response.authToken, {
         expires: expiresDate,
+        path: '/'
       });
       cookies.set('studentid', inputValue, {
         expires: expiresDate,
+        path: '/'
       });
       cookies.set('password', inputPasswordValue, {
         expires: expiresDate,
+        path: '/'
       });
       cookies.set('role', response.role, {
         expires: expiresDate,
+        path: '/'
       });
       handleSignIn();
     }).catch((error) => {
@@ -141,6 +145,7 @@ export default function SignIn() {
                   type={type}
                   className={`w-full border rounded-lg text-black caret-black p-4 m-2 ${inputPasswordFocused && inputPasswordValue === '' ? 'border-red-500' : ''}`}
                   placeholder="Nhập mật khẩu">
+
                 </input>
                 {inputPasswordFocused && inputPasswordValue === '' && (
                   <p className="text-red-500 ml-2 text-sm">Vui lòng nhập mật khẩu</p>

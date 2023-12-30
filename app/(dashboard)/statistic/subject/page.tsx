@@ -2,9 +2,13 @@
 import Fetcher from '@/api/Fetcher';
 import SearchIcon from '@/components/common/(Icons)/SearchIcon';
 import SearchBar from '@/components/common/SearchBar/SearchBar';
+import TitleWithBox from '@/components/common/TitleWithBox';
 import Main from '@/components/layouts/Main';
+import { Empty, Typography } from 'antd';
 import React, { useState } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+const { Text } = Typography;
 
 interface Subject {
     "Id": string,
@@ -128,9 +132,12 @@ export default function SubjectColumn() {
     }
 
     return (
-        <Main title="Thống kê - Tìm kiếm môn học">
+        <Main title="Thống kê - Điểm môn học">
             <div className='flex-col gap-5'>
-                <SearchBar placeholder='Tìm kiếm môn học' onChange={handleSearchChange} value={subjectName} />
+                <div className='flex gap-5'>
+                    <TitleWithBox title='GPA' />
+                    <SearchBar placeholder='Tìm kiếm môn học' onChange={handleSearchChange} value={subjectName} className='h-[40px]' />
+                </div>
                 {subjectName.length > 0 && searchResultList.length > 0 && (
                     <div className='absolute rounded-2xl border w-[400px] flex-col pt-4 pb-2 mt-1 z-[2] bg-white'>
                         {searchResultList.map((subject, index) => {
@@ -148,27 +155,39 @@ export default function SubjectColumn() {
                     </div>
                 )}
             </div>
-            {selectedSubjectName != "" &&
-                <BarChart
-                    width={1000}
-                    height={500}
-                    data={data}
-                    className='z-1'
-                    margin={{
-                        top: 40,
-                        left: 20
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="type" fontWeight={'bold'} />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend content={renderLegend} />
-                    <Bar dataKey="value" name='Sinh viên' fill="#8884d8" activeBar={{ fill: "#6863db" }} />
-                </BarChart>
+            {
+                selectedSubjectName !== '' ?
+                    <div className='flex gap-5 sm:max-xl:flex-col'>
+                        <BarChart
+                            width={1000}
+                            height={500}
+                            data={data}
+                            className='z-1'
+                            margin={{
+                                top: 40,
+                                left: 20
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="type" fontWeight={'bold'} />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend content={renderLegend} />
+                            <Bar dataKey="value" name='Sinh viên' fill="#8884d8" activeBar={{ fill: "#6863db" }} />
+                        </BarChart>
+                        <p className='mt-8 sm:max-xl:ml-[60px] sm:max-xl:mt-[10px]'>
+                            {gpa4 != -1 && <Text strong>GPA trung bình hệ 4: {gpa4}</Text>}
+                            <br />
+                            {gpa10 != -1 && <Text strong>GPA trung bình hệ 10: {gpa10}</Text>}
+                        </p>
+                    </div>
+                    :
+                    <div className='w-full h-[70vh] flex items-center justify-center flex-col'>
+                        <Empty description=''/>
+                        <Text italic type='secondary' strong className='text-lg'>Tìm kiếm môn học để xem thống kê</Text>
+                    </div>
             }
-            {gpa4 != -1 && <h1>GPA trung bình hệ 4: {gpa4}</h1>}
-            {gpa10 != -1 && <h1>GPA trung bình hệ 10: {gpa10}</h1>}
+
         </Main>
     );
 };

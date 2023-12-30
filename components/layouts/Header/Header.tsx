@@ -32,6 +32,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [scroll, setScroll] = useState(false)
+  const [openAvt, setOpenAvt] = useState(false)
 
   const handleOnSearch = (): void => {
   }
@@ -61,7 +62,9 @@ export default function Header() {
   // console.log(value)
 
   const handleSignOut = () => {
-    cookies.remove('authToken');
+    cookies.remove('authToken', {
+      path: '/'
+    });
     dispatch(authActions.updateAuthState({
       signedIn: false,
       logging: false,
@@ -72,6 +75,7 @@ export default function Header() {
   }
 
   const handleProfile = () => {
+    setOpenAvt(false)
     router.push('/profile?studentid=' + cookies.get('studentid'));
   }
 
@@ -103,7 +107,15 @@ export default function Header() {
                 onMouseLeave={() => setAvtStrokeColor(THEME.PRIMARY_COLOR)}
               >
                 <div className="relative flex">
-                  <Popover content={contentt(handleProfile, handleSignOut, cookies.get('role'))} trigger="click" arrow={true} placement="bottom" className="bg-white">
+                  <Popover
+                    content={contentt(handleProfile, handleSignOut, cookies.get('role'))}
+                    trigger="click"
+                    arrow={false}
+                    placement='bottomLeft'
+                    open={openAvt}
+                    onOpenChange={(vis) => setOpenAvt(vis)}
+                    // className="bg-white"
+                  >
                     <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={authState.avtLink} size={40}></Avatar>
                     <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" strokeWidth="2" style={{ stroke: avtStrokeColor }}></circle></svg>
                   </Popover>

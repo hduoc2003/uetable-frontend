@@ -12,6 +12,7 @@
     "@ant-design/icons": "^5.2.6",
     "@ant-design/plots": "^2.1.1",
     "@antv/g2plot": "^2.4.31",
+    "@dhaiwat10/react-link-preview": "^1.15.0",
     "@formkit/auto-animate": "^0.8.0",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",

@@ -63,11 +63,11 @@ export class EventAPI {
         }
     }
 
-    static async updateEvent(eventInfo: EventInfo): Promise<OkResponse> {
+    static async updateEvent(eventInfo: Partial<EventInfo>): Promise<OkResponse> {
         try {
             // console.log(eventInfo.timeStart.toLocaleString())
             console.log(eventInfo)
-            await Fetcher.put<any, any, EventInfo>(`/event/updateEventById/${eventInfo.id}`, eventInfo)
+            await Fetcher.put<any, any, Partial<EventInfo>>(`/event/updateEventById/${eventInfo.id}`, eventInfo)
             return {
                 ok: true
             }

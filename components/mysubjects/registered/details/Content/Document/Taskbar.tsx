@@ -15,6 +15,7 @@ interface Props {
     subjectId: string;
     subjectName: string;
     categories: string[]
+    onEndUpload: () => void
 }
 
 type GroupType = "category" | "extension";
@@ -30,7 +31,7 @@ const groupOptions: { value: GroupType; label: React.ReactNode }[] = [
     },
 ];
 
-export default function Taskbar({ onSearch, onGroup, subjectId, subjectName, categories }: Props) {
+export default function Taskbar({ onSearch, onGroup, subjectId, subjectName, categories, onEndUpload }: Props) {
     const [groupBy, setGroupBy] = useState<GroupType>("category");
     const debouceSearch = useDebouncedCallback(onSearch, 300);
     // const inputRef = useRef<InputRef>(null);
@@ -44,7 +45,7 @@ export default function Taskbar({ onSearch, onGroup, subjectId, subjectName, cat
                     onChange={(e) => debouceSearch(e.target.value)}
                 />
             </div>
-            <UserUpload subjectId={subjectId} subjectName={subjectName} categories={categories}/>
+            <UserUpload subjectId={subjectId} subjectName={subjectName} categories={categories} onEndUpload={onEndUpload}/>
             <Select
                 value={groupBy}
                 options={groupOptions}
