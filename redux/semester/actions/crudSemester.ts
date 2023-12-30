@@ -32,7 +32,7 @@ export function crudSemester(
         case 'add':
             if (isUndefined(newSemesterId))
                 throw new Error(`Function crudSemester: newSemesterId is undefined`)
-            state.semesterInfo.unshift({
+            state.semesterInfo.info.unshift({
                 id: newSemesterId,
                 title: "Học kì mới",
                 subjects: [],
@@ -43,7 +43,7 @@ export function crudSemester(
         case 'delete':
             if (isUndefined(semesterIdx))
                 throw new Error(`Function crudSemester: semesterIdx is undefined`)
-            state.semesterInfo.splice(semesterIdx, 1);
+            state.semesterInfo.info.splice(semesterIdx, 1);
             break;
     }
 }

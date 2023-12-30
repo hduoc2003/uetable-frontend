@@ -140,7 +140,7 @@ function LecturersList({
             <TitleWithBox title='Danh sách giảng viên'/>
             <SearchBar placeholder='Tìm giảng viên' className='w-full h-[40px]' onChange={(e) => handleSearch(e.target.value)}/>
             {
-                isUndefined(subject?.lecturers) ?
+                isUndefined(subject?.lecturers) || isUndefined(subject) ?
                 <Text type='secondary' italic strong>Danh sách đang cập nhật</Text>
                 :
                 <Table

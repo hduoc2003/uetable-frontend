@@ -1,5 +1,5 @@
 import { Typography } from 'antd';
-import React, {useState, useEffect, use, useRef} from 'react'
+import React, {useState, useEffect, use, useRef, useCallback} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '@/redux/auth/authSlice'
 import { twMerge } from 'tailwind-merge';
@@ -79,10 +79,10 @@ export function CommentInfo({
     }
     // setLikeCnt(usersLiked)
     // setLike(hasLiked)
-  }, []);
+  }, [authState?.signedIn, authState?.studentId]);
 
   const toggleReportForm = () => setOpenReportForm(!openReportForm);
-  const toggleMenu = () => setOpen(!isOpen);
+  const toggleMenu = useCallback(() => setOpen((open) => !open), []);
   const toggleSubmit = () => setSubmit(!isSubmit);
   const likeReq = (score: any) => {
     // console.log(score)
@@ -137,7 +137,7 @@ export function CommentInfo({
       }).catch((error) => {
 
       });
-  }, [newStateLike]); 
+  }, [Id, newStateLike]);
 
 
   const toggleNav = () => setOpenNav(!isOpenNav);
@@ -177,7 +177,7 @@ export function CommentInfo({
       setTextareaHeight(`auto`);
       toggleMenu();
     }
-  }, [isSending]);
+  }, [author.name, isSending, toggleMenu]);
 
 
   const className=parent===0?'comments__item': 'comments__answer'
@@ -226,7 +226,7 @@ export function CommentInfo({
   }
 
   // useEffect(() => {
-    
+
   // }, []);
 
   useEffect(() => {
@@ -241,7 +241,7 @@ export function CommentInfo({
     }).catch((error) => {
 
     });
-  }, [newState]);
+  }, [data, newState]);
 
   return (
     <div>
@@ -314,10 +314,10 @@ export function CommentInfo({
               <button className="comments__reply" onClick={toggleReply}>
                     <MessageIcon size='20px' className='icon'/>
                     Xem tất cả {children?.length} phản hồi
-              </button> 
+              </button>
             )
           }
-          <div className={isLiking===0?"flex items-center": "hidden flex items-center"}>
+          <div className={isLiking===0?"flex items-center": "hidden items-center"}>
             <ClipLoader
             color="#2A85FF"
             size={12}
@@ -341,7 +341,7 @@ export function CommentInfo({
             <div className="answer__btns">
               <button className={inputReply===""?"button button-small answer__button disabled": "button button-small answer__button"} onClick={onSubmit}>Reply</button>
               <button className="button-stroke button-small answer__button" onClick={toggleMenu}>Cancel</button>
-              <div className={isSending===0?"flex items-center": "hidden flex items-center"}>
+              <div className={isSending===0?"flex items-center": "hidden items-center"}>
                 <ClipLoader
                   color="#2A85FF"
                   size={24}

@@ -3,14 +3,21 @@ import Fetcher from '@/api/Fetcher';
 import { CloseCircleFilled } from '@ant-design/icons';
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { useSearchParams } from 'next/navigation';
+import { PageProps } from '@/types/PageProps';
 
-export default function ResetPassword() {
+type Props = PageProps<{
+    token: string
+}>
 
-    const searchParams = useSearchParams();
+export const dynamic='force-static';
 
+export default function ResetPassword({
+    searchParams: {
+        token
+    }
+}: Props) {
 
-    const authToken = searchParams.get("token");
+    const authToken = token;
 
     const [inputPassword, setPassword] = useState("");
     const [inputFocused, setInputFocused] = useState(false);

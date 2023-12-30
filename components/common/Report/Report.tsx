@@ -125,7 +125,7 @@ function Content({
                         Gửi báo cáo
                     </SaveButton>
                 {/* </div> */}
-                <div className={isSending===0?"flex items-center": "hidden flex items-center"}>
+                <div className={isSending===0?"flex items-center": "hidden items-center"}>
                     <ClipLoader
                     color="#2A85FF"
                     size={24}

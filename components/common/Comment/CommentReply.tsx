@@ -1,5 +1,5 @@
 import { Typography } from 'antd';
-import React, {useState, useEffect, use, useRef} from 'react'
+import React, {useState, useEffect, use, useRef, useCallback} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '@/redux/auth/authSlice'
 import { twMerge } from 'tailwind-merge';
@@ -43,7 +43,7 @@ export function CommentReply({
     timestamp,
     hasLiked,
     hasDisLiked,
-    editable = false, 
+    editable = false,
 }: any) {
   // console.log(Id, pageId, pageType, author, content, parent, usersLiked, usersDisLiked, timestamp, hasLiked, hasDisLiked, editable)
   const authState = useSelector(authSelector);
@@ -68,17 +68,17 @@ export function CommentReply({
   const [newStateLike, setNewStateLike] = useState(0);
   useEffect(() => {
     if (authState?.signedIn) {
-      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
+      Fetcher.get<any, UserInfoResponse>('/users/' + authState.studentId)
       .then((response) => {
           setAvtURL(response.avatar);
       });
     }
     // setLikeCnt(usersLiked)
     // setLike(hasLiked)
-  }, []);
+  }, [authState?.signedIn, authState.studentId]);
 
   const toggleReportForm = () => setOpenReportForm(!openReportForm);
-  const toggleMenu = () => setOpen(!isOpen);
+  const toggleMenu = useCallback(() => setOpen((open) => !open), []);
   const toggleSubmit = () => setSubmit(!isSubmit);
   const likeReq = (score: any) => {
     // console.log(score)
@@ -133,7 +133,7 @@ export function CommentReply({
       }).catch((error) => {
 
       });
-  }, [newStateLike]); 
+  }, [Id, newState, newStateLike]);
 
 
   const toggleNav = () => setOpenNav(!isOpenNav);
@@ -172,10 +172,10 @@ export function CommentReply({
       setTextareaHeight(`auto`);
       toggleMenu();
     }
-  }, [isSending]);
+  }, [author.name, isSending, toggleMenu]);
 
 
-  const className=parent===0?'comments__item': 'comments__answer' 
+  const className=parent===0?'comments__item': 'comments__answer'
   const date = new Date(timestamp);
   const now = Date.now();
   const diff = now - timestamp;
@@ -214,7 +214,7 @@ export function CommentReply({
     }).catch((error) => {
 
     });
-  }, []);
+  }, [Id]);
 
   return (
     <div className={twMerge("flex")}>
@@ -223,10 +223,10 @@ export function CommentReply({
         {/* <img src={author.avatar} alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
       </div>
       <div className='comment__details' style={{flex: '0 0 calc(100% - 48px)', width: 'calc(100% - 48px)', paddingLeft: '16px'}}>
-        <div className={'flex'} style={{alignItems: 'center'}}> 
+        <div className={'flex'} style={{alignItems: 'center'}}>
           <div style={{marginRight: 'auto', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
             <Text strong style={{fontSize: '16px', lineHeight: '0.9'}}>
-            {author.name} 
+            {author.name}
             </Text>
             <div className='comment__login' style={{marginTop: '4px', fontSize: '12px', fontWeight: '500', color: '#6F767E'}}>
                 @{author.studentId}
@@ -280,7 +280,7 @@ export function CommentReply({
               <ReplyIcon size='20px' className='icon'/>
               Reply
           </button> */}
-          <div className={isLiking===0?"flex items-center": "hidden flex items-center"}>
+          <div className={isLiking===0?"flex items-center": "hidden items-center"}>
             <ClipLoader
             color="#2A85FF"
             size={12}
@@ -316,13 +316,13 @@ export function CommentReply({
           </div>
         </div>)} */}
       </div>
-      
+
       <ReportForm
       // key={(editingSubject?.id ?? '') + editingSubject?.getFinalScore?.()}
       // key={editingSubject.current?.id ?? ''}
       reportInfo = {
         {
-          pageId: Id, 
+          pageId: Id,
           pageType: "C"
         }
       }

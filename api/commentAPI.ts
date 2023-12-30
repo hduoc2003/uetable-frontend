@@ -1,8 +1,5 @@
 import { CommentInfoType } from "@/types/comment";
-import { mockAllSemesterInfo } from "./mocks/semester";
-import { RegisteredSubject } from "@/types/subject";
 import Fetcher from "./Fetcher";
-import { delay } from "@/utils/delay";
 
 interface Data1 {
     semesterInfo: CommentInfoType[]

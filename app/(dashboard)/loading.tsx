@@ -5,7 +5,7 @@ import { Spin } from 'antd'
 
 export default function DashboardLoading() {
     return (
-        <Main>
+        <Main title='Đang tải'>
             <Spin fullscreen />
             {/* <div>
                 <div className="hduoc2003_boxesContainer">

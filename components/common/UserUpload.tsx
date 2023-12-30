@@ -19,7 +19,8 @@ interface UserUploadProps {
     subjectId: string,
     subjectName: string,
     categories: string[],
-    onEndUpload?: () => void
+    onEndUpload?: () => void,
+    children?: React.ReactNode
 }
 const { Text } = Typography;
 
@@ -29,17 +30,25 @@ export default function UserUpload({
     subjectId,
     subjectName,
     categories,
-    onEndUpload
+    onEndUpload,
+    children
 }: UserUploadProps) {
     const [uploading, setUploading] = useState(false);
     return (
         <>
-            <MyButtonWrapper
-                className={" group-hover/document:opacity-100 transition-opacity duration-300"}
-                onClick={() => setUploading(true)}
-            >
-                <PiUploadSimpleBold size={25} className='fill-royal-gray hover:fill-current' />
-            </MyButtonWrapper>
+            {
+                isUndefined(children) ?
+                <MyButtonWrapper
+                    className={" group-hover/document:opacity-100 transition-opacity duration-300"}
+                    onClick={() => setUploading(true)}
+                >
+                    <PiUploadSimpleBold size={25} className='fill-royal-gray hover:fill-current' />
+                </MyButtonWrapper>
+                :
+                <button onClick={() => setUploading(true)}>
+                    {children}
+                </button>
+            }
             <UploadArea
                 uploading={uploading}
                 onCancel={() => setUploading(false)}
@@ -74,7 +83,7 @@ function UploadArea({
             closeIcon={null}
         >
             <Divider />
-            <FormUpload onCancel={onCancel} subjectId={subjectId} subjectName={subjectName} categories={categories} onEndUpload={onEndUpload}/>
+            <FormUpload onCancel={onCancel} subjectId={subjectId} subjectName={subjectName} categories={categories} onEndUpload={onEndUpload} />
         </Modal>
     )
 
@@ -149,7 +158,7 @@ function FormUpload({
                     <AutoComplete
                         placeholder='Chọn thẻ'
                         onChange={(newCa) => category.current = newCa}
-                        options={categories.map((category) => ({value: category}))}
+                        options={categories.map((category) => ({ value: category }))}
                         popupMatchSelectWidth={false}
                         filterOption={(inputValue, option) => {
                             if (isUndefined(option))

@@ -1,38 +1,21 @@
 "use client"
-import React, { use, useEffect } from "react"
+import React, { useEffect } from "react"
 import { Typography } from 'antd';
-import { FilePdfOutlined, FontColorsOutlined, HeartFilled } from "@ant-design/icons";
-import { BiLike } from "react-icons/bi";
-import { BiSolidLike } from "react-icons/bi";
-import { RiDownload2Fill } from "react-icons/ri";
-import { MdOutlineReportProblem } from "react-icons/md";
-import { Button, Image, Input, Modal, notification } from 'antd';
-import type { NotificationPlacement } from 'antd/es/notification/interface';
+import { Image } from 'antd';
 import { useState } from "react";
-import { RxAvatar } from "react-icons/rx";
-import { FaBook } from "react-icons/fa6";
-import { FaFaceGrin } from "react-icons/fa6";
-import { FaFaceFrownOpen } from "react-icons/fa6";
-import { FaFaceLaughSquint } from "react-icons/fa6";
-import { FaFaceSadCry } from "react-icons/fa6";
-import { FiClock } from "react-icons/fi";
-import { FaFaceFrown } from "react-icons/fa6";
-import { IoMdDocument } from "react-icons/io";
 import Fetcher from "@/api/Fetcher";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from 'next/navigation';
 import Main from "@/components/layouts/Main";
-import { error } from "console";
 import Avatar from "antd/es/avatar/avatar";
 import Comment  from "@/components/common/Comment/Comment"
 import TitleWithBox from "@/components/common/TitleWithBox";
 const {Text} = Typography;
 import HeartIcon from "@/components/common/(Icons)/HeartIcon";
-import Download from "@/components/common/(MyButton)/Download";
 import DownloadIcon from "@/components/common/(Icons)/DownloadIcon";
 import ClipLoader from "react-spinners/ClipLoader";
 import ReportForm from '@/components/common/Report/Report';
 import ReportIcon from '@/components/common/(Icons)/ReportIcon';
+import { PageProps } from "@/types/PageProps";
 
 interface Response {
     id: any,
@@ -49,11 +32,19 @@ interface Response {
     studentId: any,
 }
 
-export default function Documentdetail() {
+type Props = PageProps<{
+    documentId: string
+}>
+
+export default function Documentdetail({
+    searchParams: {
+        documentId
+    }
+}: Props) {
     const [filename, setFilename] = useState("");
     const [subname, setSubname] = useState("");
     const [link, setLink] = useState("");
-    const [author, setAuthor] = useState("");
+    const [author, setAuthor] = useState<any>("");
     const [numoflike, setNumOfLike] = useState(0);
     const [numofDownload, setNumOfDownload] = useState(0);
     const [subjecttId, setSubjectId] = useState("");
@@ -101,10 +92,6 @@ export default function Documentdetail() {
     // setLike(!isLike);
     // setDisLike(false);
     }
-    
-
-    const searchParams = useSearchParams();
-    const documentId = searchParams.get('documentId');
 
     // const [isliked, setIsliked] = useState(false);
     const typeDoc = (link[link.length - 1] === 'f' || link[link.length - 1] === 'F')? 'PDF' : 'IMG'
@@ -125,16 +112,16 @@ export default function Documentdetail() {
             })
             .catch(error => {
                 console.log('Lỗi khi gọi API:', error)
-            });      
+            });
             console.log(studentId);
 
-            Fetcher.get('/users/' + studentId)
+            Fetcher.get<any, any>('/users/' + studentId)
             .then((response) => {
                 setImageURL(response.avatar);
                 console.log(imageURL);
             }).catch((error) => {
                 console.log(error);
-            }); 
+            });
 
     }, [documentId, numoflike, imageURL, studentId, numoflike]);
 
@@ -150,7 +137,7 @@ export default function Documentdetail() {
     //         setIsliked(true);
     //     }).catch(error => {
     //         console.log(error);
-    //     }) 
+    //     })
     // };
 
     const handleDown = () => {
@@ -180,11 +167,11 @@ export default function Documentdetail() {
               setLike(false)
             //   setDisLike(false)
             }
-  
+
         }).catch((error) => {
-  
+
         });
-    }, [newStateLike]); 
+    }, [documentId, newStateLike]);
 
     const date = new Date(time);
     const now = Date.now();
@@ -214,7 +201,7 @@ export default function Documentdetail() {
     }
 
     return (<>
-        <Main title = "Document">
+        <Main title = "Tài liệu">
             <TitleWithBox title={filename} boxContent={typeDoc} size="ultra" />
             {/* <br />
             <div className = {`flex`}>
@@ -233,7 +220,7 @@ export default function Documentdetail() {
                         {author} <span style={{color: '#6F767E'}}> gửi vào lúc </span> { commentDate }
 
                         </Text>
-                        
+
                     </div>
                 {/* </div>
                     { commentDate }
@@ -262,7 +249,7 @@ export default function Documentdetail() {
                 <div>
                 </div>
                 <div className="product__btns flex items-center">
-                    <div className={isLiking===0?"flex items-center": "hidden flex items-center"}>
+                    <div className={isLiking===0?"flex items-center": "hidden items-center"}>
                         <ClipLoader
                         color="#2A85FF"
                         size={24}
@@ -278,7 +265,7 @@ export default function Documentdetail() {
                         <HeartIcon size={24}  solid={isLike} solidOnHover className="mr-2"/>
                         {likeCnt}
                     </button>
-                    <a href={link} download={filename}>
+                    <a href={link} download={filename} target="_blank">
                         <button className="button product__buy">
 
                             <span className="product__price">
@@ -286,10 +273,10 @@ export default function Documentdetail() {
                             </span>
                             <span className="product__inner">
                                 Download
-                                <span> 
+                                <span>
                                     <DownloadIcon size={24} className="ml-2"/>
                                 </span>
-                            </span> 
+                            </span>
                         </button>
                     </a>
                 </div>
@@ -336,7 +323,7 @@ export default function Documentdetail() {
                     // key={editingSubject.current?.id ?? ''}
                     reportInfo = {
                         {
-                        pageId: documentId, 
+                        pageId: documentId,
                         pageType: "D"
                         }
                     }

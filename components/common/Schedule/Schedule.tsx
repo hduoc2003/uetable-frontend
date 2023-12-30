@@ -186,7 +186,7 @@ export default function Schedule({
     );
 
     async function handleDownload() {
-        exportComponentAsPNG(tableRef)
+        // exportComponentAsPNG(tableRef)
     }
     function isDivider(data: TableData) {
         if (scheduleStyle.hasDivider)

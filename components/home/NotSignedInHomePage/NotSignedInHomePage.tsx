@@ -1,12 +1,12 @@
 'use client';
 
 import Image from "next/image";
-import HomeImage from '../../../public/images/A whole year-rafiki.svg';
+import HomeImage from '../../../public/images/hero-illo@3x.png';
 import { Typography } from "antd";
-import Schedule from "@/components/common/Schedule/Schedule";
 import ScheduleIcon from "@/components/common/(Icons)/NavIcons/ScheduleIcon";
 import MySubjectIcon from "@/components/common/(Icons)/NavIcons/MySubjectIcon";
 import Main from "@/components/layouts/Main";
+import PersonalStat from "@/components/statistic/personal/PersonalStat";
 const { Text, Title } = Typography;
 
 const headerText = "";
@@ -27,7 +27,7 @@ function AboutScheduleAndMySubjects() {
   return (
     <div className="flex flex-col">
       <div className="flex items-center w-full">
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           <Title className={headerText}>
             <div className="whitespace-nowrap">Tạo thời khoá biểu</div>
             <div className="whitespace-nowrap">& Quản lý môn học</div>
@@ -51,8 +51,8 @@ function AboutScheduleAndMySubjects() {
             </div>
           </div>
         </div>
-        <div className="flex flex-1 place-content-center">
-          <Image src={HomeImage} alt="Dược" width={500} height={500}/>
+        <div className="">
+          <Image src={HomeImage} alt="Dược" width={500} height={500} />
         </div>
       </div>
     </div>
@@ -70,10 +70,15 @@ function AboutAllSubjects({ }) {
   </div>);
 }
 function AboutStats({ }) {
-  return (<div>
-    <Title>Dữ liệu thống kê</Title>
-    <Text type="secondary" className="mb-[20px] text-xl">
-      Xem dữ liệu được thống kê theo Ngành, Khoá và bản thân
-    </Text>
-  </div>);
+  return (
+    <div>
+      <Title>Dữ liệu thống kê</Title>
+      <Text type="secondary" className="mb-[20px] text-xl">
+        Xem dữ liệu được thống kê theo Ngành, Khoá và bản thân
+      </Text>
+      <div className="mt-8">
+        <PersonalStat fake />
+      </div>
+    </div>
+  );
 }
