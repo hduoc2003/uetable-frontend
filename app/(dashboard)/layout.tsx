@@ -37,10 +37,8 @@ export default function DashboardLayout({
     const dispatch = useDispatch();
     const router = useRouter();
     const handleLogin = useCallback((): void => {
-        if (isUndefined(cookies.get('studentid'))) {
-            router.replace('/');
-            return;
-        }
+        if (authState.signedIn)
+            return
         Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'))
             .then((response) => {
                 dispatch(authActions.updateAuthState({
@@ -49,9 +47,6 @@ export default function DashboardLayout({
                     name: response.name,
                     studentId: cookies.get('studentid'),
                 }));
-                // Fetcher.get('http://127.0.0.1:8000/api/schedule/autoCreateEventClass')
-                // .then((res) => console.log(res))
-                // .catch((err) => console.log(err))
             }).catch((error) => {
                 dispatch(authActions.updateAuthState({
                     signedIn: false,
@@ -60,10 +55,10 @@ export default function DashboardLayout({
                 cookies.remove('authToken', {
                     path: '/'
                 });
-                // if (!accessibleRoute(pathName))
-                router.push('/');
+                if (!accessibleRoute(pathName))
+                    router.push('/');
             });
-    }, [dispatch, router])
+    }, [authState.signedIn, dispatch, pathName, router])
 
     useEffect(() => {
         handleLogin()
@@ -77,7 +72,7 @@ export default function DashboardLayout({
     }, [pathName, router])
 
     if (authState.logging)
-        return (<></>)
+        return (<>fawe</>)
     return (
         <div className='flex'>
             <NavBar />

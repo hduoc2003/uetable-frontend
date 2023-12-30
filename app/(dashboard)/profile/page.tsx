@@ -1,14 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { LikeOutlined, DownloadOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Typography, Progress, Avatar, DatePicker, DatePickerProps } from 'antd';
+import { Typography, Progress, Avatar, DatePicker, DatePickerProps, List, Space } from 'antd';
 import Image from 'next/image';
 import Fetcher from '@/api/Fetcher';
 import { UserInfoResponse } from '@/api/userAPI';
 import Cookies from 'universal-cookie';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { DocumentClass } from '@/types/document';
 import MyButtonWrapper from '@/components/common/(MyButton)/MyButtonWrapper';
 import EditableText from '@/components/common/EditableText';
@@ -16,16 +16,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '@/redux/auth/authSlice';
 import { authSelector } from '@/redux/auth/authSelector';
 import { PageProps } from '@/types/PageProps';
+import DocumentImage from '@/components/common/DocumentImage';
+import { getExtOfFile } from '@/utils/getExtOfFile';
+import Link from 'next/link';
+import { getURL } from '@/utils/navigation';
+import LikeIcon from '@/components/common/(Icons)/LikeIcon';
+import DownloadIcon from '@/components/common/(Icons)/DownloadIcon';
+import { useDebouncedCallback } from 'use-debounce';
+import search from '@/utils/search';
+import SearchBar from '@/components/common/SearchBar/SearchBar';
 const { Paragraph, Text, Title } = Typography;
 
 const cookies = new Cookies();
-export default function Profile({
-  searchParams: {
-    studentid
-  }
-}: PageProps<{
-  studentid: string
-}>) {
+export default function Profile() {
+
+  const searchParams = useSearchParams();
+  const studentid = searchParams.get('studentid') || '';
 
   const [name, setName] = useState("");
   const [birth, setBirth] = useState("");
@@ -41,6 +47,10 @@ export default function Profile({
   const [percentage, setPercentage] = useState(20);
   const currentStudentId = cookies.get('studentid');
   const [otherAvt, setOtherAvt] = useState('')
+  const [searchDoc, setSearchDoc] = useState('');
+  const handleSearchDoc = useDebouncedCallback((search) => {
+    setSearchDoc(search)
+  }, 300)
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -68,7 +78,7 @@ export default function Profile({
         }
       });
 
-    Fetcher.get<any, DocumentClass[]>('/document/getMyDocumentByStudentId', {
+    Fetcher.get<any, Omit<DocumentClass, 'ext'>[]>('/document/getMyDocumentByStudentId', {
       params: {
         "studentId": studentid,
       }
@@ -80,7 +90,7 @@ export default function Profile({
         data[i].createdAt = date[0] + '/' + time[1] + '/' + time[0];
 
       }
-      setDocData(response);
+      setDocData(response.map((g) => ({ ...g, ext: getExtOfFile(g.link).ext })));
     }).catch((error) => {
 
     })
@@ -296,41 +306,53 @@ export default function Profile({
             }
 
             <div className="w-full bg-white border rounded-2xl hover:shadow p-6">
-              <div className="font-bold text-2xl mb-4">Tài liệu</div>
-              <div>
-                {docData.map((document) => {
-                  return (
-                    <>
-                      <div className="border hover:bg-gray-100 hover:shadow bg-white p-6 m-4 flex cursor-pointer" onClick={() => {
-                        router.push('/all-subjects/documents/details?documentId=' + document.id);
-                      }}>
-                        {
-                          document.link.slice(-3) == "pdf" ?
-                            <Image src="https://i.imgur.com/WccjHlP.png" height={100} width={100} alt="Document Image" className='mr-5' />
-                            :
-                            <Image src="https://i.imgur.com/sYktWfS.png" height={100} width={100} alt="Document Image" className='mr-5' />
-                        }
-                        <div className="flex flex-col gap-2">
-                          <p className='text-blue-400 text-2xl'>{document.name}</p>
-                          <p className="">Môn học: {document.subjectName}</p>
-                          <p className='text-sm'>Upload bởi: {name}</p>
-                          <div className="flex gap-10">
-                            <div className="flex">
-                              <p>{document.like}</p>
-                              <LikeOutlined />
+            <div className="flex mb-4 gap-5 items-center">
+              <span className="font-bold text-2xl ">Tài liệu</span>
+              <SearchBar
+                placeholder='Tìm kiếm tài liệu'
+                onChange={(e) => handleSearchDoc(e.target.value)}
+                className='h-[40px] w-[25vw]'
+              />
+            </div>
+              <List>
+                {
+                  search(searchDoc, docData, ['name', 'subjectName']).map((doc) => {
+                    return (
+                      <List.Item key={doc.id}>
+                        <Link
+                          href={getURL('/all-subjects/documents/details', {
+                            documentId: doc.id
+                          })}
+                          className='w-full'
+                        >
+                          <div className='flex w-full items-center'>
+                            <div className='flex gap-1 items-center'>
+                              <DocumentImage ext={doc.ext} />
+                              <p>
+                                <Text strong className='text-inherit'>{doc.name}</Text> <br />
+                                <Text type='secondary' strong>{`${doc.subjectName}`}</Text>
+                              </p>
                             </div>
-                            <div className="flex">
-                              <p>{document.download}</p>
-                              <DownloadOutlined />
-                            </div>
-                            <p>{document.createdAt}</p>
                           </div>
+                        </Link>
+                        <div className='flex flex-col gap-2 ml-auto'>
+                          <Space size={'large'}>
+                            <Space className=''>
+                              <LikeIcon />
+                              <Text strong>{doc.like}</Text>
+                            </Space>
+                            <Space>
+                              <DownloadIcon className='fill-contrast' size={'1.5em'} />
+                              <Text strong>{doc.download}</Text>
+                            </Space>
+                          </Space>
+                          <Text strong type='secondary'>{doc.createdAt}</Text>
                         </div>
-                      </div>
-                    </>
-                  )
-                })}
-              </div>
+                      </List.Item>
+                    )
+                  })
+                }
+              </List>
             </div>
           </div>
         </div>
@@ -405,6 +427,6 @@ export default function Profile({
           </div>
         }
       </div>
-    </main>
+    </main >
   );
 }

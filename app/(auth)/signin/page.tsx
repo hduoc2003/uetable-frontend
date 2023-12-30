@@ -55,12 +55,12 @@ export default function SignIn() {
       setType("password");
   }
 
-  useEffect(() => {
-    if (!isUndefined(cookies.get('authToken'))) {
-      router.replace('/');
-      return;
-    }
-  }, [router])
+  // useEffect(() => {
+  //   if (!isUndefined(cookies.get('authToken'))) {
+  //     router.replace('/');
+  //     return;
+  //   }
+  // }, [router])
 
   async function handleSignIn() {
     Fetcher.get<any, UserInfoResponse>('/users/' + inputValue)
@@ -85,7 +85,7 @@ export default function SignIn() {
     Fetcher.post<any, SignInResponse>('/users/auth', {
       "studentid": inputValue,
       "password": inputPasswordValue,
-    }).then((response: SignInResponse) => {
+    }).then(async (response: SignInResponse) => {
       const expiresDate = new Date();
       expiresDate.setDate(expiresDate.getDate() + 999999);
       cookies.set('authToken', response.authToken, {
@@ -104,7 +104,7 @@ export default function SignIn() {
         expires: expiresDate,
         path: '/'
       });
-      handleSignIn();
+      await handleSignIn();
     }).catch((error) => {
       setLogInError("Tài khoản hoặc mật khẩu không đúng.");
     });
@@ -126,7 +126,7 @@ export default function SignIn() {
             <div className="flex w-full justify-center relative pb-6">
               <div className="absolute bottom-21 left-5 bg-white px-2 flex gap-[2px]">
                 <pre className='text-red-500 text-xs'>*</pre>
-                <p className="text-gray-500 text-xs font-semibold">EMAIL / MSSV</p>
+                <p className="text-gray-500 text-xs font-semibold">EMAIL</p>
               </div>
               <div className="w-full flex flex-col pr-4">
                 <input

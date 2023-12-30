@@ -8,20 +8,17 @@ import { UserInfoResponse } from '@/api/userAPI';
 import Cookies from 'universal-cookie';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { DocumentClass } from '@/types/document';
 import { PageProps } from '@/types/PageProps';
 const { Paragraph } = Typography;
 
 const cookies = new Cookies();
-export default function Profile({
-  searchParams: {
-    studentid
-  }
-}: PageProps<{
-  studentid: string
-}>) {
+export default function Profile() {
 
+  const searchParams = useSearchParams();
+  const studentid = searchParams.get('studentid') || '';
+  console.log({studentid})
   const [name, setName] = useState('Hoàng Minh Thái');
   const [birth, setBirth] = useState("2003-01-13");
   const [mssv, setMSSV] = useState('21020034');
