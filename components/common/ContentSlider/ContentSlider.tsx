@@ -120,7 +120,7 @@ function SlideButton({
                                 !place-content-center
                               `, className)}
             // style={!press ? {backgroundColor: 'blue !important'} : undefined}
-            ref={ref}
+            // ref={ref}
         >
             <Icon size={iconSize ?? 28} />
         </MyButtonWrapper>

@@ -1,11 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { mockDocumentClasses } from '@/api/mocks/document';
-import { LikeOutlined, CommentOutlined, DownloadOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { LikeOutlined, DownloadOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Typography, Progress, Avatar, DatePicker, DatePickerProps } from 'antd';
 import Image from 'next/image';
 import Fetcher from '@/api/Fetcher';
-import { useSearchParams } from 'next/navigation';
 import { UserInfoResponse } from '@/api/userAPI';
 import Cookies from 'universal-cookie';
 import dayjs from 'dayjs';
@@ -16,12 +14,18 @@ import MyButtonWrapper from '@/components/common/(MyButton)/MyButtonWrapper';
 import EditableText from '@/components/common/EditableText';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '@/redux/auth/authSlice';
-import Editor from '@/components/common/Editor/Editor';
 import { authSelector } from '@/redux/auth/authSelector';
+import { PageProps } from '@/types/PageProps';
 const { Paragraph, Text, Title } = Typography;
 
 const cookies = new Cookies();
-export default function Profile() {
+export default function Profile({
+  searchParams: {
+    studentid
+  }
+}: PageProps<{
+  studentid: string
+}>) {
 
   const [name, setName] = useState("");
   const [birth, setBirth] = useState("");
@@ -40,8 +44,6 @@ export default function Profile() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const searchParams = useSearchParams();
-  const studentid = searchParams.get('studentid');
   const dispatch = useDispatch();
   const { avtLink } = useSelector(authSelector)
 

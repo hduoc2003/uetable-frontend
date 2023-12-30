@@ -1,7 +1,5 @@
 import { ScheduleInfo } from "@/types/schedule";
-import { mockSubjectClasses } from "./mocks/subject";
 import { THEME } from "@/styles/theme";
-import { delay } from "@/utils/delay";
 import Fetcher from "./Fetcher";
 import { SubjectClass } from "@/types/subject";
 import { toast } from "react-toastify";

@@ -3,11 +3,10 @@
 import Image from "next/image";
 import HomeImage from '../../../public/images/hero-illo@3x.png';
 import { Typography } from "antd";
-import Schedule from "@/components/common/Schedule/Schedule";
 import ScheduleIcon from "@/components/common/(Icons)/NavIcons/ScheduleIcon";
 import MySubjectIcon from "@/components/common/(Icons)/NavIcons/MySubjectIcon";
 import Main from "@/components/layouts/Main";
-import PersonalColumn from "@/app/(dashboard)/statistic/personal/page";
+import PersonalStat from "@/components/statistic/personal/PersonalStat";
 const { Text, Title } = Typography;
 
 const headerText = "";
@@ -78,7 +77,7 @@ function AboutStats({ }) {
         Xem dữ liệu được thống kê theo Ngành, Khoá và bản thân
       </Text>
       <div className="mt-8">
-        <PersonalColumn fake />
+        <PersonalStat fake />
       </div>
     </div>
   );

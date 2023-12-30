@@ -1,13 +1,11 @@
 'use client';
 
-import { getSubjectClasses } from "@/api/subjectAPI";
 import Schedule from "../common/Schedule/Schedule";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { THEME } from "@/styles/theme";
 import MyCountDown from "../common/MyCountDown";
-import { Button, Flex, Popover, Space } from "antd";
-import { HiInformationCircle, HiSpeakerphone } from "react-icons/hi";
-import { useEffect, useMemo, useState } from "react";
+import { Flex, Popover, Space } from "antd";
+import { HiInformationCircle } from "react-icons/hi";
+import { useEffect, useState } from "react";
 import { lessonToHour, nowToNextSubjectClass } from "@/utils/subjectClass";
 import { useSelector } from "react-redux";
 import { scheduleDataSelector } from "@/redux/schedule/scheduleSelector";

@@ -2,21 +2,13 @@ import {
   RegisteredSubject,
   Subject,
   SubjectAll,
-  SubjectClass,
 } from "@/types/subject";
-import { mockAllSubjects, mockSubjectClasses } from "./mocks/subject";
 import { delay } from "@/utils/delay";
 import _ from "lodash";
 import Fetcher from "./Fetcher";
 import { toast } from "react-toastify";
 import { OkResponse } from "@/types/response";
-import { ScheduleAPI } from "./scheduleAPI";
 import { SemesterAPI } from "./semesterAPI";
-
-export function getSubjectClasses(): SubjectClass[] {
-  return mockSubjectClasses;
-}
-
 export class SubjectAllAPI {
   static async getAllSubjects(): Promise<Subject[]> {
     try {
@@ -66,17 +58,13 @@ export class SubjectAllAPI {
         }
       );
       console.log(res);
+      res.forEach((g) => g.type = 'all')
       return res;
     } catch (error) {
       console.log(error);
       toast.error("Fetch môn học thất bại");
       throw error;
     }
-    console.log(sortBy);
-    await delay(1000);
-    // console.log(from, to)
-    // console.log({from, to})
-    return Math.random() < 1 ? mockAllSubjects : [];
   }
 
   static async starSubject(subjectId: string, star: boolean): Promise<OkResponse> {
@@ -128,8 +116,6 @@ export class SubjectAllAPI {
       toast.error("Fetch môn học liên quan thất bại");
       return [];
     }
-    await delay(2000);
-    return mockAllSubjects;
   }
 
   static async getSubjectById(subjectId: string): Promise<SubjectAll> {

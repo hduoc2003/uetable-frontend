@@ -6,12 +6,10 @@ import {
     UserUploadFile,
 } from "@/types/document";
 import { delay } from "@/utils/delay";
-import { mockMySubectDocGroups } from "./mocks/document";
 import Fetcher from "./Fetcher";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { getExtOfFile } from "@/utils/getExtOfFile";
-import genId from "@/utils/genId";
 import { OkResponse } from "@/types/response";
 
 export class DocumentAPI {

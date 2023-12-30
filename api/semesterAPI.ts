@@ -1,6 +1,4 @@
-import { SemesterChangeLog, SemesterInfo } from "@/types/semester";
-import { mockAllSemesterInfo } from "./mocks/semester";
-import { RegisteredSubject } from "@/types/subject";
+import { SemesterInfo } from "@/types/semester";
 import Fetcher from "./Fetcher";
 import { delay } from "@/utils/delay";
 import { OkResponse } from "@/types/response";

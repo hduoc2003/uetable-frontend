@@ -15,6 +15,8 @@ type ActivatePageProps = PageProps<{
     token: string
 }>
 
+export const dynamic='force-static';
+
 export default function ActivatePage({
     searchParams: {
         token

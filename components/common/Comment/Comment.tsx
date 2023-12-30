@@ -46,7 +46,7 @@ export default function Comment({
               setAvtURL(response.avatar);
           });
         }
-      }, []);
+      }, [authState?.signedIn, authState?.studentId]);
 
     async function onSubmit() {
         setIsSending(0)
@@ -85,7 +85,7 @@ export default function Comment({
         }).catch((error) => {
 
         });
-    }, [newState])
+    }, [newState, pageId, pageType])
 
     useEffect(() => {
         const uri = `/page/comment/${pageType}/${pageId}/${offset}/${limit}`
@@ -102,7 +102,7 @@ export default function Comment({
         }).catch((error) => {
 
         });
-    },[])
+    },[data, limit, offset, pageId, pageType])
 
     useEffect(() => {
         setIsLoadMore(0)
@@ -122,7 +122,7 @@ export default function Comment({
         }).catch((error) => {
 
         });
-    }, [offsetNow]);
+    }, [cnt, cntAdd, data, limit, offsetNow, pageId, pageType]);
 
     useEffect(() => {
         const uri = `/comment/${newState}`
@@ -136,7 +136,7 @@ export default function Comment({
         }).catch((error) => {
 
         });
-    }, [newState, offset, limit]);
+    }, [newState, offset, limit, data]);
 
     const seeMoreComment = () => {
         setOffsetNow(offsetNow + limit)
@@ -164,7 +164,7 @@ export default function Comment({
                         <div className="answer__btns">
                             <button className={inputReply===""?"button button-small answer__button disabled": "button button-small answer__button"} onClick={onSubmit}>Bình luận</button>
                             {/* <button className="button-stroke button-small answer__button" onClick={}>Cancel</button> */}
-                            <div className={isSending===0?"flex items-center": "hidden flex items-center"}>
+                            <div className={isSending===0?"flex items-center": "hidden items-center"}>
                                 <ClipLoader
                                 color="#2A85FF"
                                 size={24}
@@ -183,7 +183,7 @@ export default function Comment({
                         <button className="button message__button button-stroke" onClick={seeMoreComment}>
                             {/* <ReplyIcon size='20px' className='icon'/> */}
                             Xem thêm {cnt - offsetNow - limit - cntAdd} phản hồi
-                            <div className={isLoadMore===0?"flex items-center ml-2": "hidden flex items-center ml-2"}>
+                            <div className={isLoadMore===0?"flex items-center ml-2": "hidden items-center ml-2"}>
                                 <ClipLoader
                                 color="#2A85FF"
                                 size={12}

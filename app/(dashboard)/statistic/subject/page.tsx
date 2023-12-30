@@ -112,14 +112,14 @@ export default function SubjectColumn() {
         })
     }
 
-    const renderLegend = (props) => {
+    const renderLegend = (props: any) => {
         const { payload } = props;
 
         return (
             <ul>
                 <div className='flex gap-[50px] justify-center'>
                     {
-                        payload.map((entry, index) => (
+                        payload.map((entry: any, index: any) => (
                             <div key={`item-${index}`} className='flex'>
                                 <div className='h-[20px] w-[25px] mr-2' style={{ backgroundColor: entry.color }}></div>
                                 <li key={`item-${index}`} style={{ color: entry.color }}>{entry.value}</li>
