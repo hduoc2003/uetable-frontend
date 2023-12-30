@@ -145,7 +145,7 @@ export default function SignUp() {
 
         <div className="mx-10 flex justify-between">
           <button className="font-bold bg-slate-300 hover:bg-sky-300 text-black rounded-2xl w-28 h-10"
-          onClick={() => router.push("/allsub")}>Back</button>
+          onClick={() => router.push("/")}>Back</button>
 
           <button className="font-bold bg-black hover:bg-sky-300 text-white rounded-2xl w-28 h-10"
           onClick={() => HandleClick()}>Next</button>

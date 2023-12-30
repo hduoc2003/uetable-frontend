@@ -308,3 +308,16 @@ hr {
     width: 30%;
     margin-top: 32px;
 }
+
+.product__price {
+    margin-right: 20px;
+    padding-right: 20px;
+    border-right: 1px solid #4493FC;
+    box-shadow: 1px 0 0 0 #186FE3;
+    line-height: 48px;
+}
+
+.product__inner {
+    display: inline-flex;
+    align-items: center;
+}

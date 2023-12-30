@@ -249,7 +249,6 @@ export default function AllSubjectsDocumentsPage({
                         })}
                     />
                 </ConfigProvider>
-
             </Space>
         </Main>
     )
