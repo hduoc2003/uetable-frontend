@@ -24,8 +24,6 @@ import { Avatar, Badge, Divider, Select, Popover } from "antd";
 import { authSelector } from "@/redux/auth/authSelector";
 import { UserInfoResponse } from "@/api/userAPI";
 import { CommentInfoType }  from "@/types/comment";
-import { CommentReplyList } from './CommentReplyList';
-import MessageIcon from '../(Icons)/MessageIcon';
 
 interface Props {
     className?: string;
@@ -33,20 +31,19 @@ interface Props {
     children?: React.ReactNode;
 }
 
-export function CommentInfo({
+export function CommentReply({
     Id,
     pageId,
     pageType,
     author,
     content,
     parent,
-    children,
     usersLiked,
     usersDisLiked,
     timestamp,
     hasLiked,
     hasDisLiked,
-    editable = false,
+    editable = false, 
 }: any) {
   // console.log(Id, pageId, pageType, author, content, parent, usersLiked, usersDisLiked, timestamp, hasLiked, hasDisLiked, editable)
   const authState = useSelector(authSelector);
@@ -59,7 +56,7 @@ export function CommentInfo({
   const [isSending, setIsSending] = useState(-1);
   const [isLiking, setIsLiking] = useState(-1)
   const dispatch = useDispatch();
-  const [inputReply, setReply] = useState("");
+  const [inputReply, setReply] = useState("@" + author.name + " ");
   const [isSubmit, setSubmit] = React.useState(false);
   const [submitError, setSubmitError] = useState("");
   const [textareaHeight, setTextareaHeight] = useState('auto');
@@ -69,10 +66,9 @@ export function CommentInfo({
   const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
   const [newState, setNewState] = useState(0);
   const [newStateLike, setNewStateLike] = useState(0);
-  const [isSeeReply, setIsSeeReply] = useState(false);
   useEffect(() => {
     if (authState?.signedIn) {
-      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.studentId)
+      Fetcher.get<any, UserInfoResponse>('/users/' + authState?.username)
       .then((response) => {
           setAvtURL(response.avatar);
       });
@@ -116,7 +112,7 @@ export function CommentInfo({
   }
 
   useEffect(() => {
-      console.log(Id, newStateLike)
+      console.log(Id, newState)
       const uri = `page/like/C/${Id}/`
       Fetcher.get<any, any>(uri).then((response) => {
           // let newData = response.count;
@@ -160,10 +156,9 @@ export function CommentInfo({
       "preCommentId": 0
     }).then((response : any) => {
       if (response.message === "Comment successfully created") {
-        // router.reload();
         setNewState(response.CommentId)
+        // router.reload();
         setIsSending(1)
-        setIsSeeReply(true)
       }
       // console.log(response)
     }).catch((error) => {
@@ -180,12 +175,12 @@ export function CommentInfo({
   }, [isSending]);
 
 
-  const className=parent===0?'comments__item': 'comments__answer'
+  const className=parent===0?'comments__item': 'comments__answer' 
   const date = new Date(timestamp);
   const now = Date.now();
   const diff = now - timestamp;
   let commentDate = '';
-  if (diff <= 1000 * 5) {
+  if (diff < 1000 * 5) {
     commentDate = 'Vừa xong'
   } else if (diff < 1000 * 60) {
     commentDate = `${Math.floor(diff / 1000)} giây trước`
@@ -210,53 +205,32 @@ export function CommentInfo({
 
   const [data, setData] = useState<CommentInfoType[]>();
 
-  const toggleReply = () => {
+  useEffect(() => {
     const uri = `comment/getchildren/${Id}`
-    setIsLiking(0)
     Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
         let newData = response;
         console.log(newData)
         setData([...newData])
-        setIsLiking(-1)
-        setIsSeeReply(true)
-
     }).catch((error) => {
 
     });
-  }
-
-  // useEffect(() => {
-    
-  // }, []);
-
-  useEffect(() => {
-    const uri = `/comment/${newState}`
-    Fetcher.get<any, CommentInfoType>(uri).then((response) => {
-        let newData = data ? [...data] : []
-        newData?.unshift(response);
-        console.log(newData)
-        setData(newData ? [...newData] : [])
-        setReply('')
-        setIsSending(1)
-    }).catch((error) => {
-
-    });
-  }, [newState]);
+  }, []);
 
   return (
-    <div>
-
-    <div className={twMerge("flex", className)}>
-      <div className='comment__avatar' style={{width:'56px', height: '56px'}}>
-        <Avatar className="" src={author.avatar} size={56}></Avatar>
+    <div className={twMerge("flex")}>
+      <div className='comment__avatar' style={{width:'48px', height: '48px'}}>
+        <Avatar className="" src={author.avatar} size={48}></Avatar>
         {/* <img src={author.avatar} alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
       </div>
       <div className='comment__details' style={{flex: '0 0 calc(100% - 48px)', width: 'calc(100% - 48px)', paddingLeft: '16px'}}>
-        <div className={'flex'} style={{alignItems: 'center'}}>
+        <div className={'flex'} style={{alignItems: 'center'}}> 
           <div style={{marginRight: 'auto', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
-            <Text strong style={{fontSize: '18px'}}>
-            {author.name}
+            <Text strong style={{fontSize: '16px', lineHeight: '0.9'}}>
+            {author.name} 
             </Text>
+            <div className='comment__login' style={{marginTop: '4px', fontSize: '12px', fontWeight: '500', color: '#6F767E'}}>
+                @{author.studentId}
+            </div>
           </div>
           <div style={{marginLeft: '8px', whiteSpace: 'nowrap', fontSize: '12px', fontWeight: '500', color: '#9A9FA5'}}>
             {commentDate}
@@ -286,10 +260,7 @@ export function CommentInfo({
                   </div>
                 </div>
         </div>
-        <div className='comment__login' style={{marginTop: '4px', fontSize: '14px', fontWeight: '500', color: '#6F767E'}}>
-        @{author.studentId}
-        </div>
-        <div className='comment__content' style={{marginTop: '12px', fontSize: '16px', fontWeight: '500', color: '#33383F'}}>
+        <div className='comment__content' style={{marginTop: '12px', fontWeight: '500', color: '#33383F'}}>
           {/* <Text> */}
           {content}
           {/* </Text> */}
@@ -305,18 +276,10 @@ export function CommentInfo({
            {isDisLike && (<DisLikedIcon size='20px' solidOnHover solid className='icon' color='red'/>)}
            {disLikeCnt}
           </button>
-          <button className="comments__reply" onClick={toggleMenu}>
+          {/* <button className="comments__reply" onClick={toggleMenu}>
               <ReplyIcon size='20px' className='icon'/>
               Reply
-          </button>
-          {
-            children?.length > 0 && isSeeReply === false && (
-              <button className="comments__reply" onClick={toggleReply}>
-                    <MessageIcon size='20px' className='icon'/>
-                    Xem tất cả {children?.length} phản hồi
-              </button> 
-            )
-          }
+          </button> */}
           <div className={isLiking===0?"flex items-center": "hidden flex items-center"}>
             <ClipLoader
             color="#2A85FF"
@@ -327,11 +290,10 @@ export function CommentInfo({
             />
           </div>
         </div>
-        {isOpen && (
+        {/* {isOpen && (
         <div className="answer">
           <div className="answer__avatar" style={{width:'48px', height: '48px'}}>
             <Avatar className="" src={avtURL} size={48}></Avatar>
-          {/* <img src='https://ui8-core.herokuapp.com/img/content/avatar-2.jpg' alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
           </div>
           <div className="answer__details">
             <div className="answer__message">
@@ -352,15 +314,15 @@ export function CommentInfo({
               </div>
             </div>
           </div>
-        </div>)}
+        </div>)} */}
       </div>
-
+      
       <ReportForm
       // key={(editingSubject?.id ?? '') + editingSubject?.getFinalScore?.()}
       // key={editingSubject.current?.id ?? ''}
       reportInfo = {
         {
-          pageId: Id,
+          pageId: Id, 
           pageType: "C"
         }
       }
@@ -382,11 +344,5 @@ export function CommentInfo({
       onCancel={() => setOpenReportForm(false)}
       />
     </div>
-
-    <div className="comment_reply_container">
-        <CommentReplyList comments={data ?? []} />
-    </div>
-
-  </div>
   )
 }

@@ -10,6 +10,12 @@
     border-top: 1px solid #EFEFEF;
 }
 
+/* .comment__content {
+    margin-top: 12px;
+    font-weight: 500;
+    color: #33383F;
+} */
+
 .comments__control {
     display: flex;
     align-items: center;
@@ -285,4 +291,20 @@ hr {
     font-weight: 600;
     line-height: 1.71429;
     color: #33383F;
+}
+
+/* .comment_reply_container  */
+
+.button-stroke, .button-stroke-red {
+    background: none;
+    box-shadow: 0 0 0 2px #EFEFEF inset;
+}
+
+.button-stroke {
+    color: #1A1D1F;
+}
+
+.message__button {
+    width: 30%;
+    margin-top: 32px;
 }
