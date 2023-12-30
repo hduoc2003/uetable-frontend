@@ -363,7 +363,7 @@ export default function Documentdetail() {
                     <div><ReportIcon size='20px' className='icon'/></div>
                     <div className="flex" style={{ flexDirection: 'column'}}>
                         <Text style={{textAlign: 'left'}}> Báo cáo tài liệu</Text>
-                        <div style={{wordWrap: 'break-word', textAlign: 'left', fontSize: '12px'}}> Chúng tôi sẽ không cho {author.name} biết ai đã báo cáo.</div>
+                        <div style={{wordWrap: 'break-word', textAlign: 'left', fontSize: '12px'}}> Chúng tôi sẽ không cho {author} biết ai đã báo cáo.</div>
                         {/* <Text></Text> */}
                     </div>
                 </button>
