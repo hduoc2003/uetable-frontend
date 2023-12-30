@@ -6,7 +6,7 @@ interface Props {
     color?: string;
     title: React.ReactNode;
     titleClassName?: string;
-    size?: 'small' | 'middle' | 'large';
+    size?: 'small' | 'middle' | 'large' | 'ultra';
     boxContent?: React.ReactNode;
     className?: string
 }
@@ -19,7 +19,7 @@ export default function TitleWithBox({
     boxContent,
     className
 }: Props) {
-    const textSize = (size === 'large' ? 'text-2xl' : (size === 'middle' ? 'text-xl' : 'text-lg'))
+    const textSize = (size === 'ultra'? 'text-3xl': ('large' ? 'text-2xl' : (size === 'middle' ? 'text-xl' : 'text-lg')))
     return (
         <div className={twMerge("flex gap-4 items-center", className)}>
             <DecorBox color={color}>

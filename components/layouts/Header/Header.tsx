@@ -83,11 +83,12 @@ export default function Header() {
       }}
     >
       <div
-        className="flex items-center h-[80px] bg-secondary shadow px-8"
+        className="flex items-center h-[80px] bg-secondary px-8"
         style={{
           // borderTopLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
           // borderBottomLeftRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
-          transition: 'border-radius 0.3s ease-in-out'
+          transition: 'border-radius 0.3s ease-in-out',
+          boxShadow: 'inset 1px 0px 0px #F4F4F4, inset 0 -1px 0px #EFEFEF'
         }}
       >
         <div className="flex-1">

@@ -136,20 +136,20 @@ export default function DocumentsOfSubject() {
         <Main title={subject}>
             <div className = {`flex`}>
                 <div className = {`w-[15px] h-[30px] bg-blue-300 rounded`}></div>
-                <div className = {`ml-[10px] font-semibold text-2xl`}>Documents</div>
+                <div className = {`ml-[10px] font-semibold text-2xl`}>Tài liệu</div>
             </div>
             <br />
             <div className = {`ml-[10px] my-[10px] text-base text-slate-500 font-semibold`}>
                 <div className = {`flex`}>
                     <div className = {`w-[100px]`}>STT</div>
                     <div className = {`w-[400px]`}>
-                        <button className = {``} onClick = {handleName}>Name</button>
+                        <button className = {``} onClick = {handleName}>Tên</button>
                     </div>
                     <div className = {`w-[300px]`} onClick={handleDate}>
-                        <button>Date modified</button>
+                        <button>Ngày sửa đổi</button>
                     </div>
                     <div className = {`w-[100px]`} onClick={handleType}>
-                        <button>Type</button>
+                        <button>Loại</button>
                     </div>    
                 </div>
                 <hr />

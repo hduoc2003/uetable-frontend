@@ -15,6 +15,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { NAVBAR_STYLE } from '@/styles/navBar';
 import NavMenu from './NavMenu';
 import MyButtonWrapper from '@/components/common/(MyButton)/MyButtonWrapper';
+import Image from 'next/image';
 
 const { Text } = Typography;
 const { Sider } = Layout;
@@ -54,7 +55,7 @@ export default function NavBar() {
             "
         >
             <div
-                className='bg-secondary h-full shadow min-w-fit flex flex-col gap-[30px]'
+                className={expand?'bg-secondary h-full shadow min-w-[300px] flex flex-col gap-[30px]':'bg-secondary h-full shadow min-w-fit flex flex-col gap-[30px]' }
                 style={{
                     // borderTopRightRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
                     transition: 'border-radius 0.3s ease-in-out'
@@ -66,6 +67,7 @@ export default function NavBar() {
                         className='rounded-full hover:bg-gray-100'
                     >
                         {<AiOutlineMenu size={NAVBAR_STYLE.ICON_SIZE} />}
+                        {/* <Image alt='logo' src={'https://ui8-core.herokuapp.com/img/logo-dark.png'} width={50} height={50} /> */}
                     </MyButtonWrapper>
                     {
                         expand &&
