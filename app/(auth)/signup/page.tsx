@@ -36,7 +36,6 @@ export default function SignUp() {
         "studentid": mssv,
         "password": password1
       });
-      console.log(data);
       router.push("/signin");
     } catch (error) {
       setNote("Tài khoản không hợp lệ hoặc đã tồn tại.")

@@ -21,7 +21,6 @@ import Fetcher from "@/api/Fetcher";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from 'next/navigation';
 import Main from "@/components/layouts/Main";
-import { error } from "console";
 import Avatar from "antd/es/avatar/avatar";
 
 
@@ -75,18 +74,14 @@ export default function Documentdetail() {
                 setNumOfDownload(response.download);
                 setStudentId(response.studentId);
                 setTime(response.createdAt);
-                console.log(response);
-                console.log(response.createdAt);
             })
             .catch(error => {
                 console.log('Lỗi khi gọi API:', error)
             });      
-            console.log(studentId);
 
             Fetcher.get('/users/' + studentId)
             .then((response) => {
                 setImageURL(response.avatar);
-                console.log(imageURL);
             }).catch((error) => {
                 console.log(error);
             }); 
@@ -100,7 +95,6 @@ export default function Documentdetail() {
             'pageType' : 'D',
             'score' : 1
         }).then(response => {
-            console.log(response);
             //setNumOfLike(numoflike + 1);
             setIsliked(true);
         }).catch(error => {
@@ -112,7 +106,6 @@ export default function Documentdetail() {
     };
 
     function handleAuthor() {
-        console.log(studentId);
         router.push("/settings/profile?studentid=" + studentId);
     }
 

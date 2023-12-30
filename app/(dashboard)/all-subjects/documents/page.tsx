@@ -10,9 +10,6 @@ import { FaFilePdf } from "react-icons/fa";
 
 
 export default function DocumentsOfSubject() {
-
-    console.log("running");
-
     const [listfile, setList] = useState<DocumentInfo[]>([]);
     const [subject, setSubject] = useState("Giải Tích 2");
     const [status, setStatus] = useState("Normal");
@@ -29,7 +26,6 @@ export default function DocumentsOfSubject() {
             }
         }).then((response) => {
             setSubject(response.name);
-            console.log(response);
         }).catch((error) => {
 
         })
@@ -39,10 +35,7 @@ export default function DocumentsOfSubject() {
             }
         })
         .then((response) => {
-            console.log(subjectId);
-            console.log(response);
             setList((response.map(DocInfo => {
-                console.log(DocInfo);
                 if(DocInfo.link[DocInfo.link.length - 1] === "f" || DocInfo.link[DocInfo.link.length - 1] === "F")
                     DocInfo.type = "PDF";
                 if(DocInfo.link[DocInfo.link.length - 1] === "g" || DocInfo.link[DocInfo.link.length - 1] === "G")
@@ -51,7 +44,6 @@ export default function DocumentsOfSubject() {
                 return DocInfo;
             })));
         }).catch((error) => {
-            console.log(error);
         })
     }, [subjectId]);
 
@@ -71,7 +63,6 @@ export default function DocumentsOfSubject() {
     }
 
     function getTime(x : Date) {
-        console.log(x);
         return months[x.getMonth()] + ' ' + x.getDate() + ', ' + x.getFullYear() + ' at ' + x.getHours() + ':' + x.getMinutes() + ':' + x.getSeconds(); 
     }
 
@@ -101,7 +92,6 @@ export default function DocumentsOfSubject() {
             return (<>
                 <div className = {`flex bg-white hover:bg-slate-100 max-h-fit max-w-fit cursor-pointer font-semibold p-1 rounded-lg`} onClick={ () => {
                     router.push('/all-subjects/documents/details?documentId=' + DocInfo.id);
-                    console.log(listfile[0].id);
                 }}>
                     <div className = {`w-[85px] my-[40px]`}>{cnt}</div>
                     <div className = {`flex w-[410px]`}>
