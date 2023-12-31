@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { LikeOutlined, DownloadOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Typography, Progress, Avatar, DatePicker, DatePickerProps, List, Space } from 'antd';
 import Image from 'next/image';
@@ -25,6 +25,7 @@ import DownloadIcon from '@/components/common/(Icons)/DownloadIcon';
 import { useDebouncedCallback } from 'use-debounce';
 import search from '@/utils/search';
 import SearchBar from '@/components/common/SearchBar/SearchBar';
+import Editor from '@/components/common/Editor/Editor';
 const { Paragraph, Text, Title } = Typography;
 
 const cookies = new Cookies();
@@ -51,6 +52,7 @@ export default function Profile() {
   const handleSearchDoc = useDebouncedCallback((search) => {
     setSearchDoc(search)
   }, 300)
+  const filterDoc = useMemo(() => search(searchDoc, docData, ['name', 'subjectName']), [docData, searchDoc])
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -70,10 +72,10 @@ export default function Profile() {
         setBirth(response.date);
         setBio(response.bio);
       }).catch((error) => {
-        if (error.response.status == 401) {
+        if (error.status == 401) {
           router.push('/signin');
         }
-        else if (error.response.status == 404) {
+        else if (error.status == 404) {
           router.push('/');
         }
       });
@@ -288,8 +290,8 @@ export default function Profile() {
                   <div className="font-bold text-2xl">Giới thiệu</div>
                   {/* </div> */}
                   {/* <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => { handleFinishEditBio(newValue) } }}>{bio}</Paragraph> */}
-                  {/* <Editor content={bio} onSave={handleFinishEditBio}/> */}
-                  <EditableText
+                  <Editor content={bio} onSave={handleFinishEditBio} maxWidth={700}/>
+                  {/* <EditableText
                     defaultValue={bio}
                     normalText={
                       bio ?
@@ -300,7 +302,7 @@ export default function Profile() {
                     type='textarea'
                     onComplete={handleFinishEditBio}
                     className='w-full'
-                  />
+                  /> */}
                 </div>
               )
             }
@@ -314,9 +316,12 @@ export default function Profile() {
                 className='h-[40px] w-[25vw]'
               />
             </div>
+              {filterDoc.length === 0 ?
+                <Text strong type='secondary' italic>Không có tài liệu</Text>
+              :
               <List>
                 {
-                  search(searchDoc, docData, ['name', 'subjectName']).map((doc) => {
+                  filterDoc.map((doc) => {
                     return (
                       <List.Item key={doc.id}>
                         <Link
@@ -353,6 +358,7 @@ export default function Profile() {
                   })
                 }
               </List>
+              }
             </div>
           </div>
         </div>

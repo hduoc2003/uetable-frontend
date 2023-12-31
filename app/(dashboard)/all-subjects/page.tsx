@@ -8,7 +8,7 @@ import SearchBar from "@/components/common/SearchBar/SearchBar";
 import Main from "@/components/layouts/Main";
 import { SubjectAll } from "@/types/subject";
 import { Select } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 type SortType = Parameters<typeof SubjectAllAPI.getSomeSubjects>[0];
@@ -28,10 +28,16 @@ export default function AllSubjectsPage() {
 
     const [sortBy, setSortBy] = useState<SortType>('last-access');
     const [searchValue, setSearchValue] = useState('');
+    const [reload, setReload] = useState(false)
 
     const handleSearch = useDebouncedCallback((value: string) => {
         setSearchValue(value);
     }, 300);
+
+    // useEffect(() => {
+    //     setReload(true)
+    //     setTimeout(() => setReload(false), 500)
+    // }, [searchValue, sortBy])
 
     return (
         <Main title='Môn học toàn trường'>
@@ -55,8 +61,9 @@ export default function AllSubjectsPage() {
                     />
                     {/* </div> */}
                 </div>
-                <PreviewList<SubjectAll>
-                    key={sortBy + searchValue}
+                {!reload &&
+                    <PreviewList<SubjectAll>
+                    // key={sortBy + searchValue}
                     render={(subject) => {
                         return (
                             <SubjectPreview
@@ -66,11 +73,9 @@ export default function AllSubjectsPage() {
                     }}
                     dataKey={(subject) => subject.code}
                     fetchMore={async (from, to) => SubjectAllAPI.getSomeSubjects(sortBy, from, to, searchValue)}
-                // filter={(data) => {
-                //     return search(searchValue, data, ['id', 'name'])
-                // }}
-                // fetchMore={SubjectAPI.getAllSubject}
+                    fetchKey={sortBy + searchValue}
                 />
+                }
             </div>
         </Main>
     );

@@ -57,7 +57,7 @@ export class SubjectAllAPI {
           searchValue,
         }
       );
-      console.log(res);
+      // console.log(res);
       res.forEach((g) => g.type = 'all')
       return res;
     } catch (error) {

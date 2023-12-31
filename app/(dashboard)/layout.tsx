@@ -72,7 +72,7 @@ export default function DashboardLayout({
     }, [pathName, router])
 
     if (authState.logging)
-        return (<>fawe</>)
+        return (<></>)
     return (
         <div className='flex'>
             <NavBar />

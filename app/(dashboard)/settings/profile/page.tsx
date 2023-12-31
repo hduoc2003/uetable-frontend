@@ -48,10 +48,10 @@ export default function Profile() {
         setBirth(response.date);
         setBio(response.bio);
       }).catch((error) => {
-        if (error.response.status == 401) {
+        if (error.status == 401) {
           router.push('/signin');
         }
-        else if (error.response.status == 404) {
+        else if (error.status == 404) {
 
         }
         //console.log(studentid);

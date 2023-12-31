@@ -16,6 +16,7 @@ interface Props {
     defaultEditing?: boolean;
     content: string;
     onSave: (content: string) => void
+    maxWidth?: number | string
 }
 
 const modules: StringMap = {
@@ -30,7 +31,7 @@ const modules: StringMap = {
 }
 
 export default function Editor({
-    defaultEditing, content, onSave
+    defaultEditing, content, onSave, maxWidth
 }: Props) {
     const [editing, setEditing] = useState(defaultEditing);
     const text = useRef<string>('');
@@ -42,18 +43,18 @@ export default function Editor({
             >
                 <div className="flex-1">
                     {
-                        content === ''
+                        !content
                             ?
                             <Text type='secondary' italic>Không có thông tin</Text>
                             :
-                            <div dangerouslySetInnerHTML={{ __html: content }} />
+                            <div className=' break-all' dangerouslySetInnerHTML={{ __html: content }} />
                     }
                 </div>
                 <EditButton iconSize={25} onClick={() => setEditing(true)} />
             </div>
         )
     return (
-        <div className='w-full flex flex-col gap-4 h-[300px]'>
+        <div className='w-full flex flex-col gap-4' style={{maxWidth: maxWidth ?? 800}}>
             <ReactQuill
                 theme="snow"
                 modules={modules}
@@ -61,6 +62,8 @@ export default function Editor({
                 onChange={(value) => text.current = value}
                 placeholder="Nhập dữ liệu"
                 value={content}
+                className='max-h-[3000px] overflow-y-auto'
+                // style={{maxWidth: maxWidth ?? 800}}
             />
             <Space className='ml-auto'>
                 <DangerButton onClick={() => setEditing(false)}>Huỷ thay đổi</DangerButton>

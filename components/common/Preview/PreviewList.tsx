@@ -9,6 +9,8 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer';
 import useSWR from 'swr';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import useSWRMutation from 'swr/mutation'
+
 
 const {Text} = Typography;
 
@@ -25,6 +27,7 @@ interface Props<DataType> {
         xxl?: number;
     },
     howManyFetch?: number
+    fetchKey?: string
 }
 
 export default function PreviewList<DataType>({
@@ -34,27 +37,47 @@ export default function PreviewList<DataType>({
     filter,
     dataPerFetch = 6,
     cols,
-    howManyFetch = 99999999
+    howManyFetch = 99999999,
+    fetchKey
 }: Props<DataType>) {
     const _cols: (typeof cols) = _.mapValues({ ...{ xs: 1, md: 2, lg: 3, xxl: 4 }, ...cols }, (x) => 24 / x);
     const [data, setData] = useState<(DataType)[]>([])
     const [fetchFrom, setFetchFrom] = useState<number>(1);
     const [stopFetching, setStopFetching] = useState(false);
     const { data: extraData } = useSWR(
-        [fetchFrom, fetchFrom + dataPerFetch - 1],
-        ([from, to]) => fetchMore(from, to)
+        [fetchKey, fetchFrom, fetchFrom + dataPerFetch - 1],
+        ([_, from, to]) => fetchMore(from, to)
     );
-
+    // console.log(extraData)
     useEffect(() => {
+        // if (fetchFrom )
         if (!isUndefined(extraData)) {
+            // console.log(extraData.length)
             if (--howManyFetch === 0)
                 setStopFetching(true)
-            if (extraData.length > 0)
+            if (extraData.length > 0) {
+                if (fetchFrom === 1)
+                    setData(() => [])
                 setData((data) =>  [...data, ...extraData])
+            }
             else
                 setStopFetching(true);
         }
+        // return () => console.log('unmount')
     }, [extraData, howManyFetch])
+
+    useEffect(() => {
+        // console.log(fetchKey)
+        // setData(() => []);
+        setFetchFrom(() => 1)
+        // trigger()
+    }, [fetchKey])
+
+    // useEffect(() => {
+    //     trigger();
+    // }, [fetchFrom, trigger])
+
+    // console.log(data)
 
     return (
             <InfiniteScroll
@@ -79,3 +102,4 @@ export default function PreviewList<DataType>({
             </InfiniteScroll>
     )
 }
+

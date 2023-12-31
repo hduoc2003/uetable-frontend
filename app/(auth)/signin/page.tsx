@@ -126,7 +126,7 @@ export default function SignIn() {
             <div className="flex w-full justify-center relative pb-6">
               <div className="absolute bottom-21 left-5 bg-white px-2 flex gap-[2px]">
                 <pre className='text-red-500 text-xs'>*</pre>
-                <p className="text-gray-500 text-xs font-semibold">EMAIL</p>
+                <p className="text-gray-500 text-xs font-semibold">MSSV</p>
               </div>
               <div className="w-full flex flex-col pr-4">
                 <input
