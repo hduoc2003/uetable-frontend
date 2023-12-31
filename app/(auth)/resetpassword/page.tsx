@@ -4,20 +4,18 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { PageProps } from '@/types/PageProps';
+import { useSearchParams } from 'next/navigation';
 
 type Props = PageProps<{
     token: string
 }>
 
-export const dynamic='force-static';
 
-export default function ResetPassword({
-    searchParams: {
-        token
-    }
-}: Props) {
+export default function ResetPassword() {
 
-    const authToken = token;
+    const searchParams = useSearchParams();
+    const authToken = searchParams.get('token');
+    console.log({authToken})
 
     const [inputPassword, setPassword] = useState("");
     const [inputFocused, setInputFocused] = useState(false);

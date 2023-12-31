@@ -14,7 +14,7 @@ export default function DocumentImage({
             alt={ext}
             width={5000}
             height={5000}
-            className="!w-[40px]"
+            className="!w-[40px] !h-[40px]"
             onError={(e) => setImgSrc('/images/icons/documents.png')}
         />
     );

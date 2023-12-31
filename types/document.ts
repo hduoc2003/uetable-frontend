@@ -27,6 +27,7 @@ export interface DocumentClass {
     createdAt: string
     link: string
     subjectName: string
+    ext: string
 }
 
 export interface UserUploadFile {

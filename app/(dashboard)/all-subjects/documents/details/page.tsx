@@ -4,7 +4,7 @@ import { Typography } from 'antd';
 import { Image } from 'antd';
 import { useState } from "react";
 import Fetcher from "@/api/Fetcher";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Main from "@/components/layouts/Main";
 import Avatar from "antd/es/avatar/avatar";
 import Comment  from "@/components/common/Comment/Comment"
@@ -36,11 +36,10 @@ type Props = PageProps<{
     documentId: string
 }>
 
-export default function Documentdetail({
-    searchParams: {
-        documentId
-    }
-}: Props) {
+export default function Documentdetail() {
+    const searchParams = useSearchParams();
+    const documentId = searchParams.get('documentId') || '';
+    console.log({documentId})
     const [filename, setFilename] = useState("");
     const [subname, setSubname] = useState("");
     const [link, setLink] = useState("");

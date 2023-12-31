@@ -232,10 +232,7 @@ export function CommentInfo({
   useEffect(() => {
     const uri = `/comment/${newState}`
     Fetcher.get<any, CommentInfoType>(uri).then((response) => {
-        let newData = data ? [...data] : []
-        newData?.unshift(response);
-        console.log(newData)
-        setData(newData ? [...newData] : [])
+        setData((oldData) => [response, ...(oldData ?? [])])
         setReply('')
         setIsSending(1)
     }).catch((error) => {

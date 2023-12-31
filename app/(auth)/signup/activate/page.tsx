@@ -10,19 +10,18 @@ import useSWR from "swr";
 import { AuthAPI } from "@/api/authAPI";
 import ErrorIcon from '@/public/images/error.png'
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 type ActivatePageProps = PageProps<{
     token: string
 }>
 
-export const dynamic='force-static';
 
-export default function ActivatePage({
-    searchParams: {
-        token
-    }
-}: ActivatePageProps) {
+export default function ActivatePage() {
+    const searchParams = useSearchParams();
+    const token = searchParams.get('token')
     const { data: status, isLoading } = useSWR(token, AuthAPI.activateAccount);
+    console.log({token})
     return (
         <div
             className="w-screen h-screen flex items-center justify-center bg-underground flex-col gap-10 py-20"

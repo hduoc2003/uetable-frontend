@@ -69,7 +69,7 @@ export default function LinksPage() {
                     <Image src={`/images/links/${getLinkIdx(link)}.png`} width={120} alt={label} />
                     <Link href={link}>
                       <p>
-                        <strong>{label}</strong> <br />
+                        <strong className='text-base'>{label}</strong> <br />
                         <Text type='secondary'>{link}</Text>
                       </p>
                     </Link>

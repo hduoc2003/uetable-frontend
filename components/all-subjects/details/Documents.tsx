@@ -4,7 +4,6 @@ import TitleWithBox from "@/components/common/TitleWithBox";
 import { getURL } from "@/utils/navigation";
 import { Space, Typography } from "antd";
 import Link from "next/link";
-import { SubjectDocumentsPageProps } from "../documents/page";
 import Preview from "@/components/common/Preview/Preview";
 import MultiCarousel from "@/components/common/MultiCarousel";
 import MyButtonWrapper from "@/components/common/(MyButton)/MyButtonWrapper";
@@ -12,6 +11,8 @@ import useSWR from "swr";
 import { DocumentAPI } from "@/api/DocumentAPI";
 import { DocumentClass } from "@/types/document";
 import genId from "@/utils/genId";
+import { AllSubjectsDocumentsPageProps } from "@/app/(dashboard)/all-subjects/documents/page";
+import { useElementRect } from "@/hooks/useElementRect";
 
 const { Text } = Typography;
 const fetchKey = genId();
@@ -22,17 +23,17 @@ interface Props {
 export default function Documents({
     subjectId
 }: Props) {
-    // const { ref, rect: { width } } = useElementRect<HTMLDivElement>();
+    const { ref, rect: { width } } = useElementRect<HTMLDivElement>();
     const { data: documents, isLoading } = useSWR([fetchKey, subjectId],
         ([_, subjectId]) => DocumentAPI.getTopDocumentsOfSubject(subjectId, 5)
     )
 
     return (
         // <Space direction="vertical" size={'large'} className="w-full" ref={ref}>
-        <Space direction="vertical" size={'large'} className="w-full" >
+        <Space direction="vertical" size={'large'} className="w-full" ref={ref}>
             <TitleWithBox
                 title={
-                    <Link href={getURL<SubjectDocumentsPageProps['searchParams']>("/all-subjects/documents", { subjectId })}>
+                    <Link href={getURL<AllSubjectsDocumentsPageProps['searchParams']>("/all-subjects/documents", { subjectId })}>
                         Tài liệu nổi bật
                     </Link>
                 }
@@ -40,7 +41,7 @@ export default function Documents({
             />
             {
                 documents && documents.length > 0 ?
-                    <MultiCarousel width={'58vw'}>
+                    <MultiCarousel width={width}>
                         {(documents ?? Array<null>(5).fill(null)).map((doc, i) => {
                             return (
                                 <Preview

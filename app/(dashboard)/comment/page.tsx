@@ -9,8 +9,9 @@ import { PageProps } from "@/types/PageProps";
 import { SubjectAll } from "@/types/subject";
 import { Divider, Typography } from "antd";
 import useSWR from "swr";
-import Comment  from "@/components/common/Comment/Comment"
+import Comment from "@/components/common/Comment/Comment"
 import { SubjectAllAPI } from "@/api/subjectAPI";
+import { useSearchParams } from "next/navigation";
 
 const { Text, Title } = Typography;
 
@@ -18,11 +19,10 @@ export type AllSubjectsDetailsPageProps = PageProps<{
   subjectId: string
 }>
 
-export default function AllSubjectsDetailsPage({
-  searchParams: {
-    subjectId
-  }
-}: AllSubjectsDetailsPageProps) {
+export default function AllSubjectsDetailsPage() {
+  const searchParams = useSearchParams();
+  const subjectId = searchParams.get('subjectId') || '';
+  console.log({ subjectId })
   const { data: subject, isLoading } = useSWR<SubjectAll>(subjectId, SubjectAllAPI.getSubjectById);
   return (
     <Main title={'Thông tin học phần'}>
@@ -32,7 +32,7 @@ export default function AllSubjectsDetailsPage({
           <Divider />
           <Documents subjectId={subjectId} />
           <Divider />
-          <Comment pageId={1} pageType='S'/>
+          <Comment pageId={1} pageType='S' />
         </div>
         <Divider type="vertical" className="h-auto" />
         <div className="w-1/4 pl-5">
