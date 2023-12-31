@@ -26,6 +26,8 @@ import { UserInfoResponse } from "@/api/userAPI";
 import { CommentInfoType }  from "@/types/comment";
 import { CommentReplyList } from './CommentReplyList';
 import MessageIcon from '../(Icons)/MessageIcon';
+import { useRouter, useSearchParams } from "next/navigation";
+
 
 interface Props {
     className?: string;
@@ -84,6 +86,11 @@ export function CommentInfo({
   const toggleReportForm = () => setOpenReportForm(!openReportForm);
   const toggleMenu = useCallback(() => setOpen((open) => !open), []);
   const toggleSubmit = () => setSubmit(!isSubmit);
+  const router = useRouter();
+  function handleAuthor() {
+    // console.log(studentId);
+    router.push("/profile?studentid=" + author.studentId);
+  }
   const likeReq = (score: any) => {
     // console.log(score)
     setIsLiking(0)
@@ -160,14 +167,15 @@ export function CommentInfo({
       "preCommentId": 0
     }).then((response : any) => {
       if (response.message === "Comment successfully created") {
+        console.log(response)
         // router.reload();
         setNewState(response.CommentId)
         setIsSending(1)
         setIsSeeReply(true)
       }
-      // console.log(response)
+      console.log(response)
     }).catch((error) => {
-      // console.log(error)
+      console.log(error)
     })
   }
 
@@ -244,7 +252,7 @@ export function CommentInfo({
     <div>
 
     <div className={twMerge("flex", className)}>
-      <div className='comment__avatar' style={{width:'56px', height: '56px'}}>
+      <div className='comment__avatar cursor-pointer' style={{width:'56px', height: '56px'}} onClick={handleAuthor}>
         <Avatar className="" src={author.avatar} size={56}></Avatar>
         {/* <img src={author.avatar} alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
       </div>

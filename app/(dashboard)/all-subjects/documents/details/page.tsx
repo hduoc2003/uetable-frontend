@@ -144,7 +144,7 @@ export default function Documentdetail() {
 
     function handleAuthor() {
         console.log(studentId);
-        router.push("/settings/profile?studentid=" + studentId);
+        router.push("/profile?studentid=" + studentId);
     }
 
     function handleSubject() {
@@ -267,14 +267,14 @@ export default function Documentdetail() {
                     <a href={link} download={filename} target="_blank">
                         <button className="button product__buy">
 
-                            <span className="product__price">
-                                100
-                            </span>
+                            {/* <span className="product__price">
+                                
+                            </span> */}
                             <span className="product__inner">
-                                Download
-                                <span>
+                                Xem toàn bộ màn hình
+                                {/* <span>
                                     <DownloadIcon size={24} className="ml-2"/>
-                                </span>
+                                </span> */}
                             </span>
                         </button>
                     </a>

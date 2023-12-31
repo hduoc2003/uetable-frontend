@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import HomeImage from '../../../public/images/hero-illo@3x.png';
+import CommentHomeImage from '../../../public/images/comment.png';
 import { Typography } from "antd";
 import ScheduleIcon from "@/components/common/(Icons)/NavIcons/ScheduleIcon";
 import MySubjectIcon from "@/components/common/(Icons)/NavIcons/MySubjectIcon";
@@ -62,11 +63,13 @@ function AboutScheduleAndMySubjects() {
 function AboutAllSubjects({ }) {
   return (<div>
     <Title>Khám phá các học phần</Title>
-
-
-    <Text type="secondary" className="mb-[20px] text-xl">
+    <Text type="secondary" className="mb-[40px] text-xl">
       Nơi bạn có thể đánh giá và tìm tài liệu của các học phần
     </Text>
+
+    <Image src={CommentHomeImage} alt="Comment" className="mt-8" />
+
+    
   </div>);
 }
 function AboutStats({ }) {

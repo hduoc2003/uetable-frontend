@@ -14,7 +14,7 @@ const contentt = function loadSetting(profile: () => void, signOut: () => void, 
             </button>
             { role == 'admin' &&
             <button className="w-full font-semibold flex rounded-lg hover:bg-gray-100 p-2">
-                <a href="http://localhost:8000/admin" className="flex">
+                <a href="http://fall2324w3g4.int3306.freeddns.org/admin" className="flex">
                     <div className="mr-5">
                         <ProfileOutlined/>
                     </div>

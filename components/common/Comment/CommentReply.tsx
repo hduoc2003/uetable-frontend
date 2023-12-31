@@ -24,6 +24,7 @@ import { Avatar, Badge, Divider, Select, Popover } from "antd";
 import { authSelector } from "@/redux/auth/authSelector";
 import { UserInfoResponse } from "@/api/userAPI";
 import { CommentInfoType }  from "@/types/comment";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
     className?: string;
@@ -66,6 +67,11 @@ export function CommentReply({
   const [avtURL, setAvtURL] = useState<string>('https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj')
   const [newState, setNewState] = useState(0);
   const [newStateLike, setNewStateLike] = useState(0);
+  const router = useRouter();
+  function handleAuthor() {
+    // console.log(studentId);
+    router.push("/profile?studentid=" + author.studentId);
+  }
   useEffect(() => {
     if (authState?.signedIn) {
       Fetcher.get<any, UserInfoResponse>('/users/' + authState.studentId)
@@ -218,7 +224,7 @@ export function CommentReply({
 
   return (
     <div className={twMerge("flex")}>
-      <div className='comment__avatar' style={{width:'48px', height: '48px'}}>
+      <div className='comment__avatar cursor-pointer' style={{width:'48px', height: '48px'}}  onClick={handleAuthor}>
         <Avatar className="" src={author.avatar} size={48}></Avatar>
         {/* <img src={author.avatar} alt='Avatar' style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}}></img> */}
       </div>

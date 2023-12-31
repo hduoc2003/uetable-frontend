@@ -24,6 +24,11 @@ const initInfo =
   }
 ];
 
+interface Response {
+  semester: string,
+  result: Stat[]
+}
+
 export default function CreditColumn() {
   const [data, setData] = useState<Stat[]>();
 
@@ -58,13 +63,14 @@ export default function CreditColumn() {
 
   useEffect(() => {
     if (currentSemesterId && currentYearId)
-    Fetcher.get<any, Stat[]>('/statistic/getCreditRangeInSemester', {
+    Fetcher.get<any, Response>('/statistic/getCreditRangeInSemester', {
       params: {
         semesterId: currentSemesterId,
         year: currentYearId,
       }
     }).then((response) => {
-      let newData = response;
+      console.log(response);
+      let newData = response.result;
       for (let i = 0; i < newData.length; i++)
         newData[i].type += " tín chỉ";
       setData(newData);

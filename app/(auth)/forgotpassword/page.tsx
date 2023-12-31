@@ -5,6 +5,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import Cookies from 'universal-cookie';
 import Image from 'next/image'
+import { Avatar, Badge, Divider, Select, Popover } from "antd";
 
 export default function ForgotPassword() {
     const [inputMSSV, setMSSV] = useState("");
@@ -71,7 +72,8 @@ export default function ForgotPassword() {
         <div>
           <button className="bg-transparent text-[48px] my-6 text-primary font-bold font-mainfont">
             <Link href="/">
-              <Image alt='logo' src="https://static.vecteezy.com/system/resources/previews/024/241/000/original/colorful-shiba-inu-dog-shiba-inu-portrait-dog-sticker-clip-art-dog-lover-design-ai-generated-png.png" width={96} height={96} />
+            <Avatar className="" src={'https://static.vecteezy.com/system/resources/previews/024/241/000/original/colorful-shiba-inu-dog-shiba-inu-portrait-dog-sticker-clip-art-dog-lover-design-ai-generated-png.png'} size={96}></Avatar>
+              {/* <Image alt='logo' src="https://static.vecteezy.com/system/resources/previews/024/241/000/original/colorful-shiba-inu-dog-shiba-inu-portrait-dog-sticker-clip-art-dog-lover-design-ai-generated-png.png" width={96} height={96} /> */}
             </Link>
           </button>
         </div>

@@ -11,6 +11,7 @@ import { cookies } from '@/app/(dashboard)/layout'
 import { isUndefined, set } from 'lodash'
 import { ClipLoader } from 'react-spinners'
 import Image from 'next/image'
+import { Avatar, Badge, Divider, Select, Popover } from "antd";
 
 interface SignInResponse {
   message: string,
@@ -150,7 +151,7 @@ export default function SignIn() {
         <div>
           <button className="bg-transparent text-[48px] my-6 text-primary font-bold font-mainfont">
             <Link href="/">
-              <Image alt='logo' src="https://static.vecteezy.com/system/resources/previews/024/241/000/original/colorful-shiba-inu-dog-shiba-inu-portrait-dog-sticker-clip-art-dog-lover-design-ai-generated-png.png" width={96} height={96} />
+              <Avatar className="" src={'https://static.vecteezy.com/system/resources/previews/024/241/000/original/colorful-shiba-inu-dog-shiba-inu-portrait-dog-sticker-clip-art-dog-lover-design-ai-generated-png.png'} size={96}></Avatar>
               {/* <div className="text-[64px] text-sky-700 font-bold my-8 tracking-tighter">UETable</div> */}
             </Link>
           </button>
