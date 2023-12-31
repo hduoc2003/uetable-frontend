@@ -13,6 +13,7 @@ import { DocumentClass } from "@/types/document";
 import genId from "@/utils/genId";
 import { AllSubjectsDocumentsPageProps } from "@/app/(dashboard)/all-subjects/documents/page";
 import { useElementRect } from "@/hooks/useElementRect";
+import useResizeObserver from "use-resize-observer";
 
 const { Text } = Typography;
 const fetchKey = genId();
@@ -23,7 +24,9 @@ interface Props {
 export default function Documents({
     subjectId
 }: Props) {
-    const { ref, rect: { width } } = useElementRect<HTMLDivElement>();
+    // const { ref, rect: { width } } = useElementRect<HTMLDivElement>();
+    const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
+
     const { data: documents, isLoading } = useSWR([fetchKey, subjectId],
         ([_, subjectId]) => DocumentAPI.getTopDocumentsOfSubject(subjectId, 5)
     )
@@ -48,7 +51,9 @@ export default function Documents({
                                     key={doc?.id ?? i}
                                     imgHeight={130}
                                     // imgSrc={"https://images.hdqwalls.com/wallpapers/akali-lol-artwork-4k-xu.jpg"}
-                                    url={""}
+                                    url={getURL('/all-subjects/documents/details', {
+                                        documentId: doc.id
+                                    })}
                                     title={doc?.name ?? ''}
                                     info={
                                         <Text type='secondary' strong>{`${doc?.download} lượt tải, ${doc?.like} lượt thích`}</Text>

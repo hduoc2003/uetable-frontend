@@ -290,8 +290,8 @@ export default function Profile() {
                   <div className="font-bold text-2xl">Giới thiệu</div>
                   {/* </div> */}
                   {/* <Paragraph className=" px-6 pb-6 text-xl font-semibold pt-3" editable={{ onChange: (newValue) => { handleFinishEditBio(newValue) } }}>{bio}</Paragraph> */}
-                  <Editor content={bio} onSave={handleFinishEditBio} maxWidth={700}/>
-                  {/* <EditableText
+                  {/* <Editor content={bio} onSave={handleFinishEditBio} maxWidth={700}/> */}
+                  <EditableText
                     defaultValue={bio}
                     normalText={
                       bio ?
@@ -302,7 +302,7 @@ export default function Profile() {
                     type='textarea'
                     onComplete={handleFinishEditBio}
                     className='w-full'
-                  /> */}
+                  />
                 </div>
               )
             }

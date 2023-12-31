@@ -40,7 +40,7 @@ export default function RelatedSubject({
                         <div className="mb-5">
                             <Preview
                                 imgSrc={subject?.imgLink}
-                                url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.code ?? '' })}
+                                url={getURL<AllSubjectsDetailsPageProps['searchParams']>("/all-subjects/details", { subjectId: subject?.id ?? '' })}
                                 title={subject?.name ?? ''}
                                 loading={isLoading || isUndefined(subjectCode)}
                                 imgHeight={180}

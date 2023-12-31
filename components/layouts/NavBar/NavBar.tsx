@@ -1,21 +1,12 @@
 'use client';
 
-import { THEME } from '@/styles/theme'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ConfigProvider, Layout, Menu, Typography } from 'antd';
-import type { MenuProps } from 'antd/es/menu';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import HomeIcon from '../../common/(Icons)/NavIcons/HomeIcon';
-import ScheduleIcon from '../../common/(Icons)/NavIcons/ScheduleIcon';
-import MySubjectIcon from '../../common/(Icons)/NavIcons/MySubjectIcon';
-import AllSubjectsIcon from '../../common/(Icons)/NavIcons/AllSubjectsIcon';
-import StatsIcon from '../../common/(Icons)/NavIcons/StatIcon';
+import { Layout, Typography } from 'antd';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { NAVBAR_STYLE } from '@/styles/navBar';
 import NavMenu from './NavMenu';
 import MyButtonWrapper from '@/components/common/(MyButton)/MyButtonWrapper';
-import Image from 'next/image';
 
 const { Text } = Typography;
 const { Sider } = Layout;
@@ -39,10 +30,19 @@ export default function NavBar() {
             }
         };
 
+        const handleChangeWidth = () => {
+            // console.log(window.innerWidth)
+            setExpand(window.innerWidth > 1300)
+        }
+
         window.addEventListener("scroll", handleScroll);
+        window.addEventListener('resize', handleChangeWidth);
+
         return () => {
             window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener('resize', handleChangeWidth);
         };
+
     }, []);
 
     return (
@@ -55,7 +55,7 @@ export default function NavBar() {
             "
         >
             <div
-                className={expand?'bg-secondary h-full shadow min-w-[300px] flex flex-col gap-[30px]':'bg-secondary h-full shadow min-w-fit flex flex-col gap-[30px]' }
+                className={expand?'bg-secondary h-full shadow w-[300px] flex flex-col gap-[30px]':'bg-secondary h-full shadow min-w-fit flex flex-col gap-[30px]' }
                 style={{
                     // borderTopRightRadius: scroll ? 0 : THEME.LAYOUT_ELEMENT_BORDER_RADIUS,
                     transition: 'border-radius 0.3s ease-in-out'

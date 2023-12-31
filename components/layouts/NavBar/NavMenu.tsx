@@ -120,7 +120,7 @@ function NavLabel({
     selected?: boolean
 }) {
     const [ref] = useAutoAnimate();
-    let className = 'font-semibold text-base text-royal-gray tracking-tight group-hover:text-nav-highlight ';
+    let className = 'font-semibold text-base text-royal-gray tracking-tight group-hover:text-nav-highlight';
     // className += ' animate__animated animate__slideOutLeft animate__slideInLeft'
     if (subMenu)
         className += ' pl-3'
