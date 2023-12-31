@@ -87,28 +87,8 @@ export default function Comment({
         });
     }, [pageId, pageType])
 
-    // useEffect(() => {
-    //     const uri = `/page/comment/${pageType}/${pageId}/0/5`
-    //     Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
-    //         // let newData = data ? [...data] : []
-    //         // for (let i = 0; i < response.length; i++) {
-    //         //     newData?.push(response[i])
-    //         // }
-    //         // // newData?.append(response);
-    //         // console.log("new data", newData)
-    //         // setData(newData ? [...newData] : [])
-    //         setData(response ?? [])
-    //         setReply('')
-    //         setIsSending(1)
-    //     }).catch((error) => {
-
-    //     });
-    // },[pageId, pageType])
-
     useEffect(() => {
-        setIsLoadMore(0)
-        // console.log("offsetNow", offsetNow)
-        const uri = `/page/comment/${pageType}/${pageId}/${offsetNow}/${limit}`
+        const uri = `/page/comment/${pageType}/${pageId}/0/5`
         Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
             // let newData = data ? [...data] : []
             // for (let i = 0; i < response.length; i++) {
@@ -116,14 +96,29 @@ export default function Comment({
             // }
             // // newData?.append(response);
             // console.log("new data", newData)
-            // setCntMore(cnt - offsetNow - limit - cntAdd)
             // setData(newData ? [...newData] : [])
-            // console.log('CON CAK')
+            setData(response ?? [])
+            setReply('')
+            setIsSending(1)
+        }).catch((error) => {
+
+        });
+    },[pageId, pageType])
+
+    useEffect(() => {
+        setIsLoadMore(0)
+        console.log("cc", offsetNow, pageId, pageType)
+        // console.log("offsetNow", offsetNow)
+        const uri = `/page/comment/${pageType}/${pageId}/${offsetNow}/5`
+        Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
             console.log(response)
-            for (let i = 0; i < response.length; i++) {
-                setData((oldData) => [...(oldData ?? []), response[i]])
-            }
-            // setData((oldData) => [...(oldData ?? []), ...response])
+            // console.log("data", data)
+            console.log(response.length)
+            // for (let i = 0; i < response.length; i++) {
+            //     setData((oldData) => [...(oldData ?? []), response[i]])
+            // }
+            // console.log("new aeppend data", data)
+            setData((oldData) => [...(oldData ?? []), ...response])
             // console.log("data", data)
             setReply('')
             setIsSending(1)
@@ -131,7 +126,7 @@ export default function Comment({
         }).catch((error) => {
 
         });
-    }, [limit, offsetNow, pageId, pageType]);
+    }, [offsetNow, pageId, pageType]);
 
     useEffect(() => {
         // console.log("This state", newState)
@@ -155,8 +150,8 @@ export default function Comment({
         setOffsetNow(offsetNow + limit + cntAdd)
         setCntAdd(0)
     }
-    // console.log(commentData)
-
+    console.log(data)
+    
     return (
         <div className="flex flex-col">
             <TitleWithBox title={'Bình luận'} boxContent={cnt} size="middle" boxClassName="px-2"/>
