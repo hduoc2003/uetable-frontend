@@ -27,7 +27,8 @@ export interface DocumentClass {
     createdAt: string
     link: string
     subjectName: string
-    ext: string
+    ext: string,
+    userName: string
 }
 
 export interface UserUploadFile {

@@ -1,7 +1,7 @@
 "use client";
 
 import { THEME } from "@/styles/theme";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "@/redux/auth/authSlice";
 import { authSelector } from "@/redux/auth/authSelector";
@@ -13,12 +13,14 @@ import Link from "next/link";
 import { MAIN_FONT } from "@/styles/fonts";
 import NotificationIcon from "../../common/(Icons)/NotificationIcon";
 import Fetcher from "@/api/Fetcher";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "universal-cookie";
 import { UserInfoResponse } from "@/api/userAPI";
 import { cookies } from "@/app/(dashboard)/layout";
 import { contentt } from "../Settings";
 import Notifications from "./Notifications";
+import { useDebouncedCallback } from "use-debounce";
+import { getURL } from "@/utils/navigation";
 interface TabProps {
   selected: boolean;
   children: ReactNode;
@@ -33,9 +35,14 @@ export default function Header() {
   const router = useRouter();
   const [scroll, setScroll] = useState(false)
   const [openAvt, setOpenAvt] = useState(false)
+  const searchValue = useRef('')
+  const searchParams = useSearchParams();
 
-  const handleOnSearch = (): void => {
-  }
+  const handleOnSearch = useDebouncedCallback((): void => {
+    router.replace(getURL('/search', {
+      subjectName: searchValue.current
+    }))
+  })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,11 +54,11 @@ export default function Header() {
     };
     if (authState?.signedIn) {
       Fetcher.get<any, UserInfoResponse>('/users/' + authState?.studentId)
-      .then((response) => {
-        dispatch(authActions.updateAuthState({
-          avtLink: response.avatar
-        }))
-      });
+        .then((response) => {
+          dispatch(authActions.updateAuthState({
+            avtLink: response.avatar
+          }))
+        });
     }
 
     window.addEventListener("scroll", handleScroll);
@@ -96,7 +103,13 @@ export default function Header() {
         }}
       >
         <div className="flex-1">
-          <SearchBar placeholder="Tìm kiếm học phần" className="w-[25vw]"/>
+          <SearchBar
+            placeholder="Tìm kiếm học phần"
+            className="w-[25vw]"
+            onPressEnter={() => handleOnSearch()}
+            onChange={(e) => searchValue.current = e.target.value}
+            defaultValue={searchParams.get('subjectName') ?? ''}
+          />
         </div>
         {/* <LanguaguesSelector /> */}
         {
@@ -115,7 +128,7 @@ export default function Header() {
                     placement='bottomLeft'
                     open={openAvt}
                     onOpenChange={(vis) => setOpenAvt(vis)}
-                    // className="bg-white"
+                  // className="bg-white"
                   >
                     <Avatar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={authState.avtLink} size={40}></Avatar>
                     <svg width="50" height="50" viewBox="0 0 32 32"><circle r="15" cx="16" cy="16" fill="none" strokeWidth="2" style={{ stroke: avtStrokeColor }}></circle></svg>

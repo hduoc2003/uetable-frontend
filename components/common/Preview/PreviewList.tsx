@@ -28,6 +28,7 @@ interface Props<DataType> {
     },
     howManyFetch?: number
     fetchKey?: string
+    onLoadMoreDone?: (data: DataType[]) => void
 }
 
 export default function PreviewList<DataType>({
@@ -38,7 +39,8 @@ export default function PreviewList<DataType>({
     dataPerFetch = 6,
     cols,
     howManyFetch = 99999999,
-    fetchKey
+    fetchKey,
+    onLoadMoreDone
 }: Props<DataType>) {
     const _cols: (typeof cols) = _.mapValues({ ...{ xs: 1, md: 2, lg: 3, xxl: 4 }, ...cols }, (x) => 24 / x);
     const [data, setData] = useState<(DataType)[]>([])
@@ -52,6 +54,7 @@ export default function PreviewList<DataType>({
     useEffect(() => {
         // if (fetchFrom )
         if (!isUndefined(extraData)) {
+            onLoadMoreDone?.(extraData)
             // console.log(extraData.length)
             if (--howManyFetch === 0)
                 setStopFetching(true)

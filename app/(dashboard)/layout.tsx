@@ -7,6 +7,7 @@ import NavBar from '@/components/layouts/NavBar/NavBar'
 import { AllRouteKey } from '@/components/layouts/NavBar/NavMenu';
 import { authSelector } from '@/redux/auth/authSelector'
 import { authActions } from '@/redux/auth/authSlice';
+import { Spin } from 'antd';
 import { isUndefined } from 'lodash';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -39,8 +40,12 @@ export default function DashboardLayout({
     const handleLogin = useCallback((): void => {
         if (authState.signedIn)
             return
-        Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'))
+        Fetcher.get<any, UserInfoResponse>('/users/' + cookies.get('studentid'), {
+            timeout: 5000
+        })
             .then((response) => {
+                console.log('haha')
+
                 dispatch(authActions.updateAuthState({
                     signedIn: true,
                     logging: false,
@@ -48,6 +53,8 @@ export default function DashboardLayout({
                     studentId: cookies.get('studentid'),
                 }));
             }).catch((error) => {
+        console.log('haha')
+
                 dispatch(authActions.updateAuthState({
                     signedIn: false,
                     logging: false
@@ -55,6 +62,7 @@ export default function DashboardLayout({
                 cookies.remove('authToken', {
                     path: '/'
                 });
+                console.log(error)
                 if (!accessibleRoute(pathName))
                     router.push('/');
             });
@@ -72,7 +80,7 @@ export default function DashboardLayout({
     }, [pathName, router])
 
     if (authState.logging)
-        return (<></>)
+        return (<Spin fullscreen/>)
     return (
         <div className='flex'>
             <NavBar />
