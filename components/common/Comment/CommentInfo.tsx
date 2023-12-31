@@ -171,7 +171,8 @@ export function CommentInfo({
         // router.reload();
         setNewState(response.CommentId)
         setIsSending(1)
-        setIsSeeReply(true)
+        // setIsSeeReply(true)
+        // toggleReply()
       }
       console.log(response)
     }).catch((error) => {
@@ -271,7 +272,7 @@ export function CommentInfo({
                     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}><MoreHoriIcon size='20px'/></div>
                   </button>
                   <div className="actions__body">
-                    <button className="actions__option">
+                    {/* <button className="actions__option">
                     <EditIcon size='20px' className='icon'/>
                     <div style={{ color: '#1A1D1F'}}>Chỉnh sửa</div>
                     </button>
@@ -279,7 +280,7 @@ export function CommentInfo({
                       <RepeatIcon size='20px' className='icon'/>
                       <div style={{ color: '#1A1D1F'}}>Xem lịch sử chỉnh sửa</div>
                     </button>
-                    <hr style={{marginTop: '8px', marginBottom: '8px'}}></hr>
+                    <hr style={{marginTop: '8px', marginBottom: '8px'}}></hr> */}
                     <button className="actions__option" style={{alignItems: 'start'}} onClick={toggleReportForm}>
                       <div><ReportIcon size='20px' className='icon'/></div>
                       <div className="flex" style={{ flexDirection: 'column'}}>
