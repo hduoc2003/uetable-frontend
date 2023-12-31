@@ -67,7 +67,7 @@ export default function Documents({
                         }
                     </MultiCarousel>
                     :
-                    <Text type="secondary" italic>Đang cập nhật tài liệu</Text>
+                    <Text type="secondary" italic strong>Đang cập nhật tài liệu</Text>
             }
         </Space>
     );
