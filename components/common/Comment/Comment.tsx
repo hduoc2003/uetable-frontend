@@ -1,3 +1,5 @@
+'use client'
+
 import Editor from "@/components/common/Editor/Editor";
 import TitleWithBox from "../TitleWithBox"
 import { CommentList } from "./CommentList"
@@ -87,26 +89,51 @@ export default function Comment({
         });
     }, [pageId, pageType])
 
-    useEffect(() => {
-        const uri = `/page/comment/${pageType}/${pageId}/0/5`
-        Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
-            // let newData = data ? [...data] : []
-            // for (let i = 0; i < response.length; i++) {
-            //     newData?.push(response[i])
-            // }
-            // // newData?.append(response);
-            // console.log("new data", newData)
-            // setData(newData ? [...newData] : [])
-            setData(response ?? [])
-            setReply('')
-            setIsSending(1)
-        }).catch((error) => {
+    // useEffect(() => {
+    //     const uri = `/page/comment/${pageType}/${pageId}/0/5`
+    //     Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
+    //         // let newData = data ? [...data] : []
+    //         // for (let i = 0; i < response.length; i++) {
+    //         //     newData?.push(response[i])
+    //         // }
+    //         // // newData?.append(response);
+    //         // console.log("new data", newData)
+    //         // setData(newData ? [...newData] : [])
+    //         setData(response ?? [])
+    //         setReply('')
+    //         setIsSending(1)
+    //     }).catch((error) => {
 
-        });
-    },[pageId, pageType])
+    //     });
+    // },[pageId, pageType])
 
     useEffect(() => {
         setIsLoadMore(0)
+        // if (offsetNow === 0) return
+        // console.log("cc", offsetNow, pageId, pageType)
+        // console.log("offsetNow", offsetNow)
+        const uri = `/page/comment/${pageType}/${pageId}/0/5`
+        Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
+            console.log(response)
+            // console.log("data", data)
+            console.log(response.length)
+            // for (let i = 0; i < response.length; i++) {
+            //     setData((oldData) => [...(oldData ?? []), response[i]])
+            // }
+            // console.log("new aeppend data", data)
+            setData(response?? [])
+            // console.log("data", data)
+            setReply('')
+            setIsSending(1)
+            setIsLoadMore(1)
+        }).catch((error) => {
+
+        });
+    }, [pageId, pageType]);
+
+    useEffect(() => {
+        setIsLoadMore(0)
+        if (offsetNow === 0) return
         console.log("cc", offsetNow, pageId, pageType)
         // console.log("offsetNow", offsetNow)
         const uri = `/page/comment/${pageType}/${pageId}/${offsetNow}/5`
@@ -127,6 +154,42 @@ export default function Comment({
 
         });
     }, [offsetNow, pageId, pageType]);
+    // useEffect(() => {
+    //     const uri = `/page/comment/${pageType}/${pageId}/0/5`
+    //     Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
+    //         let newData = data ? [...data] : []
+    //         for (let i = 0; i < response.length; i++) {
+    //             newData?.push(response[i])
+    //         }
+    //         // newData?.append(response);
+    //         console.log("new data", newData)
+    //         setData(newData ? [...newData] : [])
+    //         setReply('')
+    //         setIsSending(1)
+    //     }).catch((error) => {
+
+    //     });
+    // },[pageId, pageType])
+
+    // useEffect(() => {
+    //     setIsLoadMore(0)
+    //     const uri = `/page/comment/${pageType}/${pageId}/${offsetNow + cntAdd}/${limit}`
+    //     Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
+    //         let newData = data ? [...data] : []
+    //         for (let i = 0; i < response.length; i++) {
+    //             newData?.push(response[i])
+    //         }
+    //         // newData?.append(response);
+    //         console.log("new data", newData)
+    //         setCntMore(cnt - offsetNow - limit - cntAdd)
+    //         setData(newData ? [...newData] : [])
+    //         setReply('')
+    //         setIsSending(1)
+    //         setIsLoadMore(1)
+    //     }).catch((error) => {
+
+    //     });
+    // }, [offsetNow]);
 
     useEffect(() => {
         // console.log("This state", newState)
