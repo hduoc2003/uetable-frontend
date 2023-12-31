@@ -241,7 +241,7 @@ export function CommentInfo({
     }).catch((error) => {
 
     });
-  }, [data, newState]);
+  }, [newState]);
 
   return (
     <div>

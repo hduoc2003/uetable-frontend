@@ -65,9 +65,9 @@ export default function Comment({
             setNewState(response.CommentId)
             setCntAdd(cntAdd + 1)
           }
-          console.log(response)
+        //   console.log(response)
         }).catch((error) => {
-          console.log(error)
+        //   console.log(error)
         })
       }
 
@@ -76,70 +76,84 @@ export default function Comment({
     }
 
     useEffect(() => {
-        console.log(newState)
+        // console.log(newState)
         const uri = `/page/comment-count/${pageType}/${pageId}/`
         Fetcher.get<any, any>(uri).then((response) => {
             let newData = response.count;
             setCnt(newData)
-            console.log(newData)
+            // console.log(newData)
         }).catch((error) => {
 
         });
-    }, [newState, pageId, pageType])
+    }, [pageId, pageType])
 
-    useEffect(() => {
-        const uri = `/page/comment/${pageType}/${pageId}/${offset}/${limit}`
-        Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
-            let newData = data ? [...data] : []
-            for (let i = 0; i < response.length; i++) {
-                newData?.push(response[i])
-            }
-            // newData?.append(response);
-            console.log("new data", newData)
-            setData(newData ? [...newData] : [])
-            setReply('')
-            setIsSending(1)
-        }).catch((error) => {
+    // useEffect(() => {
+    //     const uri = `/page/comment/${pageType}/${pageId}/0/5`
+    //     Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
+    //         // let newData = data ? [...data] : []
+    //         // for (let i = 0; i < response.length; i++) {
+    //         //     newData?.push(response[i])
+    //         // }
+    //         // // newData?.append(response);
+    //         // console.log("new data", newData)
+    //         // setData(newData ? [...newData] : [])
+    //         setData(response ?? [])
+    //         setReply('')
+    //         setIsSending(1)
+    //     }).catch((error) => {
 
-        });
-    },[data, limit, offset, pageId, pageType])
+    //     });
+    // },[pageId, pageType])
 
     useEffect(() => {
         setIsLoadMore(0)
-        const uri = `/page/comment/${pageType}/${pageId}/${offsetNow + cntAdd}/${limit}`
+        // console.log("offsetNow", offsetNow)
+        const uri = `/page/comment/${pageType}/${pageId}/${offsetNow}/${limit}`
         Fetcher.get<any, CommentInfoType[]>(uri).then((response) => {
-            let newData = data ? [...data] : []
+            // let newData = data ? [...data] : []
+            // for (let i = 0; i < response.length; i++) {
+            //     newData?.push(response[i])
+            // }
+            // // newData?.append(response);
+            // console.log("new data", newData)
+            // setCntMore(cnt - offsetNow - limit - cntAdd)
+            // setData(newData ? [...newData] : [])
+            // console.log('CON CAK')
+            console.log(response)
             for (let i = 0; i < response.length; i++) {
-                newData?.push(response[i])
+                setData((oldData) => [...(oldData ?? []), response[i]])
             }
-            // newData?.append(response);
-            console.log("new data", newData)
-            setCntMore(cnt - offsetNow - limit - cntAdd)
-            setData(newData ? [...newData] : [])
+            // setData((oldData) => [...(oldData ?? []), ...response])
+            // console.log("data", data)
             setReply('')
             setIsSending(1)
             setIsLoadMore(1)
         }).catch((error) => {
 
         });
-    }, [cnt, cntAdd, data, limit, offsetNow, pageId, pageType]);
+    }, [limit, offsetNow, pageId, pageType]);
 
     useEffect(() => {
+        // console.log("This state", newState)
+        if (newState === 0) return 
         const uri = `/comment/${newState}`
         Fetcher.get<any, CommentInfoType>(uri).then((response) => {
-            let newData = data ? [...data] : []
-            newData?.unshift(response);
-            console.log(newData)
-            setData(newData ? [...newData] : [])
+            // let newData = data ? [...data] : []
+            // newData?.unshift(response);
+            // console.log(newData)
+            // setData(newData ? [...newData] : [])
+            setData((oldData) => [response, ...(oldData ?? [])])
+            // console.log(data)
             setReply('')
             setIsSending(1)
         }).catch((error) => {
 
         });
-    }, [newState, offset, limit, data]);
+    }, [newState]);
 
     const seeMoreComment = () => {
-        setOffsetNow(offsetNow + limit)
+        setOffsetNow(offsetNow + limit + cntAdd)
+        setCntAdd(0)
     }
     // console.log(commentData)
 

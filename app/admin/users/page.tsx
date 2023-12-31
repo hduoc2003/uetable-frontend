@@ -18,12 +18,13 @@ export default function AllSubjectsDetailsPage({
 //   const page = searchParams?.page || 1;
   q = q || "";
   page = page || 1;
-  const { count, users } = await fetchUsers(q, page);
-  Fetcher.get<any, UserInfoResponse>('/users/' + inputValue)
+//   const { count, users } = await fetchUsers(q, page);
+//   const [data, setData] = useState<UserInfoResponse[]>([]);
+//   Fetcher.get<any, UserInfoResponse>('/users/' + inputValue)
 
   return (
     <div className={styles.container}>
-      <div className={styles.top}>
+      {/* <div className={styles.top}>
         <Search placeholder="Search for a user..." />
         <Link href="/dashboard/users/add">
           <button className={styles.addButton}>Add New</button>
@@ -78,7 +79,7 @@ export default function AllSubjectsDetailsPage({
           ))}
         </tbody>
       </table>
-      <Pagination count={count} />
+      <Pagination count={count} /> */}
     </div>
   );
 };
